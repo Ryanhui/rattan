@@ -28,7 +28,7 @@
         <ul class="gbrowser-dropdown" style="width:200px" v-show="showTools" @mouseenter="enterToolsList()" @mouseleave="leaveTools()">
           <li class="tools-dropdown-list"><router-link to="/">Annotation</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Search</router-link></li>
-          <li class="tools-dropdown-list"><router-link to="/">Co-expression Network</router-link></li>
+          <li class="tools-dropdown-list"><router-link to="/tools/coexpression">Co-expression Network</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Module enrichment</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Cis-element Analysis</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Gene Sets Analysis</router-link></li>

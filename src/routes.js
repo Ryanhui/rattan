@@ -5,11 +5,15 @@ import Blast from './components/Blast.vue';
 import Download from './components/Download.vue';
 import Contact from './components/Contact.vue';
 
+import CoExpression from './components/tools/CoExpression.vue';
+
 export default [
   { path: '/', component: Home },
   { path: '/gbrowser1', component: Gbrowser1 },
   { path: '/gbrowser2', component: Gbrowser2 },
   { path: '/blast', component: Blast },
   { path: '/download', component: Download },
-  { path: '/contact', component: Contact }
+  { path: '/contact', component: Contact },
+
+  {path: '/tools/coexpression', component: CoExpression}
 ]

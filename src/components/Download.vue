@@ -115,7 +115,6 @@ export default {
     },
     methods: {
       download(data) {
-        console.log(data)
         // window.open(data.address)
         // window.location.href = address;
 
