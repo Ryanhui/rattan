@@ -1,19 +1,10 @@
 <template>
   <div class="container">
-    <!-- <div id="holder">
-    <cytoscape
-      :config="config"
-      v-on:cxttapstart="updateNode"
-    >
-      <cy-element
-        v-for="def in elements"
-        :key="`${def.data.id}`"
-        :definition="def"
-      />
-    </cytoscape>
-  </div> -->
   <div class="pannel">
     <p class="title">Co-expression network analysis</p>
+    <div id="holder" v-if="show">
+      <cytoscape :config="config" />
+    </div>
     <el-tabs type="border-card" v-model="form.activeName" @tab-click="handleTabClick" stretch class="tabs">
       <el-tab-pane label="Calsi" name="calsi">
         <el-form ref="form" :model="form" label-width="120px" class="form">
@@ -38,7 +29,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="margin-left: 28px" @click="onSubmit">Search</el-button>
+            <el-button type="primary" style="margin-left: 28px" :loading="loading" @click="onSubmit">Search</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -65,7 +56,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="margin-left: 28px" @click="onSubmit">Search</el-button>
+            <el-button type="primary" style="margin-left: 28px" :loading="loading" @click="onSubmit">Search</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -76,66 +67,65 @@
 
 <script>
 const config = {
-  elements: [
-    {
-      // node a
-      data: { id: 'a' },
-      position: { x: 589, y: 182 }
-    },
-    {
-      // node b
-      data: { id: 'b' },
-      position: { x: 689, y: 282 }
-    },
-    {
-      // node c
-      data: { id: 'c' },
-      position: { x: 489, y: 282 }
-    },
-    {
-      // node c
-      data: { id: 'd' },
-      position: { x: 389, y: 282 }
-    },
-    {
-      // edge ab
-      data: { id: 'ab', source: 'a', target: 'b' },
-    },
-    {
-      data: { id: 'bc', source: 'a', target: 'c' },
-    },
-    {
-      data: { id: 'ad', source: 'a', target: 'd' },
-    },
-    {
-      data: { id: 'adc', source: 'c', target: 'd' },
-    }
-  ],
-  style: [
+  elements: [],
+  minZoom: 1,
+  //maxZoom:100,
+  style: [ // the stylesheet for the graph
     {
       selector: 'node',
       style: {
+        'width': '10px',
+        'height': '10px',
         'background-color': '#666',
-        label: 'data(id)'
+        'label': 'data(id)',
+        'font-size': '4px',
       }
     },
+
     {
       selector: 'edge',
       style: {
-        width: 3,
+        'width': 1,
         'line-color': '#ccc',
         'target-arrow-color': '#ccc',
         'target-arrow-shape': 'triangle'
       }
     }
   ],
+
   layout: {
-    name: 'grid',
-    rows: 1
+    name: 'concentric',
+
+    fit: true,
+    padding: 30, // the padding on fit
+    startAngle: 3 / 2 * Math.PI, // where nodes start in radians
+    sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
+    clockwise: true, // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
+    equidistant: false, // whether levels have an equal radial distance betwen them, may cause bounding box overflow
+    minNodeSpacing: 10, // min spacing between outside of nodes (used for radius adjustment)
+    boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+    avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+    nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+    height: undefined, // height of layout area (overrides container height)
+    width: undefined, // width of layout area (overrides container width)
+    spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+    concentric: function( node ){ // returns numeric value for each node, placing higher nodes in levels towards the centre
+      return node.degree();
+    },
+    levelWidth: function( nodes ){ // the letiation of concentric values in each level
+      return nodes.maxDegree() / 4;
+    },
+    animate: false, // whether to transition the node positions
+    animationDuration: 500, // duration of animation in ms if enabled
+    animationEasing: undefined, // easing of animation if enabled
+    animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+    ready: undefined, // callback on layoutready
+    stop: undefined, // callback on layoutstop
+    transform: function (node, position ){ return position; } 
+    },
   }
-}
-const elements = [...config.elements]
-delete config.elements
+  // const elements = [...config.elements]
+  // delete config.elements
 
 export default {
   name: 'CoExpression',
@@ -146,7 +136,10 @@ export default {
     return {
       config,
       i: 0,
-      elements,
+      elements: [],
+      loading: false,
+      show: false,
+
       form: {
           activeName: 'calsi',
 
@@ -189,41 +182,83 @@ Daeje_Gene26990`;
         return;
       }
       console.log(this.form)
-      this.axios.get(`http://rattan.bamboogdb.org/ajax.php?gene=${this.form.gene}&database=${this.form.activeName}&type=${this.form.type}`).then((response) => {
-        console.log(response.data)
-      })
-    },
-    addNode (event) {
-      const { position } = event
-      const n = {
-        group: 'nodes',
-        data: { id: `n${this.i++}` },
-        position
-      }
-      this.elements = [...this.elements, n]
-    },
-    updateNode (event) {
-      if (event.target.id) {
-        const n = {
-          data: { id: event.target.id(), shape: 'rectangle' },
-          position: event.target.position(),
-          group: 'nodes'
-        }
-        // console.log('updating: ', n)
-        const elements = [
-          ...this.elements.filter(e => e.data.id !== event.target.id()),
-          n
-        ]
-        // console.log('filtered elements: ', elements)
-        this.elements = elements
-      }
-    },
-    removeNode (event) {
-      if (event.target.id) {
-        // console.log('removing: ', event.target.id())
-        this.elements = this.elements.filter(
-          e => e.data.id !== event.target.id()
-        )
+      if(this.form.singleOrList === 'single') {
+        this.show = false;
+        this.loading = true;
+        this.axios.get(`http://rattan.bamboogdb.org/coExpressionGet.php?gene=${this.form.gene}&database=${this.form.activeName}&type=${this.form.type}`).then((response) => {
+          console.log(response.data)
+          const rowData = response.data;
+          if(response.data === 'no_data') {
+              this.$message({
+                message: 'No result',
+                type: 'error'
+              });
+              this.loading = false;
+              return;
+          }
+          let newElement = [];
+          newElement.push({data: { id: rowData.root }});
+          rowData.node.forEach(element => {
+            newElement.push({data: { id: element }});
+          });
+          rowData.edge.forEach(element => {
+            newElement.push({data: { id: element.id, source: element.source, target: element.target }})
+          });
+          this.elements = newElement;
+          this.config.elements = newElement;
+          const self = this;
+          setTimeout(function(){
+            self.show = true;  
+            self.loading = false;
+          },1000);
+        })
+      } else {
+        var data = new FormData();
+        data.append('database',this.form.activeName);
+        data.append('genes',this.form.genes);
+        data.append('type', this.form.type);
+        
+        this.show = false;
+        this.loading = true;
+        this.axios.post('http://rattan.bamboogdb.org/coExpressionPost.php', data).then((response) => {
+          console.log(response);
+          const rowData = response.data;
+          let stop = false;
+          let newElement = [];
+
+          rowData.root.forEach((item) => {
+            if(item === '') {
+              this.$message({
+                message: 'Please check input format',
+                type: 'error'
+              });
+              stop = true;
+            }
+            newElement.push({data: { id: item.replace(/\s/g, '')}});
+          })
+          
+          if(stop) {
+            this.loading = false;
+            return;
+          }
+
+          rowData.node.forEach(element => {
+            newElement.push({data: { id: element }});
+          });
+
+          rowData.edge.forEach(element => {
+            newElement.push({data: { id: element.id, source: element.source, target: element.target }})
+          });
+          this.elements = newElement;
+          this.config.elements = newElement;
+          const self = this;
+          setTimeout(function(){
+            self.show = true;  
+            self.loading = false;
+          },1000);
+        }).catch((error) => {
+
+        })
       }
     }
   }
@@ -233,7 +268,7 @@ Daeje_Gene26990`;
 
 <style scoped>
   .container {
-    min-height: 600px;
+    min-height: 800px;
     position: relative;
     text-align: initial;
   }
@@ -246,7 +281,7 @@ Daeje_Gene26990`;
   }
   .tabs {
     width: 80%;
-    margin: 24px auto 0 auto;
+    margin: 24px auto 24px auto;
   }
   .form {
     width: 400px;
@@ -254,7 +289,7 @@ Daeje_Gene26990`;
   }
   #holder {
     width: 100%;
-    height: 100%;
+    height: 700px;
   }
   .cytoscape-area {
     width: 100%;
