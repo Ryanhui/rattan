@@ -55,8 +55,10 @@ if ($dataBase == 'calsi') {
 
 if($type == 'Positive') {
     $whichOrder = '>';
-} else {
+} else if($type == 'Negative'){
     $whichOrder = '<';
+} else {
+    $whichOrder = '<>';
 }
 
 $node = array();

@@ -26,6 +26,7 @@
             <el-radio-group v-model="form.type">
               <el-radio label="Positive"></el-radio>
               <el-radio label="Negative"></el-radio>
+              <el-radio label="All"></el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item>
@@ -53,6 +54,7 @@
             <el-radio-group v-model="form.type">
               <el-radio label="Positive"></el-radio>
               <el-radio label="Negative"></el-radio>
+              <el-radio label="All"></el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item>
@@ -76,18 +78,32 @@ const config = {
       style: {
         'width': '10px',
         'height': '10px',
-        'background-color': '#666',
+        'background-color': '#9baec8',
         'label': 'data(id)',
         'font-size': '4px',
       }
     },
-
     {
-      selector: 'edge',
+      "selector": "node[?isRoot]",
+        "style": {
+          "background-color": "#2b90d9",
+        }
+    },
+    {
+      selector: 'edge[length > 0]',
       style: {
-        'width': 1,
-        'line-color': '#ccc',
-        'target-arrow-color': '#ccc',
+        'width': 0.3,
+        'line-color': '#566270',
+        'target-arrow-color': '#566270',
+        'target-arrow-shape': 'triangle'
+      }
+    },
+    {
+      selector: 'edge[length < 0]',
+      style: {
+        'width': 0.3,
+        'line-color': '#F68657',
+        'target-arrow-color': '#F68657',
         'target-arrow-shape': 'triangle'
       }
     }
@@ -181,12 +197,12 @@ Daeje_Gene26990`;
         });
         return;
       }
-      console.log(this.form)
+      //console.log(this.form)
       if(this.form.singleOrList === 'single') {
         this.show = false;
         this.loading = true;
         this.axios.get(`http://rattan.bamboogdb.org/coExpressionGet.php?gene=${this.form.gene}&database=${this.form.activeName}&type=${this.form.type}`).then((response) => {
-          console.log(response.data)
+        //  console.log(response.data)
           const rowData = response.data;
           if(response.data === 'no_data') {
               this.$message({
@@ -197,12 +213,12 @@ Daeje_Gene26990`;
               return;
           }
           let newElement = [];
-          newElement.push({data: { id: rowData.root }});
+          newElement.push({data: { id: rowData.root, isRoot:true }});
           rowData.node.forEach(element => {
             newElement.push({data: { id: element }});
           });
           rowData.edge.forEach(element => {
-            newElement.push({data: { id: element.id, source: element.source, target: element.target }})
+            newElement.push({data: { id: element.id, source: element.source, target: element.target, length: element.length }})
           });
           this.elements = newElement;
           this.config.elements = newElement;
@@ -221,7 +237,7 @@ Daeje_Gene26990`;
         this.show = false;
         this.loading = true;
         this.axios.post('http://rattan.bamboogdb.org/coExpressionPost.php', data).then((response) => {
-          console.log(response);
+          // console.log(response);
           const rowData = response.data;
           let stop = false;
           let newElement = [];
@@ -234,7 +250,7 @@ Daeje_Gene26990`;
               });
               stop = true;
             }
-            newElement.push({data: { id: item.replace(/\s/g, '')}});
+            newElement.push({data: { id: item.replace(/\s/g, ''), isRoot: true }});
           })
           
           if(stop) {
@@ -247,7 +263,7 @@ Daeje_Gene26990`;
           });
 
           rowData.edge.forEach(element => {
-            newElement.push({data: { id: element.id, source: element.source, target: element.target }})
+            newElement.push({data: { id: element.id, source: element.source, target: element.target, length: element.length }})
           });
           this.elements = newElement;
           this.config.elements = newElement;
