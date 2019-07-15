@@ -4,6 +4,7 @@
     <p class="title">Co-expression network analysis</p>
     <div id="holder" v-if="show">
       <cytoscape :config="config" />
+      <span v-on:click="exportToImg" style="font-size:14px; margin: 0 0 24px 120px">Export to img</span>
     </div>
     <el-tabs type="border-card" v-model="form.activeName" @tab-click="handleTabClick" stretch class="tabs">
       <el-tab-pane label="Calsi" name="calsi">
@@ -276,6 +277,19 @@ Daeje_Gene26990`;
 
         })
       }
+    },
+    exportToImg() {
+      console.log(this.$cytoscape)
+      this.$cytoscape.instance.then(cy => {
+        let png64 = cy.png();
+        
+        function debugBase64(base64URL){
+           let win = window.open();
+            win.document.write('<iframe src="' + base64URL  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+            win.document.close()
+        }
+        debugBase64(png64)
+      })
     }
   }
 }
@@ -305,7 +319,7 @@ Daeje_Gene26990`;
   }
   #holder {
     width: 100%;
-    height: 700px;
+    height: 1000px;
   }
   .cytoscape-area {
     width: 100%;

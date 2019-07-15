@@ -6,6 +6,7 @@ import Download from './components/Download.vue';
 import Contact from './components/Contact.vue';
 
 import CoExpression from './components/tools/CoExpression.vue';
+import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
 
 export default [
   { path: '/', component: Home },
@@ -15,5 +16,6 @@ export default [
   { path: '/download', component: Download },
   { path: '/contact', component: Contact },
 
-  {path: '/tools/coexpression', component: CoExpression}
+  {path: '/tools/coexpression', component: CoExpression},
+  {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis}
 ]
