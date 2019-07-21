@@ -1,0 +1,24 @@
+NST.sh: line 1: syntax error near unexpected token ``ls *gene`'
+NST.sh: line 1: `for  in `ls *gene`;do echo "python annotation_pre.py $i Calsi"; done >VND_enrichment.sh'
+ls: 无法访问*sorted_detail: 没有那个文件或目录
+Number of  Commands: 31
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "annotation_pre.py", line 44, in <module>
+  File "annotation_pre.py", line 44, in <module>
+        for line2 in open('tmp/%s.tmp.query' % session):
+for line2 in open('tmp/%s.tmp.query' % session):
+IOErrorIOError: : [Errno 2] No such file or directory: 'tmp/Calsi_gene30083-AT4G36160.coex_MR.gene.tmp.query'[Errno 2] No such file or directory: 'tmp/Calsi_gene06873-AT1G71930.coex_MR.gene.tmp.query'
+
+Traceback (most recent call last):
+  File "annotation_pre.py", line 44, in <module>
+    for line2 in open('tmp/%s.tmp.query' % session):
+IOError: [Errno 2] No such file or directory: 'tmp/Calsi_gene30083-AT2G18060.coex_MR.gene.tmp.query'
+Traceback (most recent call last):
+  File "annotation_pre.py", line 44, in <module>
+    for line2 in open('tmp/%s.tmp.query' % session):
+IOError: [Errno 2] No such file or directory: 'tmp/Calsi_gene07255-AT5G09330.coex_MR.gene.tmp.query'
+
+
+We are sorry, commands in file: [FailedCommands] failed.  :-( 
+

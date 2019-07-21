@@ -202,7 +202,7 @@ Daeje_Gene26990`;
       if(this.form.singleOrList === 'single') {
         this.show = false;
         this.loading = true;
-        this.axios.get(`http://rattan.bamboogdb.org/coExpressionGet.php?gene=${this.form.gene}&database=${this.form.activeName}&type=${this.form.type}`).then((response) => {
+        this.axios.get(`http://rattan.bamboogdb.org/php/coExpressionGet.php?gene=${this.form.gene}&database=${this.form.activeName}&type=${this.form.type}`).then((response) => {
         //  console.log(response.data)
           const rowData = response.data;
           if(response.data === 'no_data') {
@@ -237,7 +237,7 @@ Daeje_Gene26990`;
         
         this.show = false;
         this.loading = true;
-        this.axios.post('http://rattan.bamboogdb.org/coExpressionPost.php', data).then((response) => {
+        this.axios.post('http://rattan.bamboogdb.org/php/coExpressionPost.php', data).then((response) => {
           // console.log(response);
           const rowData = response.data;
           let stop = false;
