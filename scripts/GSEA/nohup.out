@@ -60241,3 +60241,33 @@ Number of  Commands: 73
 
 All commands completed successfully. :-)
 
+Number of  Commands: 1
+sh: R: command not found
+sh: R: command not found
+sh: R: command not found
+sh: R: command not found
+Traceback (most recent call last):
+  File "annotation.py", line 62, in <module>
+    for line in open('tmp/%s.detail' % session):
+IOError: [Errno 2] No such file or directory: 'tmp/Calsi_gene07414-AT1G80760.co_MR_gene.detail'
+/var/www/rattan/scripts/gsea
+/var/www/rattan/scripts/gsea
+
+
+All commands completed successfully. :-)
+
+Number of  Commands: 0
+
+
+All commands completed successfully. :-)
+
+Number of  Commands: 0
+
+
+All commands completed successfully. :-)
+
+Number of  Commands: 0
+
+
+All commands completed successfully. :-)
+

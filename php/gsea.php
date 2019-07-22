@@ -35,7 +35,7 @@ $job_dir = '/var/www/rattan/scripts/gsea/tmp/'.$job_id;
 mkdir($job_dir, 0777);
 chmod($job_dir, 0777);
 
-echo json_encode($_POST);
+#echo json_encode($_POST);
 
 $newGeneFile = fopen($job_dir.'/gene.file', "w") or die("Unable to open file!");
 $txt = $_POST["textarea"];
@@ -44,7 +44,31 @@ fclose($newGeneFile);
 
 chmod($job_dir.'/gene.file', 0777);
 
-// exec("python /var/www/rattan/scripts/gsea/annotation_pre.py Calsi_gene47006-AT4G10340.co_MR_gene Calsi 2>&1",$array);
+$Module_annotation_conf = fopen($job_dir.'/Module_annotation.conf', 'w') or die('Unable to open file!');
+$species = $_POST["species"];
+$background = $_POST["background"];
+$testMethod = $_POST["testMethod"];
+$mt = $_POST["adjustmentMethod"];
+$cutoff = $_POST["level"];
+fwrite($Module_annotation_conf ,"species ".$species.PHP_EOL);
+fwrite($Module_annotation_conf, "bgtype ".$background.PHP_EOL);
+fwrite($Module_annotation_conf, "testMethod ".$testMethod.PHP_EOL);
+fwrite($Module_annotation_conf, "mt ".$mt.PHP_EOL);
+fwrite($Module_annotation_conf, "cutoff ".$cutoff);
+fclose($Module_annotation_conf);
+chmod($job_dir.'/Module_annotation.conf', 0777);
+
+$Module_annotation_category = fopen($job_dir.'/Module_annotation.category','w') or die('Unable to open file!'); 
+$rawcata = $_POST["database"];
+$cata = explode(',', $rawcata);
+foreach($cata as $value) {
+    fwrite($Module_annotation_category, $species.'_'.$value.PHP_EOL);
+}
+fclose($Module_annotation_category);
+chmod($job_dir.'/Module_annotation.category', 0777);
+
+echo($job_id);
+exec("python /var/www/rattan/scripts/gsea/annotation_pre.py gene ".$species.' '.$job_id." 2>&1",$array);
 
 // echo(json_encode($array));
 ?>

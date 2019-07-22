@@ -1,6 +1,6 @@
 #!perl
 open IN,"$ARGV[0]";
-open OUT,">$ARGV[0]-0.05";
+open OUT,">$ARGV[1]";
 #open OUT1,">Module_id_0.05";
 while(<IN>){
 	chomp;
