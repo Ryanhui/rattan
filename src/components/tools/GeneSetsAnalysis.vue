@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <p class="title">GSEA Analysis</p>
-    <div class="result">
+    <div class="result" v-if="showResult">
+      <el-button @click="backToMain" type="primary" icon="el-icon-back" class="returnButton">Return</el-button>
+      <el-button @click="getResult" class="returnButton" style="margin-left: 8px">No result? Click To Try Again</el-button>
       <el-table
         :data="tableData"
         stripe
@@ -36,7 +38,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-form ref="form" label-width="200px" class="form">
+    <el-form ref="form" label-width="200px" class="form" v-if="!showResult">
       <el-form-item label="Choose Species">
         <el-select v-model="species" placeholder="please select">
           <el-option label="Calamus simplicifolius" value="Calsi"></el-option>
@@ -117,7 +119,6 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
-        <el-button @click="getResult">getResult</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -151,53 +152,70 @@ export default {
 
         jobId: '',
 
-        tableData:[{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙'
-        }]
+        showResult: false,
+        tableData:[],
       }
     },
   methods: {
     handleCheckAllG1Change(val){
-      console.log(val);
       this.checkedG1 = val ? ['BP', 'CC', 'MF'] : [];
       this.isIndeterminateG1 = false;
     },
     handleCheckedG1Change(val) {
-      console.log(val);
       this.checkAllG1 = val.length === 3;
       this.isIndeterminateG1 = val.length > 0 && val.length < 3; 
     },
 
     handleCheckAllG3Change(val){
-      console.log(val);
       this.checkedG3 = val ? ['KEGG'] : [];
       this.isIndeterminateG3 = false;
     },
     handleCheckedG3Change(val) {
-      console.log(val);
       this.checkAllG3 = val.length === 1;
       this.isIndeterminateG3 = val.length > 0 && val.length < 1; 
     },
 
     onSubmit() {
+      // 转换 gene Setes 数据
+      let database = [];
+      database = database.concat(this.checkedG1).concat(this.checkedG3);
+      if(this.checkedG2) {
+        database.push('GFam');
+      }
 
+      // 判断用户输入完整
+      if(this.species === '') {
+        this.$message.error('Please Choose Species!');
+        return;
+      }
+      if(database.length === 0) {
+        this.$message.error('Choose Gene Sets!');
+        return;
+      }
+      if(this.background === '') {
+        this.$message.error('Please Choose Background!');
+        return;
+      }
+      if(this.testMethod === '') {
+        this.$message.error('Please Choose Statistical test method!');
+        return;
+      }
+      if(this.adjustmentMethod === '') {
+        this.$message.error('Please Choose Multi-test adjustment method!');
+        return;
+      }
+      if(this.level === '') {
+        this.$message.error('Please Choose Significance Level!');
+        return;
+      }
+      if(this.textarea === '') {
+        this.$message.error('Please Input Genes!');
+        return;
+      }
+
+      // 生成请求数据
       var data = new FormData();
-      data.append('database',this.checkedG1);
-      data.append('genes',this.checkedG3);
+      data.append('database', database);
       data.append('species', this.species);
       data.append('background', this.background);
       data.append('customizedBackground', this.customizedBackground);
@@ -205,10 +223,30 @@ export default {
       data.append('adjustmentMethod', this.adjustmentMethod);
       data.append('level', this.level);
       data.append('textarea', this.textarea);
+      
+      for (var pair of data.entries()) {
+        console.log(pair[0]+ ': ' + pair[1]); 
+      }
+      
+      // 显示结果页
+      this.showResult = true;
+      this.onloading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+      });
+      this.tableData = [];
 
+      // 开始请求
       this.axios.post('http://rattan.bamboogdb.org/php/gsea.php',data).then((response) => {
         console.log(response);
         this.jobId = response.data;
+        
+        // 获取结果
+        setTimeout(() => {
+          this.getResult();
+        },2000)
       }).catch((error) => {
         console.log(error);
       })
@@ -218,7 +256,12 @@ export default {
       this.axios.get('http://rattan.bamboogdb.org/php/gsea_result.php?job_id='+this.jobId).then((response) => {
         console.log(response);
         this.tableData = response.data;
+        this.onloading.close();
       })
+    },
+    
+    backToMain() {
+      this.showResult = false;
     }
   }
 }
@@ -240,7 +283,11 @@ export default {
   }
   .result {
     width: 1000px;
-    margin: 0 auto;
+    margin: 24px auto 24px auto;
+  }
+  .returnButton {
+    margin: 16px 0;
+    float: left;
   }
 </style>
 
