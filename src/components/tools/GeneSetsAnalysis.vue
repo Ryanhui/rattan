@@ -2,8 +2,19 @@
   <div class="container">
     <p class="title">GSEA Analysis</p>
     <div class="result" v-if="showResult">
-      <el-button @click="backToMain" type="primary" icon="el-icon-back" class="returnButton">Return</el-button>
-      <el-button @click="getResult" class="returnButton" style="margin-left: 8px">No result? Click To Try Again</el-button>
+      <div class="returnButtonWrap">
+        <el-button @click="backToMain" type="primary" icon="el-icon-back" class="returnButton">Return</el-button>
+      </div>
+      <!-- <el-button @click="getResult" class="returnButton" style="margin-left: 8px">No result? Click To Try Again</el-button> -->
+      <!-- <el-button @click="updateCanvas">updateCanvas</el-button> -->
+      <div class="jobInfo">
+        <p style="font-size: 24px">Basic computing summary</p>
+        <p>ID number of the Job: {{jobId}} (Available in 3 months for retrieving).</p>
+        <p>Categories selected: {{categories}}</p>
+        <p>NO. query list after removing redundancy: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.query'" target="_blank">click</a></p>
+        <p>NO. redundant list in original query: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.redu.query'" target="_blank">click</a></p>
+        <p>Computing Result in Table formatted: <a :href="'/scripts/gsea/tmp/'+jobId+'/result.table.table_out'" target="_blank">click</a></p>
+      </div>
       <el-table
         :data="tableData"
         stripe
@@ -37,6 +48,9 @@
           label="FDR">
         </el-table-column>
       </el-table>
+      <div class="canvas">
+        <canvas id="canvas" width="1000" height="1600"></canvas>
+      </div>
     </div>
     <el-form ref="form" label-width="200px" class="form" v-if="!showResult">
       <el-form-item label="Choose Species">
@@ -132,6 +146,7 @@ export default {
   },
   data() {
       return {
+        categories: [],
         checkAllG1: false,
         isIndeterminateG1: false,
         checkedG1: [],
@@ -154,6 +169,7 @@ export default {
 
         showResult: false,
         tableData:[],
+        chartData: {},
       }
     },
   methods: {
@@ -182,6 +198,7 @@ export default {
       if(this.checkedG2) {
         database.push('GFam');
       }
+      this.categories = database;
 
       // 判断用户输入完整
       if(this.species === '') {
@@ -255,15 +272,59 @@ export default {
     getResult() {
       this.axios.get('http://rattan.bamboogdb.org/php/gsea_result.php?job_id='+this.jobId).then((response) => {
         console.log(response);
-        this.tableData = response.data;
+        this.tableData = response.data.table;
+        this.chartData = response.data.chart;
         this.onloading.close();
+
+        setTimeout(()=>{
+          this.updateCanvas();
+        },10)
       })
     },
     
     backToMain() {
       this.showResult = false;
-    }
-  }
+    },
+
+    updateCanvas: function (){
+      var canvas = document.getElementById('canvas'),
+          ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = "black";
+      ctx.font="20px";
+
+
+      let startX = 50,startY = 500;
+      let drawData = this.chartData.detail;
+      let drawTitle = this.chartData.title;
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for(let i = 0; i<drawData.length; i++) {
+        if(drawData[i][0] === '') break;
+        ctx.fillStyle = "black";
+        ctx.fillText(drawData[i][0], startX, startY + i *20 + 6);
+        for(let j = 0;j < drawTitle.length; j++) {
+          if(drawData[i].indexOf(drawTitle[j]) > -1) {
+            ctx.fillStyle="#CC3300";
+          }else {
+            ctx.fillStyle="#C0C0C0";
+          }
+          ctx.fillRect(startX+20 + j*15, startY + i *20, 12, 12);
+        }
+      }
+
+      ctx.save();
+      ctx.translate(startX+25, startY-5);
+      ctx.rotate(-Math.PI/2);
+      ctx.fillStyle = "black";
+      ctx.textAlign = "left";
+      this.chartData.title.forEach((item, i) => {
+        ctx.fillText(item, 0, 0 + 15 * i);
+      })
+
+      ctx.restore();
+    },
+  },
 }
 
 </script>
@@ -288,6 +349,19 @@ export default {
   .returnButton {
     margin: 16px 0;
     float: left;
+  }
+  .returnButtonWrap {
+    overflow: hidden;
+  }
+  .jobInfo{
+    text-align: left;
+    margin-bottom: 24px;
+  }
+  .jobInfo p {
+    margin: 8px 0;
+  }
+  .canvas {
+    margin-top: 24px;
   }
 </style>
 

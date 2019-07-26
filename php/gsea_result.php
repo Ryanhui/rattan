@@ -38,7 +38,11 @@ exec($str);
 $str = 'perl /var/www/rattan/scripts/gsea/GSEA-transformat.pl '.$job_dir.'/result.table '.$job_dir.'/';
 exec($str);
 
+$str = 'perl /var/www/rattan/scripts/gsea/transformat2html_dotplot.pl '.$job_dir.'/gene.query '.$job_dir.'/result.table >'.$job_dir.'/chart.data';
+exec($str);
+
 $file_path = $job_dir.'/result.table.table_out';
+$return_data = new stdClass();
 if(file_exists($file_path)) {
   $file_arr = fopen($file_path, "r");
   $outArr = array();
@@ -58,12 +62,44 @@ if(file_exists($file_path)) {
     array_push($outArr, $object);
   } while(!feof($file_arr));
 
-  echo json_encode($outArr);
-
-  // $f = fopen($file_path, "r");
-  // $line = fgets($f);
-  // $line = str_replace("\t", "+", $line);
-  // $line = explode("+", $line);
-  // echo json_encode($line);
+  array_pop($outArr);
+  $return_data->table = $outArr;
+#  echo json_encode($outArr);
 }
+
+$chart_file_path = $job_dir.'/chart.data';
+if(file_exists($chart_file_path)) {
+    $chart_file_arr = fopen($chart_file_path, 'r');
+    $chart_outObj = new stdClass();
+    $line = fgets($chart_file_arr);
+    $line = str_replace(PHP_EOL, '', $line);
+    $line = str_replace("\t", "+", $line);
+    $line = explode("+", $line);
+    array_pop($line);
+    $line_result = array();
+    foreach($line as $k=>$v){
+		if($v != ""){
+			array_push($line_result, $v);
+		};
+    };
+
+    $chart_outObj->title = $line_result;
+
+    $detail_data = array();
+    do {
+        $line = fgets($chart_file_arr);
+        $line = str_replace(PHP_EOL, '', $line);
+        $line = str_replace("\t", "+", $line);
+        $line = explode("+", $line);
+        array_push($detail_data, $line);
+    } while(!feof($chart_file_arr));
+
+    $chart_outObj->detail = $detail_data;
+    
+    $return_data->chart = $chart_outObj; 
+    
+   # echo json_encode($chart_outObj);
+}
+
+echo json_encode($return_data);
 ?>
