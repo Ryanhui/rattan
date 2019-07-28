@@ -4,7 +4,42 @@
     <p class="title">Co-expression network analysis</p>
     <div id="holder" v-if="show">
       <cytoscape :config="config" />
-      <span v-on:click="exportToImg" style="font-size:14px; margin: 0 0 24px 120px">Export to img</span>
+    </div>
+    <div v-if="show">
+      <p v-on:click="exportToImg" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">Export to img</p>
+      <p v-on:click="showDetailfun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showDetail?'Hide':'Show'}} network details</p>
+    </div>
+    <div v-if="showDetail">
+      <el-table
+        :data="tableData"
+        border
+        size="mini"
+        style="width: 80%;margin: 0 auto;">
+        <el-table-column
+          prop="source"
+          label="Gene A"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="target"
+          label="	Gene B"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="length"
+          label="PCC">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="MR">
+        </el-table-column>
+        <el-table-column
+          label="Relationship">
+          <template slot-scope="scope">
+            {{scope.row.length > 0 ? 'Positive': 'Negative'}}
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <el-tabs type="border-card" v-model="form.activeName" @tab-click="handleTabClick" stretch class="tabs">
       <el-tab-pane label="Calsi" name="calsi">
@@ -156,7 +191,9 @@ export default {
       elements: [],
       loading: false,
       show: false,
-
+      tableData: [],
+      showDetail: false,
+      
       form: {
           activeName: 'calsi',
 
@@ -223,6 +260,8 @@ Daeje_Gene26990`;
           });
           this.elements = newElement;
           this.config.elements = newElement;
+          this.tableData = rowData.edge;
+          console.log(rowData.edge);
           const self = this;
           setTimeout(function(){
             self.show = true;  
@@ -290,6 +329,9 @@ Daeje_Gene26990`;
         }
         debugBase64(png64)
       })
+    },
+    showDetailfun() {
+      this.showDetail = !this.showDetail;
     }
   }
 }

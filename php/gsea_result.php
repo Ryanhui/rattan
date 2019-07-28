@@ -48,8 +48,8 @@ if(file_exists($file_path)) {
   $outArr = array();
   do {
     $line = fgets($file_arr);
-    $line = str_replace("\t", "+", $line);
-    $line = explode("+", $line);
+    $line = str_replace("\t", "^", $line);
+    $line = explode("^", $line);
     $object = new stdClass();
 
     $object->gene = $line[0];
@@ -73,9 +73,9 @@ if(file_exists($chart_file_path)) {
     $chart_outObj = new stdClass();
     $line = fgets($chart_file_arr);
     $line = str_replace(PHP_EOL, '', $line);
-    $line = str_replace("\t", "+", $line);
-    $line = explode("+", $line);
-    array_pop($line);
+    $line = str_replace("\t", "^", $line);
+    $line = explode("^", $line);
+    //array_pop($line);
     $line_result = array();
     foreach($line as $k=>$v){
 		if($v != ""){
@@ -85,12 +85,13 @@ if(file_exists($chart_file_path)) {
 
     $chart_outObj->title = $line_result;
 
+    //$chart_outObj->title = $line;
     $detail_data = array();
     do {
         $line = fgets($chart_file_arr);
         $line = str_replace(PHP_EOL, '', $line);
-        $line = str_replace("\t", "+", $line);
-        $line = explode("+", $line);
+        $line = str_replace("\t", "^", $line);
+        $line = explode("^", $line);
         array_push($detail_data, $line);
     } while(!feof($chart_file_arr));
 

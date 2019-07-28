@@ -19,7 +19,7 @@
         :data="tableData"
         stripe
         border
-        size="mini"
+        size="small"
         style="width: 100%">
         <el-table-column
           prop="gene"
@@ -49,7 +49,7 @@
         </el-table-column>
       </el-table>
       <div class="canvas">
-        <canvas id="canvas" width="1000" height="1600"></canvas>
+        <canvas id="canvas" width="1000" height="1800"></canvas>
       </div>
     </div>
     <el-form ref="form" label-width="200px" class="form" v-if="!showResult">
@@ -158,11 +158,11 @@ export default {
         checkedG3: [],
 
         species: '',
-        background: '',
+        background: 'suggested',
         customizedBackground: '',
-        testMethod: '',
-        adjustmentMethod: '',
-        level: '',
+        testMethod: 'fisher',
+        adjustmentMethod: 'BY',
+        level: '0.05',
         textarea: '',
 
         jobId: '',
@@ -291,10 +291,10 @@ export default {
           ctx = canvas.getContext('2d');
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.fillStyle = "black";
-      ctx.font="20px";
+      ctx.font="16px Arial";
 
 
-      let startX = 50,startY = 500;
+      let startX = 150,startY = 700;
       let drawData = this.chartData.detail;
       let drawTitle = this.chartData.title;
       ctx.textAlign = "right";
@@ -302,24 +302,24 @@ export default {
       for(let i = 0; i<drawData.length; i++) {
         if(drawData[i][0] === '') break;
         ctx.fillStyle = "black";
-        ctx.fillText(drawData[i][0], startX, startY + i *20 + 6);
+        ctx.fillText(drawData[i][0], startX, startY + i *20 + 8);
         for(let j = 0;j < drawTitle.length; j++) {
           if(drawData[i].indexOf(drawTitle[j]) > -1) {
             ctx.fillStyle="#CC3300";
           }else {
             ctx.fillStyle="#C0C0C0";
           }
-          ctx.fillRect(startX+20 + j*15, startY + i *20, 12, 12);
+          ctx.fillRect(startX+10 + j*19, startY + i *20, 15, 15);
         }
       }
 
       ctx.save();
-      ctx.translate(startX+25, startY-5);
+      ctx.translate(startX+18, startY-5);
       ctx.rotate(-Math.PI/2);
       ctx.fillStyle = "black";
       ctx.textAlign = "left";
       this.chartData.title.forEach((item, i) => {
-        ctx.fillText(item, 0, 0 + 15 * i);
+        ctx.fillText(item, 0, 0 + 20 * i);
       })
 
       ctx.restore();

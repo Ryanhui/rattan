@@ -44,6 +44,13 @@ fclose($newGeneFile);
 
 chmod($job_dir.'/gene.file', 0777);
 
+$newBackgroundFile = fopen($job_dir.'/gene.bgfile', "w") or die("Unable to open file!");
+$txt = $_POST["customizedBackground"];
+fwrite($newBackgroundFile, $txt);
+fclose($newBackgroundFile);
+
+chmod($job_dir.'/gene.file', 0777);
+
 $Module_annotation_conf = fopen($job_dir.'/Module_annotation.conf', 'w') or die('Unable to open file!');
 $species = $_POST["species"];
 $background = $_POST["background"];
