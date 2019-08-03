@@ -12,7 +12,8 @@ array = {}
 array_s = {}
 query = []
 
-print jobId
+# print jobId
+# print os.getcwd()
 
 for line in open('tmp/'+jobId+'/Module_annotation.conf'): 
 

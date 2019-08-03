@@ -7,6 +7,7 @@ import Contact from './components/Contact.vue';
 
 import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
+import ModuleEnrichment from './components/tools/ModuleEnrichment.vue';
 
 export default [
   { path: '/', component: Home },
@@ -17,5 +18,6 @@ export default [
   { path: '/contact', component: Contact },
 
   {path: '/tools/coexpression', component: CoExpression},
-  {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis}
+  {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis},
+  {path: '/tools/moduleenrichment', component: ModuleEnrichment}
 ]

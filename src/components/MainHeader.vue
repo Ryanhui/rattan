@@ -29,7 +29,7 @@
           <li class="tools-dropdown-list"><router-link to="/">Annotation</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Search</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/coexpression">Co-expression Network</router-link></li>
-          <li class="tools-dropdown-list"><router-link to="/">Module enrichment</router-link></li>
+          <li class="tools-dropdown-list"><router-link to="/tools/moduleenrichment">Module enrichment</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Cis-element Analysis</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
           <li><router-link to="/">Annotation Summary</router-link></li>
