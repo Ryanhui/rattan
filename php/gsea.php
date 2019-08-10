@@ -49,7 +49,7 @@ $txt = $_POST["customizedBackground"];
 fwrite($newBackgroundFile, $txt);
 fclose($newBackgroundFile);
 
-chmod($job_dir.'/gene.file', 0777);
+chmod($job_dir.'/gene.bgfile', 0777);
 
 $Module_annotation_conf = fopen($job_dir.'/Module_annotation.conf', 'w') or die('Unable to open file!');
 $species = $_POST["species"];

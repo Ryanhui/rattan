@@ -1,19 +1,45 @@
 <template>
   <div>
     <p class="title">ModuleSEA Analysis</p>
-    <el-form ref="form" label-width="200px" class="form" v-if="!showResult">
+    <el-table
+      :data="tableData"
+      border
+      class="table"
+      v-if="showTable"
+      style="width: 80%">
+      <el-table-column
+        prop="geneSetName"
+        label="Gene Set Name(NO. Genes)"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="description"
+        label="Description"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="category"
+        label="Category">
+      </el-table-column>
+      <el-table-column
+        prop="overlap"
+        label="Overlap Genes">
+      </el-table-column>
+      <el-table-column
+        prop="pvalue"
+        label="p-value">
+      </el-table-column>
+      <el-table-column
+        prop="fdr"
+        label="FDR">
+      </el-table-column>
+    </el-table>
+    <el-form ref="form" label-width="200px" class="form">
       <el-form-item label="Choose Species">
         <el-select v-model="species" placeholder="please select">
           <el-option label="Calamus simplicifolius" value="Calsi"></el-option>
           <el-option label="Daemonorops jenkinsiana" value="Daeje"></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="Choose Gene Sets">
-        <div>
-          <el-checkbox v-model="checkAllG1">Co-expression module</el-checkbox>
-          <el-checkbox v-model="checkedG2" label="GFam" key="GFam">MiRNA-target module</el-checkbox>
-        </div>
-
       </el-form-item>
       <el-form-item label="Statistical test method">
         <el-select v-model="testMethod" placeholder="please select">
@@ -52,6 +78,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
+        <!-- <el-button @click="getResult">adfsdf</el-button> -->
       </el-form-item>
     </el-form>
   </div>
@@ -64,7 +91,60 @@ export default {
       species: 'Calsi',
       testMethod: 'fisher',
       adjustmentMethod: 'BY',
-      level: '0.05'
+      level: '0.05',
+      textarea: '',
+
+      jobId: '',
+      tableData: [],
+      showTable: false,
+      loading: null
+    }
+  },
+  methods: {
+    onSubmit() {
+      var data = new FormData();
+      data.append('species', this.species);
+      data.append('testMethod', this.testMethod);
+      data.append('adjustmentMethod', this.adjustmentMethod);
+      data.append('level', this.level);
+      data.append('textarea', this.textarea);
+
+      // 开始请求
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+      });
+      this.showTable = false;
+      this.axios.post('http://rattan.bamboogdb.org/php/modulesea.php',data).then((response) => {
+        console.log(response);
+        this.jobId = response.data;
+
+        setTimeout(() => {
+          this.getResult();
+        },2000)
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+
+    getResult() {
+      this.axios.get('http://rattan.bamboogdb.org/php/modulesea_result.php?job_id='+this.jobId).then((response) => {
+        console.log(response);
+        this.tableData = response.data;
+        this.showTable = true;
+        this.loading.close();
+        setTimeout(() => {
+          document.querySelector('#app').scrollTo({
+            top: 100,
+            left: 0,
+            behavior: 'smooth'
+          })
+        },200)
+      }).catch((error) => {
+        console.log(error);
+      })
     }
   }
 }
@@ -78,6 +158,9 @@ export default {
     width: 900px;
     margin: 24px auto 0 auto;
     text-align: left;
+  }
+  .table {
+    margin: 24px auto 24px auto;
   }
 </style>
 
