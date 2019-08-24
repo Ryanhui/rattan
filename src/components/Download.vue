@@ -50,66 +50,60 @@ export default {
   data() {
         return {
           tableData1: [{
-            name: 'Phyllostachys_edulis_V1.BAC-ends',
-            address: '/BambooV1/Phyllostachys_edulis_V1.BAC-ends'
+            name: 'Calamus_simplicifolius.HIC.genome',
+            address: '/download/Calsi/Calamus_simplicifolius.HIC.genome'
           }, {
-            name: 'Phyllostachys_edulis_V1.Gene-clusters',
-            address: '/BambooV1/Phyllostachys_edulis_V1.Gene-clusters'
+            name: 'Calamus_simplicifolius.WGS.genome',
+            address: '/download/Calsi/Calamus_simplicifolius.WGS.genome'
           }, {
-            name: 'Phyllostachys_edulis_V1.Interpro',
-            address: '/BambooV1/Phyllostachys_edulis_V1.Interpro'
+            name: 'Calamus_simplicifolius.cds',
+            address: '/download/Calsi/Calamus_simplicifolius.cds'
           }, {
-            name: 'Phyllostachys_edulis_V1.Repeats',
-            address: '/BambooV1/Phyllostachys_edulis_V1.Repeats'
+            name: 'Calamus_simplicifolius.gene.gff3',
+            address: '/download/Calsi/Calamus_simplicifolius.gene.gff3'
           }, {
-            name: 'Phyllostachys_edulis_V1.cds',
-            address: '/BambooV1/Phyllostachys_edulis_V1.cds'
+            name: 'Calamus_simplicifolius.miRNA.gff3',
+            address: '/download/Calsi/Calamus_simplicifolius.miRNA.gff3'
           },{
-            name: 'Phyllostachys_edulis_V1.genome',
-            address: '/BambooV1/Phyllostachys_edulis_V1.genome'
+            name: 'Calamus_simplicifolius.proteins',
+            address: '/download/Calsi/Calamus_simplicifolius.proteins'
           },{
-            name: 'Phyllostachys_edulis_V1.gff',
-            address: '/BambooV1/Phyllostachys_edulis_V1.gff'
+            name: 'Calamus_simplicifolius.rRNA.gff3',
+            address: '/download/Calsi/Calamus_simplicifolius.rRNA.gff3'
           },{
-            name: 'Phyllostachys_edulis_V1.miRNA',
-            address: '/BambooV1/Phyllostachys_edulis_V1.miRNA'
+            name: 'Calamus_simplicifolius.snRNA.gff3',
+            address: '/download/Calsi/Calamus_simplicifolius.snRNA.gff3'
           },{
-            name: 'Phyllostachys_edulis_V1.pep',
-            address: '/BambooV1/Phyllostachys_edulis_V1.pep'
-          },{
-            name: 'Phyllostachys_edulis_V1.rRNA',
-            address: '/BambooV1/Phyllostachys_edulis_V1.rRNA'
+            name: 'Calamus_simplicifolius.tRNA.gff3',
+            address: '/download/Calsi/Calamus_simplicifolius.tRNA.gff3'
           }],
           tableData2: [{
-            name: 'Phyllostachys_edulis_V2.Hic.cds',
-            address: '/BambooV2/Phyllostachys_edulis_V2.Hic.cds'
+            name: 'Daemonorops_jenkinsiana.HIC.genome',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.HIC.genome'
           },{
-            name: 'Phyllostachys_edulis_V2.Hic.genome',
-            address: '/BambooV2/Phyllostachys_edulis_V2.Hic.genome'
+            name: 'Daemonorops_jenkinsiana.WGS.genome',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.WGS.genome'
           },{
-            name: 'Phyllostachys_edulis_V2.Hic.gff',
-            address: '/BambooV2/Phyllostachys_edulis_V2.Hic.gff'
+            name: 'Daemonorops_jenkinsiana.cds',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.cds'
           },{
-            name: 'Phyllostachys_edulis_V2.Hic.pep',
-            address: '/BambooV2/Phyllostachys_edulis_V2.Hic.pep'
+            name: 'Daemonorops_jenkinsiana.gene.gff3',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.gene.gff3'
           },{
-            name: 'Phyllostachys_edulis_V2.WGS.genome',
-            address: '/BambooV2/Phyllostachys_edulis_V2.WGS.genome'
+            name: 'Daemonorops_jenkinsiana.miRNA.gff3',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.miRNA.gff3'
           },{
-            name: 'Phyllostachys_edulis_V2.WGS.gff3',
-            address: '/BambooV2/Phyllostachys_edulis_V2.WGS.gff3'
+            name: 'Daemonorops_jenkinsiana.proteins',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.proteins'
           },{
-            name: 'Phyllostachys_edulis_V2.WGS.miRNA.gff',
-            address: '/BambooV2/Phyllostachys_edulis_V2.WGS.miRNA.gff'
+            name: 'Daemonorops_jenkinsiana.rRNA.gff3',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.rRNA.gff3'
           },{
-            name: 'Phyllostachys_edulis_V2.WGS.rRNA.gff',
-            address: '/BambooV2/Phyllostachys_edulis_V2.WGS.rRNA.gff'
+            name: 'Daemonorops_jenkinsiana.snRNA.gff3',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.snRNA.gff3'
           },{
-            name: 'Phyllostachys_edulis_V2.WGS.snRNA.gff',
-            address: '/BambooV2/Phyllostachys_edulis_V2.WGS.snRNA.gff'
-          },{
-            name: 'Phyllostachys_edulis_V2.WGS.tRNA.gff',
-            address: '/BambooV2/Phyllostachys_edulis_V2.WGS.tRNA.gff'
+            name: 'Daemonorops_jenkinsiana.tRNA.gff3',
+            address: '/download/Daeje/Daemonorops_jenkinsiana.tRNA.gff3'
           }]
         }
     },
