@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <img src="../assets/AnnotationSummary.png" alt="AnnotationSummary" class="as-image">
-    <button v-on:click="getResult">get</button>
+    <!-- <button v-on:click="getResult">get</button> -->
     <div class="badtable">
       <p class="summary-title">Cazy Calsi</p>
       <div style="padding: 8px">
@@ -54,13 +54,19 @@ export default {
       Cazy_Daeje: [],
       TF_Calsi: [],
       TF_Daeje: [],
+
+      loading: false,
     }
   },
   components:{
 
   },
+  mounted: function() {
+    this.getResult()
+  },
   methods: {
     getResult() {
+      this.loading = true;
       this.axios.get('http://rattan.bamboogdb.org/php/summary.php').then((response) => {
         console.log(response);
         const data = response.data;
@@ -68,6 +74,7 @@ export default {
         this.Cazy_Daeje = data.Cazy_Daeje;
         this.TF_Calsi = data.TF_Calsi;
         this.TF_Daeje = data.TF_Daeje;
+        this.loading = false;
       }).catch((error) => {
         console.log(error);
       })
@@ -89,24 +96,28 @@ export default {
   }
   .badtable{
     width: 1150px;
-    margin: 16px auto;
+    margin: 24px auto;
     border: 2px solid black;
   }
   .badtable span{
     width: 90px;
     display: inline-block;
     margin: 2px 2px;
+    text-align: center;
   }
-
+  .badtable a,.badtablebig a {
+    text-decoration: none;
+  }
   .badtablebig{
     width: 1150px;
-    margin: 16px auto;
+    margin: 24px auto;
     border: 2px solid black;
   }
   .badtablebig span{
     width: 150px;
     display: inline-block;
     margin: 2px 2px;
+    text-align: center;
   }
   .summary-title {
     text-align: center;
