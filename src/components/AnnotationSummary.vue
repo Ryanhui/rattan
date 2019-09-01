@@ -2,46 +2,53 @@
   <div class="container" v-loading="loading">
     <img src="../assets/AnnotationSummary.png" alt="AnnotationSummary" class="as-image">
     <!-- <button v-on:click="getResult">get</button> -->
-    <div class="badtable">
-      <p class="summary-title">Cazy Calsi</p>
-      <div style="padding: 8px">
-        <span v-for="i in Cazy_Calsi" :key=i>
-          <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
-            {{i.replace(".txt",'')}}
-          </a>
-        </span>
-      </div>
-    </div>
-    <div class="badtable">
-      <p class="summary-title">Cazy Daeje</p>
-      <div style="padding: 8px">
-        <span v-for="i in Cazy_Daeje" :key=i>
-          <a :href="'/annotation_summary/Cazy/Daeje/'+i" target="_blank">
-            {{i.replace(".txt",'')}}
-          </a>  
-        </span>
-      </div>
-    </div>
-    <div class="badtablebig">
-      <p class="summary-title">TF Calsi</p>
-      <div style="padding:8px">
-        <span v-for="i in TF_Calsi" :key=i>
-          <a :href="'/annotation_summary/TF/Calsi/'+i" target="_blank">
-          {{i.replace("_rule.txt.family.out",'')}}
-          </a>
-        </span>
-      </div>
-    </div>
-    <div class="badtablebig">
-      <p class="summary-title">TF Daeje</p>
-      <div style="padding: 8px">
-        <span v-for="i in TF_Daeje" :key=i>
-          <a :href="'/annotation_summary/TF/Daeje/'+i" target="_blank">
-            {{i.replace("_rule.txt.family.out",'')}}
-          </a>
-        </span>
-      </div>
-    </div>
+    <el-tabs value="Calsi" type="border-card" tab-position="top" stretch class="tab">
+      <el-tab-pane label="Calsi" name="Calsi">
+        <div class="badtable">
+          <p class="summary-title">Cazy Calsi</p>
+          <div style="padding: 8px">
+            <span v-for="i in Cazy_Calsi" :key=i>
+              <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                {{i.replace(".txt",'')}}
+              </a>
+            </span>
+          </div>
+        </div>
+        <div class="badtablebig">
+          <p class="summary-title">TF Calsi</p>
+          <div style="padding:8px">
+            <span v-for="i in TF_Calsi" :key=i>
+              <a :href="'/annotation_summary/TF/Calsi/'+i" target="_blank">
+              {{i.replace("_rule.txt.family.out",'')}}
+              </a>
+            </span>
+          </div>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="Daeje" name="Daeje">
+        <div class="badtable">
+          <p class="summary-title">Cazy Daeje</p>
+          <div style="padding: 8px">
+            <span v-for="i in Cazy_Daeje" :key=i>
+              <a :href="'/annotation_summary/Cazy/Daeje/'+i" target="_blank">
+                {{i.replace(".txt",'')}}
+              </a>  
+            </span>
+          </div>
+        </div>
+
+        <div class="badtablebig">
+          <p class="summary-title">TF Daeje</p>
+          <div style="padding: 8px">
+            <span v-for="i in TF_Daeje" :key=i>
+              <a :href="'/annotation_summary/TF/Daeje/'+i" target="_blank">
+                {{i.replace("_rule.txt.family.out",'')}}
+              </a>
+            </span>
+          </div>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -94,10 +101,13 @@ export default {
     margin: 24px auto;
     display: block
   }
+  .tab {
+    margin: 24px;
+  }
   .badtable{
-    width: 1150px;
+    width: 1100px;
     margin: 24px auto;
-    border: 2px solid black;
+    border: 2px solid rgb(133, 133, 133);
   }
   .badtable span{
     width: 90px;
@@ -109,9 +119,9 @@ export default {
     text-decoration: none;
   }
   .badtablebig{
-    width: 1150px;
+    width: 1100px;
     margin: 24px auto;
-    border: 2px solid black;
+    border: 2px solid rgb(133, 133, 133);
   }
   .badtablebig span{
     width: 150px;
@@ -122,6 +132,6 @@ export default {
   .summary-title {
     text-align: center;
     font-size: 24px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(175, 175, 175);
   }
 </style>
