@@ -3,7 +3,7 @@
   <el-row class="bg-green">
     <el-col :span="18">
       <div class="head-title">
-        <p class="head-title-big">Rattan</p>
+        <p class="head-title-big">Rattan-NET</p>
         <p class="head-title-small">Database of co-expression network with functional modules for rattans</p>
       </div>
     </el-col>
@@ -22,21 +22,21 @@
         </ul>
       </el-col>
       <el-col :span="2"><div class="meun-item"><router-link to="/blast">Blast</router-link></div></el-col>
-      <el-col :span="2"><div class="meun-item"><router-link to="/download">Download</router-link></div></el-col>
       <el-col :span="2">
         <div class="meun-item" v-bind:class="{addColor: isInToolsList}" @mouseenter="enterTools()" @mouseleave="leaveTools('title')">Tools</div>
         <ul class="gbrowser-dropdown" style="width:200px" v-show="showTools" @mouseenter="enterToolsList()" @mouseleave="leaveTools()">
-          <li class="tools-dropdown-list"><router-link to="/">Annotation</router-link></li>
+          <!-- <li class="tools-dropdown-list"><router-link to="/">Annotation</router-link></li> -->
           <li class="tools-dropdown-list"><router-link to="/">Search</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/coexpression">Co-expression Network</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/moduleenrichment">Module enrichment</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/">Cis-element Analysis</router-link></li>
-          <li class="tools-dropdown-list"><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
-          <li><router-link to="/">Annotation Summary</router-link></li>
+          <li><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
         </ul>
       </el-col>
+      <el-col :span="4"><div class="meun-item"><router-link to="/annotationsummary">Annotation Summary</router-link></div></el-col>
+      <el-col :span="2"><div class="meun-item"><router-link to="/download">Download</router-link></div></el-col>
       <el-col :span="2"><div class="meun-item"><router-link to="/contact">Contact Us</router-link></div></el-col>
-      <el-col :span="12"></el-col>
+      <el-col :span="10"></el-col>
     </el-row>
 </div>
 </template>
