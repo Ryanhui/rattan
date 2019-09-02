@@ -10,19 +10,19 @@
           <el-col :span="18">
            <div class="body-content introduction">
             <p class="introductio-text"> 
-              Rattan is the name for roughly 600 species of old world climbing 
-              palms belonging to subfamily Calamoideae. 
-              More than 5million people depend economically on rattan, 
-              and approximately 7 billion US dollars per year are made in 
-              the rattan industry, including domestic industrial production, 
-              the international cane Trade, cane splitting, plaiting materials, 
-              baskets, seats, and furniture. With the release of two rattan 
-              genomes in 2018, their functional annotations were put on the agenda. 
-              Rattan-NET aims to build a rattan co-expression network and load 
-              a range of analytical tools to functionally annotate rattan's genes 
-              to help researchers. More data will be available during the 
-              Announcing theGenome Atlas of Bamboo and Rattan (GABR) project, 
-              and the functionality will be improved.
+              Rattan is the name for roughly 600 species of old world climbing palms 
+              belonging to subfamily Calamoideae. More than 5 million people depend 
+              economically on rattan, and approximately 7 billion US dollars per year 
+              are made in the rattan industry, including domestic industrial production, 
+              the international cane Trade, cane splitting, plaiting materials, baskets, 
+              seats, and furniture. With the release of two rattan genomes in 2018, their 
+              functional analysis were put on the agenda. Rattan-NET is a open rattan 
+              co-expression network database with a range of analytical tools. Rattan-NET 
+              provided functional annotations of genes in rattans for researchers. 
+              Specifically, it annotated genes in transcriptome level and offered 
+              functional modules by co-expression analysis. More data sets and tools 
+              will be loaded during the movement of Genome Atlas of Bamboo and Rattan 
+              (GABR) project. Special thanks to the help of the <a class="lab" href="http://systemsbiology.cau.edu.cn/ZhenSuLab/index_e.html">Zhen Su's Lab</a> in Rattan-NET construction. 
               </p>
               <!-- <p style="text-align: left;padding-left: 64px;margin-top: 12px;">Citation: </p>
               <p class="citation">
@@ -40,7 +40,7 @@
           </el-col>
          <el-col :span="6">
            <div class="body-content news" ref="scriptHolder">
-              <div style="height: 260px">There are news</div>
+              <div style="height: 330px">There are news</div>
               <a href="https://www.revolvermaps.com/livestats/5pplwzj355p/"><img src="//rf.revolvermaps.com/h/m/a/0/ff0000/128/0/5pplwzj355p.png" width="256" height="128" alt="Map" style="border:0;"></a>
            </div>
         </el-col>
@@ -75,7 +75,7 @@ export default {
   }
   .body-content {
     background: rgba(40, 241, 40, 0.2);
-    height: 400px;
+    height: 470px;
   }
   .introduction {
     margin-right: 8px;
@@ -100,6 +100,10 @@ export default {
   .citation a{
     text-decoration: none;
     color:rgb(9, 160, 84);
+  }
+  .lab {
+    text-decoration: none;
+    color: rgb(0, 131, 87);
   }
 </style>
 

@@ -5,17 +5,60 @@
     <el-tabs value="Calsi" type="border-card" tab-position="top" stretch class="tab">
       <el-tab-pane label="Calsi" name="Calsi">
         <div class="badtable">
-          <p class="summary-title">Cazy Calsi</p>
-          <div style="padding: 8px">
-            <span v-for="i in Cazy_Calsi" :key=i>
-              <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
-                {{i.replace(".txt",'')}}
-              </a>
-            </span>
+          <p class="summary-title">Carbohydrate-Active enzymes in Calamus simplicifolius</p>
+          <div style="padding: 8px 0 8px 0">
+            <div>
+              <p class="cazy-title">Glycoside Hydrolases (GHs): hydrolysis and/or rearrangement of glycosidic bonds</p>
+              <span v-for="i in activeGH(Cazy_Calsi)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">GlycosylTransferases (GTs): formation of glycosidic bonds</p>
+              <span v-for="i in activeGT(Cazy_Calsi)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Polysaccharide Lyases (PLs): non-hydrolytic cleavage of glycosidic bonds</p>
+              <span v-for="i in activePL(Cazy_Calsi)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Carbohydrate Esterases (CEs): hydrolysis of carbohydrate esters</p>
+              <span v-for="i in activeCE(Cazy_Calsi)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Auxiliary Activities (AAs): redox enzymes that act in conjunction with CAZymes</p>
+              <span v-for="i in activeAA(Cazy_Calsi)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Carbohydrate-Binding Modules (CBMs): adhesion to carbohydrates</p>
+              <span v-for="i in activeCBM(Cazy_Calsi)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
           </div>
         </div>
         <div class="badtablebig">
-          <p class="summary-title">TF Calsi</p>
+          <p class="summary-title">Transcription Regulators in Calamus simplicifolius</p>
           <div style="padding:8px">
             <span v-for="i in TF_Calsi" :key=i>
               <a :href="'/annotation_summary/TF/Calsi/'+i" target="_blank">
@@ -27,18 +70,68 @@
       </el-tab-pane>
       <el-tab-pane label="Daeje" name="Daeje">
         <div class="badtable">
-          <p class="summary-title">Cazy Daeje</p>
-          <div style="padding: 8px">
+          <p class="summary-title">Carbohydrate-Active enzymes in Daemonorops jenkinsiana</p>
+          <div style="padding: 8px 0 8px 0">
+            <div>
+              <p class="cazy-title">Glycoside Hydrolases (GHs): hydrolysis and/or rearrangement of glycosidic bonds</p>
+              <span v-for="i in activeGH(Cazy_Daeje)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">GlycosylTransferases (GTs): formation of glycosidic bonds</p>
+              <span v-for="i in activeGT(Cazy_Daeje)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Polysaccharide Lyases (PLs): non-hydrolytic cleavage of glycosidic bonds</p>
+              <span v-for="i in activePL(Cazy_Daeje)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Carbohydrate Esterases (CEs): hydrolysis of carbohydrate esters</p>
+              <span v-for="i in activeCE(Cazy_Daeje)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Auxiliary Activities (AAs): redox enzymes that act in conjunction with CAZymes</p>
+              <span v-for="i in activeAA(Cazy_Daeje)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+            <div>
+              <p class="cazy-title">Carbohydrate-Binding Modules (CBMs): adhesion to carbohydrates</p>
+              <span v-for="i in activeCBM(Cazy_Daeje)" :key=i>
+                <a :href="'/annotation_summary/Cazy/Calsi/'+i" target="_blank">
+                  {{i.replace(".txt",'')}}
+                </a>
+              </span>
+            </div>
+          </div>
+          <!-- <div style="padding: 8px">
             <span v-for="i in Cazy_Daeje" :key=i>
               <a :href="'/annotation_summary/Cazy/Daeje/'+i" target="_blank">
                 {{i.replace(".txt",'')}}
               </a>  
             </span>
-          </div>
+          </div> -->
         </div>
 
         <div class="badtablebig">
-          <p class="summary-title">TF Daeje</p>
+          <p class="summary-title">Transcription Regulators in Daemonorops jenkinsiana</p>
           <div style="padding: 8px">
             <span v-for="i in TF_Daeje" :key=i>
               <a :href="'/annotation_summary/TF/Daeje/'+i" target="_blank">
@@ -71,6 +164,10 @@ export default {
   mounted: function() {
     this.getResult()
   },
+  computed: {
+
+    
+  },
   methods: {
     getResult() {
       this.loading = true;
@@ -85,7 +182,37 @@ export default {
       }).catch((error) => {
         console.log(error);
       })
-    }    
+    },
+    activeGH: function(data) {
+      return data.filter(function(item) {
+        return item.indexOf('GH') !== -1;
+      })
+    },
+    activeGT: function(data) {
+      return data.filter(function(item) {
+        return item.indexOf('GT') !== -1;
+      })
+    },
+    activePL: function(data) {
+      return data.filter(function(item) {
+        return item.indexOf('PL') !== -1;
+      })
+    },
+    activeCE: function(data) {
+      return data.filter(function(item) {
+        return item.indexOf('CE') !== -1;
+      })
+    },
+    activeAA: function(data) {
+      return data.filter(function(item) {
+        return item.indexOf('AA') !== -1;
+      })
+    },
+    activeCBM: function(data) {
+      return data.filter(function(item) {
+        return item.indexOf('CBM') !== -1;
+      })
+    }
   }
 }
 
@@ -117,6 +244,12 @@ export default {
   }
   .badtable a,.badtablebig a {
     text-decoration: none;
+    color: rgb(97, 97, 97);
+    transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
+  }
+  .badtable a:hover,.badtablebig a:hover {
+    color: black;
+    font-weight: 500;
   }
   .badtablebig{
     width: 1100px;
@@ -131,7 +264,12 @@ export default {
   }
   .summary-title {
     text-align: center;
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 36px;
     border-bottom: 1px solid rgb(175, 175, 175);
+  }
+  .cazy-title {
+    margin: 24px 24px 0 24px;
+    background: rgb(197, 197, 197);
   }
 </style>

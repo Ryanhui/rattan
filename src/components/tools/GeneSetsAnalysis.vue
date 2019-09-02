@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <p class="title">GSEA Analysis</p>
+    <p>Analysis Gene Sets from <a href="http://structuralbiology.cau.edu.cn/PlantGSEA/" class="plant-gsea">PlantGSEA</a></p>
     <div class="result" v-if="showResult">
       <div class="returnButtonWrap">
         <el-button @click="backToMain" type="primary" icon="el-icon-back" class="returnButton">Return</el-button>
@@ -362,6 +363,10 @@ export default {
   }
   .canvas {
     margin-top: 24px;
+  }
+  .plant-gsea {
+    color: rgb(59, 128, 105);
+    text-decoration: none;
   }
 </style>
 
