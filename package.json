@@ -14,6 +14,7 @@
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
     "vue-cytoscape": "^0.2.10",
+    "vue-pdf": "^4.0.7",
     "vue-router": "^3.0.6"
   },
   "devDependencies": {

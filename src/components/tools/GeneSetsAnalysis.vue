@@ -12,9 +12,17 @@
         <p style="font-size: 24px">Basic computing summary</p>
         <p>ID number of the Job: {{jobId}} (Available in 3 months for retrieving).</p>
         <p>Categories selected: {{categories}}</p>
-        <p>NO. query list after removing redundancy: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.query'" target="_blank">click</a></p>
-        <p>NO. redundant list in original query: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.redu.query'" target="_blank">click</a></p>
-        <p>Computing Result in Table formatted: <a :href="'/scripts/gsea/tmp/'+jobId+'/result.table.table_out'" target="_blank">click</a></p>
+        <p>NO. query list after removing redundancy: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.query'" class="clickColor" target="_blank">click</a></p>
+        <p>NO. redundant list in original query: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.redu.query'" class="clickColor" target="_blank">click</a></p>
+        <p>Computing Result in Table formatted: <a :href="'/scripts/gsea/tmp/'+jobId+'/result.table.table_out'" class="clickColor" target="_blank">click</a></p>
+        <p>Click to show pdf and pptx: <span @click="handlePdf" class="clickColor">{{showPdf ? 'hide' : 'show'}}</span></p>
+      </div>
+      <div v-if="showPdf" style="margin: 24px 0 48px 0">
+        <pdf :src="dotplotPdf" style="width: 60%"></pdf>
+        <p>Dotplot of GSEA result (You can edit it by Powerpoint, <a :href="dotplotPptx" target="_blank">download</a> the .pptx file)</p>
+        
+        <pdf :src="barplotPdf" style="width: 60%;margin-top: 60px"></pdf>
+        <p>Barplot of GSEA result (You can edit it by Powerpoint, <a :href="barplotPptx" target="_blank">download</a> the .pptx file)</p>
       </div>
       <el-table
         :data="tableData"
@@ -69,7 +77,7 @@
             <el-checkbox label="MF" key="MF">MF:GO molecular function</el-checkbox>
           </el-checkbox-group>
         </div>
-
+          
         <div>
           <el-checkbox v-model="checkedG2" label="GFam" key="GFam">G2:Gene Family Based gene sets</el-checkbox>
         </div>
@@ -140,10 +148,11 @@
 </template>
 
 <script>
+import pdf from 'vue-pdf'
 export default {
   name: 'GeneSetsAnalysis',
   components:{
-
+    pdf
   },
   data() {
       return {
@@ -171,6 +180,12 @@ export default {
         showResult: false,
         tableData:[],
         chartData: {},
+
+        showPdf: false,
+        dotplotPdf: '',
+        barplotPdf: '',
+        dotplotPptx: '',
+        barplotPptx: '',
       }
     },
   methods: {
@@ -190,6 +205,10 @@ export default {
     handleCheckedG3Change(val) {
       this.checkAllG3 = val.length === 1;
       this.isIndeterminateG3 = val.length > 0 && val.length < 1; 
+    },
+
+    handlePdf() {
+      this.showPdf = !this.showPdf;
     },
 
     onSubmit() {
@@ -277,6 +296,10 @@ export default {
         this.chartData = response.data.chart;
         this.onloading.close();
 
+        this.dotplotPdf = '/scripts/gsea/tmp/'+this.jobId+'/GSEA_dotplot.pdf',
+        this.barplotPdf = '/scripts/gsea/tmp/'+this.jobId+'/GSEA_barplot.pdf',
+        this.dotplotPptx = '/scripts/gsea/tmp/'+this.jobId+'/dotplot.pptx',
+        this.barplotPptx = '/scripts/gsea/tmp/'+this.jobId+'/barplot.pptx',
         setTimeout(()=>{
           this.updateCanvas();
         },10)
@@ -367,6 +390,11 @@ export default {
   .plant-gsea {
     color: rgb(59, 128, 105);
     text-decoration: none;
+  }
+  .clickColor {
+    text-decoration: none;
+    color: rgb(2, 128, 86);
+    cursor: pointer;
   }
 </style>
 
