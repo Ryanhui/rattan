@@ -22,7 +22,7 @@
               Specifically, it annotated genes in transcriptome level and offered 
               functional modules by co-expression analysis. More data sets and tools 
               will be loaded during the movement of Genome Atlas of Bamboo and Rattan 
-              (GABR) project. Special thanks to the help of the <a class="lab" href="http://systemsbiology.cau.edu.cn/ZhenSuLab/index_e.html">Zhen Su's Lab</a> in Rattan-NET construction. 
+              (GABR) project. Special thanks to the help of the <a class="lab" target="_blank" href="http://systemsbiology.cau.edu.cn/ZhenSuLab/index_e.html">Zhen Su's Lab</a> in Rattan-NET construction. 
               </p>
               <!-- <p style="text-align: left;padding-left: 64px;margin-top: 12px;">Citation: </p>
               <p class="citation">

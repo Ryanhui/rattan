@@ -248,7 +248,7 @@ export default {
     transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
   }
   .badtable a:hover,.badtablebig a:hover {
-    color: black;
+    color: rgb(7, 119, 16);
     font-weight: 500;
   }
   .badtablebig{

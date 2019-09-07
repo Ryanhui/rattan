@@ -1,6 +1,14 @@
 <template>
   <div>
     <p class="title">ModuleSEA Analysis</p>
+    <p v-if="showTable" style="text-align:left;margin:60px 0 0 120px">Click to show ModuleSEA result in image: <span @click="handlePdf" class="clickColor">{{showPdf ? 'hide' : 'show'}}</span></p>
+    <div v-if="showTable && showPdf" style="margin: 24px 0 48px 0">
+      <pdf :src="dotplotPdf" style="width: 60%"></pdf>
+      <p>Dotplot of ModuleSEA result (You can edit it by Powerpoint, <a :href="dotplotPptx" target="_blank">download</a> the .pptx file)</p>
+      
+      <pdf :src="barplotPdf" style="width: 60%;margin-top: 60px"></pdf>
+      <p>Barplot of ModuleSEA result (You can edit it by Powerpoint, <a :href="barplotPptx" target="_blank">download</a> the .pptx file)</p>
+    </div>
     <el-table
       :data="tableData"
       border
@@ -84,8 +92,12 @@
   </div>
 </template>
 <script>
+import pdf from 'vue-pdf';
 export default {
   name: 'ModuleEnrichment',
+  components:{
+    pdf
+  },
   data() {
     return {
       species: 'Calsi',
@@ -97,10 +109,20 @@ export default {
       jobId: '',
       tableData: [],
       showTable: false,
-      loading: null
+      loading: null,
+      
+      showPdf: false,
+      dotplotPdf: '',
+      barplotPdf: '',
+      dotplotPptx: '',
+      barplotPptx: '',
     }
   },
   methods: {
+    handlePdf() {
+      this.showPdf = !this.showPdf;
+    },
+
     onSubmit() {
       var data = new FormData();
       data.append('species', this.species);
@@ -135,6 +157,12 @@ export default {
         this.tableData = response.data;
         this.showTable = true;
         this.loading.close();
+
+        this.dotplotPdf = '/scripts/gsea/tmp/'+this.jobId+'/GSEA_dotplot.pdf',
+        this.barplotPdf = '/scripts/gsea/tmp/'+this.jobId+'/GSEA_barplot.pdf',
+        this.dotplotPptx = '/scripts/gsea/tmp/'+this.jobId+'/dotplot.pptx',
+        this.barplotPptx = '/scripts/gsea/tmp/'+this.jobId+'/barplot.pptx',
+
         setTimeout(() => {
           document.querySelector('#app').scrollTo({
             top: 100,
@@ -161,6 +189,11 @@ export default {
   }
   .table {
     margin: 24px auto 24px auto;
+  }
+  .clickColor {
+    text-decoration: none;
+    color: rgb(2, 128, 86);
+    cursor: pointer;
   }
 </style>
 

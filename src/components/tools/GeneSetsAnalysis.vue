@@ -15,7 +15,7 @@
         <p>NO. query list after removing redundancy: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.query'" class="clickColor" target="_blank">click</a></p>
         <p>NO. redundant list in original query: <a :href="'/scripts/gsea/tmp/'+jobId+'/gene.redu.query'" class="clickColor" target="_blank">click</a></p>
         <p>Computing Result in Table formatted: <a :href="'/scripts/gsea/tmp/'+jobId+'/result.table.table_out'" class="clickColor" target="_blank">click</a></p>
-        <p>Click to show pdf and pptx: <span @click="handlePdf" class="clickColor">{{showPdf ? 'hide' : 'show'}}</span></p>
+        <p>Click to show GSEA result in image: <span @click="handlePdf" class="clickColor">{{showPdf ? 'hide' : 'show'}}</span></p>
       </div>
       <div v-if="showPdf" style="margin: 24px 0 48px 0">
         <pdf :src="dotplotPdf" style="width: 60%"></pdf>

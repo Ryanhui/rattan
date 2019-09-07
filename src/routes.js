@@ -9,6 +9,7 @@ import AnnotationSummary from './components/AnnotationSummary.vue';
 import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
 import ModuleEnrichment from './components/tools/ModuleEnrichment.vue';
+import Search from './components/Search.vue';
 
 export default [
   { path: '/', component: Home },
@@ -18,7 +19,8 @@ export default [
   { path: '/download', component: Download },
   { path: '/contact', component: Contact },
   { path: '/annotationsummary', component: AnnotationSummary},
-
+  { path: '/search', component: Search},
+  
   {path: '/tools/coexpression', component: CoExpression},
   {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis},
   {path: '/tools/moduleenrichment', component: ModuleEnrichment}
