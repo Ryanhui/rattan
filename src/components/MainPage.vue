@@ -4,7 +4,9 @@
       <MainHeader />
     </el-header>
     <el-main class="no-padding">
-      <router-view></router-view>
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
     </el-main>
     <el-footer class="no-padding" height="50px">
       <MainFooter />

@@ -5,6 +5,7 @@ import Blast from './components/Blast.vue';
 import Download from './components/Download.vue';
 import Contact from './components/Contact.vue';
 import AnnotationSummary from './components/AnnotationSummary.vue';
+import FunctionModule from './components/FunctionModule.vue';
 
 import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
@@ -20,7 +21,8 @@ export default [
   { path: '/contact', component: Contact },
   { path: '/annotationsummary', component: AnnotationSummary},
   { path: '/search', component: Search},
-  
+  { path: '/function_module/:gene', name:'FunctionModule', component: FunctionModule},
+
   {path: '/tools/coexpression', component: CoExpression},
   {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis},
   {path: '/tools/moduleenrichment', component: ModuleEnrichment}

@@ -37,7 +37,7 @@
               <el-collapse-item title="1. Gene Family Search" name="1">
                 <div>
                   <el-input v-model="gfam_function" placeholder="Please input" style="width: 200px"></el-input>
-                  <span style="margin-left:16px">(Example: Monolignol Biosynthesis ,COMT-like)</span>
+                  <span style="margin-left:16px">(Example: Monolignol Biosynthesis ,COMT-like, MYB)</span>
                 </div>
                 <div>
                   <el-button @click="gfam_submit" style="margin: 16px 0">Search</el-button>
@@ -46,7 +46,7 @@
               <el-collapse-item title="2. Pfam id Search" name="2">
                 <div>
                   <el-input v-model="pfamId" placeholder="Please input" style="width: 200px"></el-input>
-                  <span style="margin-left:16px">(Example: PF14624)</span>
+                  <span style="margin-left:16px">(Example: PF14624, PTHR10579, SM0032, PS50234)</span>
                 </div>
                 <div>
                   <el-button @click="pfamId_submit" style="margin: 16px 0">Search</el-button>
@@ -64,7 +64,7 @@
               <el-collapse-item title="4. KEGG Search" name="4">
                 <div>
                   <el-input v-model="kegg_id" placeholder="Please input" style="width: 200px"></el-input>
-                  <span style="margin-left:16px">(Example: K11262)</span>
+                  <span style="margin-left:16px">(Example: K11262, map00620)</span>
                 </div>
                 <div>
                   <el-button @click="kegg_submit" style="margin: 16px 0">Search</el-button>
@@ -87,7 +87,7 @@
               <el-collapse-item title="1. Gene Family Search" name="1">
                 <div>
                   <el-input v-model="gfam_function" placeholder="Please input" style="width: 200px"></el-input>
-                  <span style="margin-left:16px">(Example: Cytoplasmic ribosomal protein gene family ,S4)</span>
+                  <span style="margin-left:16px">(Example: Cytoplasmic ribosomal protein gene family ,S4, MYB)</span>
                 </div>
                 <div>
                   <el-button @click="gfam_submit" style="margin: 16px 0">Search</el-button>
@@ -96,7 +96,7 @@
               <el-collapse-item title="2. Pfam id Search" name="2">
                 <div>
                   <el-input v-model="pfamId" placeholder="Please input" style="width: 200px"></el-input>
-                  <span style="margin-left:16px">(Example: PF02867)</span>
+                  <span style="margin-left:16px">(Example: PF02867, PTHR10579, SM00327, PS50234)</span>
                 </div>
                 <div>
                   <el-button @click="pfamId_submit" style="margin: 16px 0">Search</el-button>
@@ -114,7 +114,7 @@
               <el-collapse-item title="4. KEGG Search" name="4">
                 <div>
                   <el-input v-model="kegg_id" placeholder="Please input" style="width: 200px"></el-input>
-                  <span style="margin-left:16px">(Example: K03013)</span>
+                  <span style="margin-left:16px">(Example: K03013, map00620)</span>
                 </div>
                 <div>
                   <el-button @click="kegg_submit" style="margin: 16px 0">Search</el-button>
@@ -132,6 +132,31 @@
             </el-collapse>
           </el-tab-pane>
         </el-tabs>
+
+        <!-- function module search -->
+        <div style="margin-top: 36px">
+          <p class="gfs-title">3.Function Module Search</p>
+          <el-tabs type="border-card" v-model="function_module_species" class="gfs" stretch>
+          <el-tab-pane label="Calsi" name="Calsi">
+            <div>
+              <el-input v-model="function_module_keyword" placeholder="Please input" style="width: 200px"></el-input>
+              <span style="margin-left:16px">(Example: Calsi_Module0004, flavonol)</span>
+            </div>
+            <div>
+              <el-button @click="function_module_submit" style="margin: 16px 0">Search</el-button>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="Daeje" name="Daeje">
+            <div>
+              <el-input v-model="function_module_keyword" placeholder="Please input" style="width: 200px"></el-input>
+              <span style="margin-left:16px">(Example: Daeje_Module0002)</span>
+            </div>
+            <div>
+              <el-button @click="function_module_submit" style="margin: 16px 0">Search</el-button>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+        </div>
       </div>
     </div>
 
@@ -306,6 +331,66 @@
           </el-table-column>
         </el-table>
       </div>
+      <!-- function module -->
+      <div v-if="showfunctionModuleResult">
+        <el-table
+          :data="function_module_tableData"
+          style="width: 100%"
+          size="mini"
+          border
+        >
+          <el-table-column
+            prop="gene"
+            label=""
+            width="140"
+          >
+            <template slot-scope="scope">
+              <router-link target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
+              <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="group"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="function"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="num1"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="describe1"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="num2"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="value1"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="value2"
+            label=""
+          >
+          </el-table-column>
+          <el-table-column
+            prop="genes"
+            label=""
+          >
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
@@ -339,6 +424,10 @@ export default {
       po_id: '',
       po_tableData: [],
 
+      function_module_keyword: '',
+      function_module_species: 'Calsi',
+      function_module_tableData: [],
+
       showResult: false,
       loading: false,
       showGeneFunctionResult: false,
@@ -347,6 +436,7 @@ export default {
       showGoResult: false,
       showKeggResult: false,
       showPoResult: false,
+      showfunctionModuleResult: false,
     }
   },
   methods: {
@@ -358,6 +448,7 @@ export default {
       this.showGoResult = false;
       this.showKeggResult = false;
       this.showPoResult = false;
+      this.showfunctionModuleResult = false;
     },
     //1.Gene function search
     gfs_submit() {
@@ -446,6 +537,22 @@ export default {
         this.po_tableData = response.data;
         this.showPoResult = true;
         this.loading = false;
+      })
+    },
+    //function module search
+    function_module_submit() {
+      if(this.function_module_keyword === '') {
+        this.$message.error('Please input gene');
+        return;
+      }
+      
+      this.loading = true;
+      this.showResult = true;
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_fun_module.php?keyword=${this.function_module_keyword}&species=${this.function_module_species}`).then((response)=>{
+        this.function_module_tableData = response.data;
+        this.showfunctionModuleResult = true;
+        this.loading = false;
+        console.log(response);
       })
     }
   }
