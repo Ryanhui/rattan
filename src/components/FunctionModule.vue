@@ -1,23 +1,52 @@
 <template>
   <div class="container">
-    <h3>{{ this.$route.params.gene }}</h3>
+    <h3>{{ this.$route.params.gene }}'s Networks</h3>
     <div class="cystyle" v-if="showNetwork">
-      <!-- <cytoscape :config="config">
-        <cy-element
-          v-for="def in networkData"
-          :key="`${def.data.id}`"
-          :definition="def"
-        />
-      </cytoscape> -->
       <cytoscape :config="config" />
     </div>
+    <h3>Module annotation from GSEA</h3>
+    <el-table
+      :data="mafg_tableData"
+      border
+      class="mafg-table">
+      <el-table-column
+        prop="describe1"
+        label="">
+      </el-table-column>
+      <el-table-column
+        prop="value2"
+        label="">
+      </el-table-column>
+    </el-table>
+    <h3>Module member annotation</h3>
+    <el-table
+      :data="mma_tableData"
+      border
+      class="mafg-table">
+      <el-table-column
+        prop="query"
+        label="">
+      </el-table-column>
+      <el-table-column
+        prop="AT_gene"
+        label="">
+      </el-table-column>
+      <el-table-column
+        prop="e_value"
+        label="">
+      </el-table-column>
+      <el-table-column
+        prop="annotation"
+        label="">
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
 const config = {
   elements: [],
-  minZoom: 0.5,
+  minZoom: 0,
   //maxZoom:100,
   style: [ // the stylesheet for the graph
     {
@@ -57,18 +86,34 @@ const config = {
   ],
 
   layout: {
-    name: 'random',
+      name: 'concentric',
 
-    fit: false, // whether to fit to viewport
-    padding: 30, // fit padding
-    boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-    animate: true, // whether to transition the node positions
-    animationDuration: 500, // duration of animation in ms if enabled
-    animationEasing: undefined, // easing of animation if enabled
-    animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
-    ready: undefined, // callback on layoutready
-    stop: undefined, // callback on layoutstop
-    transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
+      fit: true, // whether to fit the viewport to the graph
+      padding: 30, // the padding on fit
+      startAngle: 3 / 2 * Math.PI, // where nodes start in radians
+      sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
+      clockwise: true, // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
+      equidistant: false, // whether levels have an equal radial distance betwen them, may cause bounding box overflow
+      minNodeSpacing: 30, // min spacing between outside of nodes (used for radius adjustment)
+      boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+      avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+      nodeDimensionsIncludeLabels: true, // Excludes the label when calculating node bounding boxes for the layout algorithm
+      height: undefined, // height of layout area (overrides container height)
+      width: undefined, // width of layout area (overrides container width)
+      spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+      concentric: function( node ){ // returns numeric value for each node, placing higher nodes in levels towards the centre
+      return node.degree();
+      },
+      levelWidth: function( nodes ){ // the letiation of concentric values in each level
+      return nodes.maxDegree() / 4;
+      },
+      animate: true, // whether to transition the node positions
+      animationDuration: 500, // duration of animation in ms if enabled
+      animationEasing: undefined, // easing of animation if enabled
+      animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+      ready: undefined, // callback on layoutready
+      stop: undefined, // callback on layoutstop
+      transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
     },
   }
 export default {
@@ -81,6 +126,9 @@ export default {
       config,
       networkData: [],
       showNetwork: false,
+
+      mafg_tableData: [],
+      mma_tableData: []
     }
   },
   methods: {
@@ -119,12 +167,31 @@ export default {
         let self = this;
         setTimeout(function(){
           self.showNetwork = true;
-        },1000)
+        },500)
       })
     },
+
+    mafg_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/mafg.php?id=${this.$route.params.gene}`).then((response)=>{
+        // console.log(response);
+        this.mafg_tableData = response.data || [];
+      });
+    },
+
+    mma_submit() { //module memeber annotation
+      let pattan = /Calsi/;
+      let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
+      let gene = this.$route.params.gene.replace('Module','gene0');
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${gene}&species=${species}`).then((response)=>{
+        console.log(response);
+        this.mma_tableData = response.data || [];
+      });
+    }
   },
   mounted: function() {
     this.network_submit();
+    this.mafg_submit();
+    this.mma_submit();
   }
 }
 
@@ -141,6 +208,10 @@ export default {
     position: relative;
     width: 95%;
     margin: 0 auto;
+  }
+  .mafg-table {
+    width: 80%; 
+    margin: 24px auto;
   }
 </style>
 

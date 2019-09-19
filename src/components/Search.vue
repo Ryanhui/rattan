@@ -345,7 +345,7 @@
             width="140"
           >
             <template slot-scope="scope">
-              <router-link target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
+              <router-link class="link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
               <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
             </template>
           </el-table-column>
@@ -575,6 +575,9 @@ export default {
   .gfs-title {
     margin: 8px 0;
     font-size: 24px;
+  }
+  .link {
+    color: rgb(11, 146, 63);
   }
 </style>
 
