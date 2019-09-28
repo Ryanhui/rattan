@@ -1,4 +1,5 @@
-sequenceserver  -d  /web_data/rattan/Blast_db -n 8 -p 8060
+sequenceserver  -d  /web_data/Rattan_NET/blast_db -n 8 -p 8060
+nohup sequenceserver  -d  /web_data/Rattan_NET/blast_db -n 8 -p 8060 &
 
 gbrowser 安装后报错
 #查看glibc的版本

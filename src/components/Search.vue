@@ -552,7 +552,6 @@ export default {
         this.function_module_tableData = response.data;
         this.showfunctionModuleResult = true;
         this.loading = false;
-        console.log(response);
       })
     }
   }

@@ -6,6 +6,7 @@ import Download from './components/Download.vue';
 import Contact from './components/Contact.vue';
 import AnnotationSummary from './components/AnnotationSummary.vue';
 import FunctionModule from './components/FunctionModule.vue';
+import FunctionModuleDetail from './components/FunctionModuleDetail.vue';
 
 import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
@@ -22,6 +23,7 @@ export default [
   { path: '/annotationsummary', component: AnnotationSummary},
   { path: '/search', component: Search},
   { path: '/function_module/:gene', name:'FunctionModule', component: FunctionModule},
+  { path: '/function_module_detail/moudle1/:module1/module2/:module2', name:'FunctionModuleDetail', component: FunctionModuleDetail},
 
   {path: '/tools/coexpression', component: CoExpression},
   {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis},

@@ -1,14 +1,21 @@
 <template>
-  <div class="container">
-    <h3>{{ this.$route.params.gene }}'s Networks</h3>
+  <div>
+    <h3>
+    Comparision between <span style="color: red">{{ this.$route.params.module1 }}</span> and <span style="color: red">{{ this.$route.params.module2 }}</span>
+    </h3>
     <div class="cystyle" v-if="showNetwork">
       <cytoscape :config="config" />
     </div>
-    <h3>Module annotation from GSEA</h3>
-    <el-table
+    <div>
+      <h3>1.Module annotation (GSEA enrichment result)</h3>
+      <el-table
       :data="mafg_tableData"
       border
       class="mafg-table">
+      <el-table-column
+        prop="gene"
+        label="">
+      </el-table-column>
       <el-table-column
         prop="describe1"
         label="">
@@ -18,56 +25,38 @@
         label="">
       </el-table-column>
     </el-table>
-    <h3>Module member annotation</h3>
-    <el-table
-      :data="mma_tableData"
-      border
-      class="mafg-table">
-      <el-table-column
-        prop="query"
-        label="">
-      </el-table-column>
-      <el-table-column
-        prop="AT_gene"
-        label="">
-      </el-table-column>
-      <el-table-column
-        prop="e_value"
-        label="">
-      </el-table-column>
-      <el-table-column
-        prop="annotation"
-        label="">
-      </el-table-column>
-    </el-table>
-    <h3>Direct connection functional modules</h3>
-    <el-table
-      :data="dcfm_tableData"
-      border
-      class="mafg-table">
-      <el-table-column
-        prop="id"
-        label="">
-          <template slot-scope="scope">
-            <router-link class="link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.id }}">{{scope.row.id}}</router-link>
-            <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
-          </template>
-      </el-table-column>
-      <el-table-column
-        prop=""
-        label="">
-          <template slot-scope="scope">
-              <router-link class="link" target="_blank" :to="{ name: 'FunctionModuleDetail', params: { module1:$route.params.gene, module2: scope.row.id }}">detail</router-link>
-          </template>
-      </el-table-column>
-    </el-table>
+    </div>
+    <div style="margin: 24px 0">
+      <h3>2.Module member annotation</h3>
+      <el-table
+        :data="mma_tableData"
+        border
+        class="mafg-table">
+        <el-table-column
+          prop="query"
+          label="">
+        </el-table-column>
+        <el-table-column
+          prop="AT_gene"
+          label="">
+        </el-table-column>
+        <el-table-column
+          prop="e_value"
+          label="">
+        </el-table-column>
+        <el-table-column
+          prop="annotation"
+          label="">
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script>
 const config = {
   elements: [],
-  minZoom: 0.2,
+  minZoom: 0.4,
   //maxZoom:100,
   style: [ // the stylesheet for the graph
     {
@@ -87,14 +76,23 @@ const config = {
         }
     },
     {
-      selector: 'edge',
+      selector: 'edge[group = "module1"]',
       style: {
         'width': 0.8,
-        'line-color': '#566270',
-        'target-arrow-color': '#566270',
+        'line-color': '#F68657',
+        'target-arrow-color': '#F68657',
         'target-arrow-shape': 'triangle'
       }
     },
+    {
+      selector: 'edge[group = "module2"]',
+      style: {
+        'width': 0.8,
+        'line-color': '#566270',
+        'target-arrow-color': '#F68657',
+        'target-arrow-shape': 'triangle'
+      }
+    }
   ],
 
   layout: {
@@ -129,27 +127,38 @@ const config = {
     },
   }
 export default {
-  name: 'FunctionModule',
+  name: 'FunctionModuleDetail',
   components:{
 
   },
-  data: function() {
+  data:function() {
     return {
       config,
-      networkData: [],
+      module1_network: [],
+      module2_network: [],
+      network: [],
       showNetwork: false,
 
+      mafg_module1_tableData: [],
+      mafg_module2_tableData: [],
       mafg_tableData: [],
+
+      mma_module1_tableData: [],
+      mma_module2_tableData: [],
       mma_tableData: [],
-      dcfm_tableData: []
     }
   },
   methods: {
-    network_submit() {
-      this.showNetwork = false;
-      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/networks.php?id=${this.$route.params.gene}`).then((response)=>{
+    async network_submit(module) {
+      //this.showNetwork = false;
+      let whichModule = '';
+      if(module === 'module1') {
+        whichModule = this.$route.params.module1;
+      } else {
+        whichModule = this.$route.params.module2;
+      }
+      await this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/networks.php?id=${whichModule}`).then((response)=>{
         // console.log(response);
-        // this.networkData = response.data;
         let result = [];
         let node = [];
         response.data.forEach(element => {
@@ -171,69 +180,86 @@ export default {
             source: element.source,
             target: element.target,
             distance: element.distance,
+            group: module === 'module1' ? 'module1' : 'module2',
           }
           result.push(obj);
         });
 
-        // this.networkData = result;
-        this.config.elements = result;
-        let self = this;
-        setTimeout(function(){
-          self.showNetwork = true;
-        },500)
+        if(module === 'module1') {
+          this.module1_network = result;
+        } else {
+          this.module2_network = result;
+        }
       })
     },
+    async getNetwork() {
+      await this.network_submit('module1');
+      await this.network_submit('module2');
+      // console.log(this.module1_network);
+      // console.log(this.module2_network);
+      this.config.elements = this.module1_network.concat(this.module2_network);
+      this.showNetwork = true;
+      //console.log(this.config.elements);
+    },
 
-    mafg_submit() {
-      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/mafg.php?id=${this.$route.params.gene}`).then((response)=>{
+    async mafg_submit(module) {
+      let whichModule = '';
+      if(module === 'module1') {
+        whichModule = this.$route.params.module1;
+      } else {
+        whichModule = this.$route.params.module2;
+      }
+      await this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/mafg.php?id=${whichModule}`).then((response)=>{
         // console.log(response);
-        this.mafg_tableData = response.data || [];
-      });
-    },
-
-    mma_submit() { //module memeber annotation
-      let pattan = /Calsi/;
-      let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
-      let gene = this.$route.params.gene.replace('Module','gene0');
-      this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${gene}&species=${species}`).then((response)=>{
-        this.mma_tableData = response.data || [];
-      });
-    },
-
-    dcfm_submit() { //Direct connection functional modules
-      let pattan = /Calsi/;
-      let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
-      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/dcfm.php?module=${this.$route.params.gene}&species=${species}`).then((response)=>{
-        //this.mma_tableData = response.data || [];
-        console.log(response);
-        if(response.data) {
-          let arr = response.data[0].group.split(',');
-          let result = [];
-          arr.forEach((item) => {
-            if(item) {
-              result.push({id: item});
-            }
-          });
-          this.dcfm_tableData = result;
+        if(module === 'module1') {
+          this.mafg_module1_tableData = response.data || [];
+        } else {
+          this.mafg_module2_tableData = response.data || [];
         }
       });
-    }
+    },
+    async getMafg() {
+      await this.mafg_submit('module1');
+      await this.mafg_submit('module2');
+      this.mafg_tableData = this.mafg_module1_tableData.concat(this.mafg_module2_tableData);
+      //console.log(this.mafg_tableData);
+    },
+
+    async mma_submit() { //module memeber annotation
+      let whichModule = '';
+      if(module === 'module1') {
+        whichModule = this.$route.params.module1;
+      } else {
+        whichModule = this.$route.params.module2;
+      }
+      let pattan = /Calsi/;
+      let species = pattan.test(whichModule) ? 'Calsi' : 'Daeje';
+      let gene = whichModule.replace('Module','gene0');
+      await this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${gene}&species=${species}`).then((response)=>{
+        this.mma_tableData = response.data || [];
+        if(module === 'module1') {
+          this.mma_module1_tableData = response.data || [];
+        } else {
+          this.mma_module2_tableData = response.data || [];
+        }
+      });
+    },
+    async getMma() {
+      await this.mma_submit('module1');
+      await this.mma_submit('module2');
+      this.mma_tableData = this.mma_module1_tableData.concat(this.mma_module2_tableData);
+      console.log(this.mma_tableData);
+    },
   },
   mounted: function() {
-    this.network_submit();
-    this.mafg_submit();
-    this.mma_submit();
-    this.dcfm_submit();
+   this.getNetwork();
+   this.getMafg();
+   this.getMma();
   }
 }
-
 </script>
 
 <style scoped>
-  .container {
-    min-height: 550px;
-    position: relative;
-  }
   .cystyle {
     height: 600px;
     text-align: left;
@@ -242,11 +268,7 @@ export default {
     margin: 0 auto;
   }
   .mafg-table {
-    width: 80%; 
-    margin: 24px auto;
-  }
-  .link {
-    color: rgb(11, 146, 63);
+    width: 80%;
+    margin: 0 auto;
   }
 </style>
-
