@@ -61,6 +61,10 @@
           </template>
       </el-table-column>
     </el-table>
+    <h3>Expression profilings</h3>
+    <div class="heatmap">
+      <ve-heatmap :data="chartData"></ve-heatmap>
+    </div>
   </div>
 </template>
 
@@ -139,19 +143,37 @@ export default {
       networkData: [],
       showNetwork: false,
 
+      module_genes: [],
       mafg_tableData: [],
       mma_tableData: [],
-      dcfm_tableData: []
+      dcfm_tableData: [],
+
+      chartData: {
+          columns: ['时间', '地点', '人数'],
+          rows: [
+            { '时间': '星期一', '地点': '北京', '人数': 1000 },
+            { '时间': '星期二', '地点': '上海', '人数': 400 },
+            // { '时间': '星期三', '地点': '杭州', '人数': 800 },
+            // { '时间': '星期二', '地点': '深圳', '人数': 200 },
+            // { '时间': '星期三', '地点': '长春', '人数': 100 },
+            // { '时间': '星期五', '地点': '南京', '人数': 300 },
+            // { '时间': '星期四', '地点': '江苏', '人数': 800 },
+            // { '时间': '星期一', '地点': '北京', '人数': 700 },
+            // { '时间': '星期三', '地点': '上海', '人数': 300 },
+            // { '时间': '星期二', '地点': '杭州', '人数': 500 }
+          ]
+        }
     }
   },
   methods: {
     network_submit() {
       this.showNetwork = false;
       this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/networks.php?id=${this.$route.params.gene}`).then((response)=>{
-        // console.log(response);
+        console.log(response);
         // this.networkData = response.data;
         let result = [];
         let node = [];
+        let genes = [];
         response.data.forEach(element => {
           node.push(element.source, element.target);
         });
@@ -162,7 +184,13 @@ export default {
             id: element,
           }
           result.push(obj);
+          genes.push(element);
         })
+
+        this.module_genes = genes;
+        //console.log(this.module_genes);
+        this.mma_submit();
+        this.fpkm_submit();
 
         response.data.forEach(element => {
           let obj = {};
@@ -194,8 +222,8 @@ export default {
     mma_submit() { //module memeber annotation
       let pattan = /Calsi/;
       let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
-      let gene = this.$route.params.gene.replace('Module','gene0');
-      this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${gene}&species=${species}`).then((response)=>{
+      let gene = this.module_genes.join(',')
+      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/mma.php?gene=${gene}&species=${species}`).then((response)=>{
         this.mma_tableData = response.data || [];
       });
     },
@@ -205,7 +233,7 @@ export default {
       let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
       this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/dcfm.php?module=${this.$route.params.gene}&species=${species}`).then((response)=>{
         //this.mma_tableData = response.data || [];
-        console.log(response);
+        //console.log(response);
         if(response.data) {
           let arr = response.data[0].group.split(',');
           let result = [];
@@ -217,12 +245,21 @@ export default {
           this.dcfm_tableData = result;
         }
       });
+    },
+
+    fpkm_submit() {
+      let pattan = /Calsi/;
+      let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
+      let gene = this.module_genes.join(',')
+      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/fpkm.php?gene=${gene}&species=${species}`).then((response)=>{
+        console.log(response);        
+      });
     }
   },
   mounted: function() {
     this.network_submit();
     this.mafg_submit();
-    this.mma_submit();
+    
     this.dcfm_submit();
   }
 }
@@ -247,6 +284,11 @@ export default {
   }
   .link {
     color: rgb(11, 146, 63);
+  }
+  .heatmap {
+    min-height: 400px;
+    width: 800px;
+    margin: 0 auto;
   }
 </style>
 

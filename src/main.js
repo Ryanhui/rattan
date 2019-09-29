@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import './plugins/element.js'
 import VueRouter from 'vue-router'
+import VCharts from 'v-charts'
 import routes from './routes'
 
 // import and use cytoscape
@@ -16,6 +17,7 @@ Vue.config.productionTip = false
 Vue.use(VueCytoscape)
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
+Vue.use(VCharts)
 
 const router = new VueRouter({
   routes

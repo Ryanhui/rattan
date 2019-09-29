@@ -3,8 +3,10 @@
   <el-row class="bg-green">
     <el-col :span="18">
       <div class="head-title">
-        <p class="head-title-big">Rattan-NET</p>
-        <p class="head-title-small">Database of co-expression network with functional modules for rattans</p>
+        <router-link to="/" class="link">
+          <p class="head-title-big">Rattan-NET</p>
+          <p class="head-title-small">Database of co-expression network with functional modules for rattans</p>
+        </router-link>
       </div>
     </el-col>
     <el-col :span="6">
@@ -169,5 +171,9 @@ export default {
   }
   .addColor {
     background: #5A9367;
+  }
+  .link {
+    text-decoration: none;
+    color: inherit;
   }
 </style>
