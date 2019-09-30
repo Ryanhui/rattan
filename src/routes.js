@@ -8,6 +8,8 @@ import AnnotationSummary from './components/AnnotationSummary.vue';
 import FunctionModule from './components/FunctionModule.vue';
 import FunctionModuleDetail from './components/FunctionModuleDetail.vue';
 
+import GeneFunctionSearch from './components/search/GeneFunctionSearch.vue';
+
 import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
 import ModuleEnrichment from './components/tools/ModuleEnrichment.vue';
@@ -24,6 +26,8 @@ export default [
   { path: '/search', component: Search},
   { path: '/function_module/:gene', name:'FunctionModule', component: FunctionModule},
   { path: '/function_module_detail/moudle1/:module1/module2/:module2', name:'FunctionModuleDetail', component: FunctionModuleDetail},
+
+  { path: '/gene_function_search/gene/:gene/species/:species', name:'GeneFunctionSearch', component: GeneFunctionSearch},
 
   {path: '/tools/coexpression', component: CoExpression},
   {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis},

@@ -13,7 +13,9 @@
               <span style="margin-left:16px">(Example: Calsi_gene33960, Calsi_gene00246, Calsi_gene40036)</span>
             </div>
             <div>
-              <el-button @click="gfs_submit" style="margin: 16px 0">Search</el-button>
+              <router-link class="link" target="_blank" :to="{ name: 'GeneFunctionSearch', params: { gene: gfs_gene, species: gfs_species }}">
+                <el-button style="margin: 16px 0">Search</el-button>
+              </router-link> 
             </div>
           </el-tab-pane>
           <el-tab-pane label="Daeje" name="Daeje">
@@ -22,7 +24,9 @@
               <span style="margin-left:16px">(Example: Daeje_Gene00006, Daeje_Gene00014, Daeje_Gene00079)</span>
             </div>
             <div>
-              <el-button @click="gfs_submit" style="margin: 16px 0">Search</el-button>
+              <router-link class="link" target="_blank" :to="{ name: 'GeneFunctionSearch', params: { gene: gfs_gene, species: gfs_species }}">
+                <el-button style="margin: 16px 0">Search</el-button>
+              </router-link> 
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -164,7 +168,7 @@
     <div v-if="showResult" style="min-height: 600px" v-loading="loading">
       <el-button type="primary" style="margin: 16px 0" icon="el-icon-back" @click="handleReturn">Return</el-button>
       <!-- gene function -->
-      <div v-if="showGeneFunctionResult">
+      <!-- <div v-if="showGeneFunctionResult">
         <el-table
           :data="gfs_tableData"
           style="width: 100%"
@@ -190,7 +194,7 @@
             label="annotation">
           </el-table-column>
         </el-table>
-      </div>
+      </div> -->
       <!-- gene family -->
       <div v-if="showGeneFamilyResult">
         <el-table
@@ -405,7 +409,7 @@ export default {
     return {
       gfs_gene:'',
       gfs_species: 'Calsi',
-      gfs_tableData: [],
+      // gfs_tableData: [],
 
       fds_species: 'Calsi',
 
@@ -450,20 +454,20 @@ export default {
       this.showPoResult = false;
       this.showfunctionModuleResult = false;
     },
-    //1.Gene function search
-    gfs_submit() {
-      if(this.gf_gene === '') {
-        this.$message.error('Please input gene');
-        return;
-      }
-      this.loading = true;
-      this.showResult = true;
-      this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${this.gfs_gene}&species=${this.gfs_species}`).then((response)=>{
-        this.gfs_tableData = response.data || [];
-        this.showGeneFunctionResult = true;
-        this.loading = false;
-      })
-    },
+    // //1.Gene function search
+    // gfs_submit() {
+    //   if(this.gf_gene === '') {
+    //     this.$message.error('Please input gene');
+    //     return;
+    //   }
+    //   this.loading = true;
+    //   this.showResult = true;
+    //   this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${this.gfs_gene}&species=${this.gfs_species}`).then((response)=>{
+    //     this.gfs_tableData = response.data || [];
+    //     this.showGeneFunctionResult = true;
+    //     this.loading = false;
+    //   })
+    // },
     // gene family search
     gfam_submit() {
       if(this.gfam_function === '') {
