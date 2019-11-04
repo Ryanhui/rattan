@@ -51,7 +51,7 @@
     die("连接失败: " . mysqli_connect_error());
   }
   
-  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE Subject_id="'. $subject_id . '";';
+  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE Subject_id="'. $subject_id . '" OR Query_id="'. $subject_id .'";';
   
   $result = mysqli_query($conn, $sql);
   // echo $sql;

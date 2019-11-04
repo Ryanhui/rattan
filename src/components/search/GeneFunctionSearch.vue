@@ -106,45 +106,41 @@
     <div>
       <h3>8. Protein domain</h3>
       <div class="canvas">
-        <canvas ref="canvas" width="900px" height="400px" >您的浏览器暂不支持canvas</canvas>
+        <canvas ref="canvas" width="700px" height="400px" >您的浏览器暂不支持canvas</canvas>
       </div>
       <div class="domin-table">
         <el-table
-          :data="dominData"
+          :data="dominTableData"
           border
           size="small"
           style="width: 100%">
           <el-table-column
-            prop="domin_id"
+            prop="Subject_id"
             label="Id"
             width="180">
               <template slot-scope="scope">
-                <a target="_blank" :href="generate_domin_table_id_href(scope.row.domin_id)" style="margin-left: 10px;color: #1e6f15">{{scope.row.domin_id}}</a>
+                <a target="_blank" :href="generate_domin_table_id_href(scope.row.Subject_id)" style="margin-left: 10px;color: #1e6f15">{{scope.row.Subject_id}}</a>
               </template>
           </el-table-column>
           <el-table-column
-            prop="data_base"
+            prop="Subject_DB"
             label="Database"
             width="180">
           </el-table-column>
           <el-table-column
-            prop="start"
+            prop="Query_start"
             label="Start">
           </el-table-column>
           <el-table-column
-            prop="end"
+            prop="Query_end"
             label="End">
           </el-table-column>
           <el-table-column
-            prop="e_value"
+            prop="E_value"
             label="E-value">
           </el-table-column>
           <el-table-column
-            prop="domin_length"
-            label="Domin length">
-          </el-table-column>
-          <el-table-column
-            prop="annotation"
+            prop="Subject_annotation"
             label="Annotation">
           </el-table-column>
         </el-table>
@@ -182,6 +178,7 @@ export default {
       gfs_tableData: [],
       function_module_tableData: [],
       dominData: [],
+      dominTableData: [],
       domin_detail_item: {},
     }
   },
@@ -208,6 +205,10 @@ export default {
         if(response.data.length > 0) {
           this.canvasDraw();
         }
+      })
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_pfam_id.php?subject_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+        console.log(response.data);
+        this.dominTableData = response.data;
       })
     },
     // draw picture
@@ -244,7 +245,7 @@ export default {
         }
       });
       // 重设画布大小
-      if(maxLength >= 900) {
+      if(maxLength >= 700) {
         canvas.width = maxLength;
       }
       ctx.fillStyle = 'rgba(50, 50, 50, 0.5)';
@@ -333,7 +334,7 @@ export default {
   .canvas {
     padding: 16px; 
     border: 1px solid black; 
-    width: 932px; 
+    width: 732px; 
     height: 432px;
     margin: 0 auto;
     overflow-x: scroll;
