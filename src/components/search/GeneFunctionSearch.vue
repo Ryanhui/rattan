@@ -263,6 +263,9 @@ export default {
       this.dominData.forEach(item => {
         ctx.fillStyle = 'rgba('+(Math.random()*100).toFixed()+', '+(Math.random()*100).toFixed()+', '+(Math.random()*100).toFixed()+', 1)';
         ctx.fillRect(Number(item.start), 186, Number(item.domin_length), 30);
+        let textY = 140 + Math.floor(Math.random() * 5) * 10;
+        ctx.fillText(item.domin_id, Number(item.start)-11,  textY);
+        ctx.fillRect(Number(item.start)+10, textY + 3, 1, 180 - textY);
       })
 
       //添加事件
