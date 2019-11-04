@@ -108,14 +108,55 @@
       <div class="canvas">
         <canvas ref="canvas" width="900px" height="400px" >您的浏览器暂不支持canvas</canvas>
       </div>
+      <div class="domin-table">
+        <el-table
+          :data="dominData"
+          border
+          size="small"
+          style="width: 100%">
+          <el-table-column
+            prop="domin_id"
+            label="Id"
+            width="180">
+              <template slot-scope="scope">
+                <a target="_blank" :href="generate_domin_table_id_href(scope.row.domin_id)" style="margin-left: 10px;color: #1e6f15">{{scope.row.domin_id}}</a>
+              </template>
+          </el-table-column>
+          <el-table-column
+            prop="data_base"
+            label="Database"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="start"
+            label="Start">
+          </el-table-column>
+          <el-table-column
+            prop="end"
+            label="End">
+          </el-table-column>
+          <el-table-column
+            prop="e_value"
+            label="E-value">
+          </el-table-column>
+          <el-table-column
+            prop="domin_length"
+            label="Domin length">
+          </el-table-column>
+          <el-table-column
+            prop="annotation"
+            label="Annotation">
+          </el-table-column>
+        </el-table>
+      </div>
       <div ref="domin_detail" id="domin_detail">
-        <p>Domin id: {{domin_detail_item.domin_id}}</p>
-        <p>Position: {{domin_detail_item.start}} to {{domin_detail_item.end}}</p>
-        <p>E-value: {{domin_detail_item.e_value}}</p>
-        <p>Gene length: {{domin_detail_item.gene_length}}</p>
-        <p>Annotation: {{domin_detail_item.annotation}}</p>
-        <p style="word-break:break-word;">pep sequence: {{domin_detail_item.pep}}</p>
-        <p style="word-break:break-word;">cds sequence: {{domin_detail_item.cds}}</p>
+        <p><span>Id: </span> <a target="_blank" style="color:#1e6f15" :href="'http://pfam.xfam.org/family/'+domin_detail_item.domin_id">{{domin_detail_item.domin_id}}</a></p>
+        <p><span>Position: </span>{{domin_detail_item.start}} to {{domin_detail_item.end}}</p>
+        <p><span>E-value: </span>{{domin_detail_item.e_value}}</p>
+        <p><span>Domin length: </span>{{domin_detail_item.domin_length}}</p>
+        <p><span>Annotation:</span> {{domin_detail_item.annotation}}</p>
+        <p style="word-break:break-word;"><span>Pep sequence:</span> {{domin_detail_item.pep}}</p>
+        <p style="word-break:break-word;"><span>Cds sequence:</span> {{domin_detail_item.cds}}</p>
       </div>
     </div>
     <div>
@@ -162,7 +203,7 @@ export default {
     },
     domin_submit() {
       this.axios.get(`http://rattan.bamboogdb.org/php/search_domin.php?keyword=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
-        console.log(response.data);
+        //console.log(response.data);
         this.dominData = response.data;
         if(response.data.length > 0) {
           this.canvasDraw();
@@ -191,9 +232,9 @@ export default {
 
       let maxLength = 0;
       
-      ctx.font = '18px Arial';
-      ctx.fillStyle = 'rgba(50, 50, 50, 1)';
-      ctx.fillText(this.$route.params.gene, 10, 20);
+      // ctx.font = '18px Arial';
+      // ctx.fillStyle = 'rgba(50, 50, 50, 1)';
+      // ctx.fillText(this.$route.params.gene, 10, 20);
 
       // 画gene线
       this.dominData.forEach((item) => {
@@ -219,8 +260,8 @@ export default {
       ctx.fillRect(0, 257, maxLength + 200, 1);
 
       // 画domin
-      ctx.fillStyle = 'rgba(50, 50, 50, 0.7)';
       this.dominData.forEach(item => {
+        ctx.fillStyle = 'rgba('+(Math.random()*100).toFixed()+', '+(Math.random()*100).toFixed()+', '+(Math.random()*100).toFixed()+', 1)';
         ctx.fillRect(Number(item.start), 186, Number(item.domin_length), 30);
       })
 
@@ -249,6 +290,20 @@ export default {
       canvas.addEventListener("click", function(event) {
         that.$refs.domin_detail.style.display = 'none';
       });
+    },
+    generate_domin_table_id_href(id){
+      if(/PF/g.test(id)) {
+        return (`http://pfam.xfam.org/family/${id}`);
+      }
+      if(/PTHR/g.test(id)) {
+        return (`http://pantherdb.org/panther/family.do?clsAccession=${id}`);
+      }
+      if(/SM/g.test(id)) {
+        return (`http://smart.embl-heidelberg.de/smart/do_annotation.pl?BLAST=DUMMY&DOMAIN=${id}`);
+      }
+      if(/PS/g.test(id)) {
+        return (`https://prosite.expasy.org/${id}`);
+      }
     }
   },
   mounted: function() {
@@ -285,15 +340,29 @@ export default {
     z-index: 99;
     width: 400px;
     min-height: 300px;
-    padding: 24px;
+    padding: 8px 16px;
     text-align: left;
+    font-size: 14px;
     top: 300px;
     left: 400px;
-    background: rgb(245, 245, 245);
+    color: rgb(109, 108, 108);
+    background: rgb(255, 255, 255);
     display: none;
+    border-radius: 5px;
+    box-shadow:0px 0px 5px 0px rgba(105, 105, 105, 0.7);
   }
   #domin_detail p {
     padding: 4px 0;
+  }
+  #domin_detail span {
+    font-weight: 700;
+    font-size: 16px;
+    color: rgb(39, 39, 39);
+  }
+  .domin-table {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 24px;
   }
 </style>
 
