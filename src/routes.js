@@ -13,6 +13,7 @@ import GeneFunctionSearch from './components/search/GeneFunctionSearch.vue';
 import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
 import ModuleEnrichment from './components/tools/ModuleEnrichment.vue';
+import CisElementAnalysis from './components/tools/CisElementAnalysis.vue';
 import Search from './components/Search.vue';
 
 export default [
@@ -31,5 +32,6 @@ export default [
 
   {path: '/tools/coexpression', component: CoExpression},
   {path: '/tools/genesetsanalysis', component: GeneSetsAnalysis},
-  {path: '/tools/moduleenrichment', component: ModuleEnrichment}
+  {path: '/tools/moduleenrichment', component: ModuleEnrichment},
+  {path: '/tools/ciselementanalysis', component: CisElementAnalysis}
 ]

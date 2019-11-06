@@ -31,7 +31,7 @@
           <li class="tools-dropdown-list"><router-link to="/search">Search</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/coexpression">Co-expression Network</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/moduleenrichment">Module enrichment</router-link></li>
-          <li class="tools-dropdown-list"><router-link to="/">Cis-element Analysis</router-link></li>
+          <li class="tools-dropdown-list"><router-link to="/tools/ciselementanalysis">Cis-element Analysis</router-link></li>
           <li><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
         </ul>
       </el-col>

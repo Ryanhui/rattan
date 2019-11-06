@@ -40,7 +40,9 @@
           </el-col>
          <el-col :span="6">
            <div class="body-content news" ref="scriptHolder">
-              <div style="height: 330px">There are news</div>
+              <div style="height: 330px;line-height: 330px">
+                There are news
+              </div>
               <a href="https://www.revolvermaps.com/livestats/5pplwzj355p/"><img src="//rf.revolvermaps.com/h/m/a/0/ff0000/128/0/5pplwzj355p.png" width="256" height="128" alt="Map" style="border:0;"></a>
            </div>
         </el-col>
