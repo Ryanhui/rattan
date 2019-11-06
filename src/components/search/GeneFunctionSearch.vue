@@ -106,7 +106,7 @@
     <div>
       <h3>8. Protein domain</h3>
       <div class="canvas">
-        <canvas ref="canvas" width="700px" height="400px" >您的浏览器暂不支持canvas</canvas>
+        <canvas ref="canvas" width="700px" height="200px" >您的浏览器暂不支持canvas</canvas>
       </div>
       <div class="domin-table">
         <el-table
@@ -207,7 +207,7 @@ export default {
         }
       })
       this.axios.get(`http://rattan.bamboogdb.org/php/search_pfam_id.php?subject_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
-        console.log(response.data);
+        // console.log(response.data);
         this.dominTableData = response.data;
       })
     },
@@ -232,7 +232,7 @@ export default {
       }
 
       let maxLength = 0;
-      
+      let baseHeight = 100;
       // ctx.font = '18px Arial';
       // ctx.fillStyle = 'rgba(50, 50, 50, 1)';
       // ctx.fillText(this.$route.params.gene, 10, 20);
@@ -249,24 +249,24 @@ export default {
         canvas.width = maxLength;
       }
       ctx.fillStyle = 'rgba(50, 50, 50, 0.5)';
-      ctx.fillRect(0, 200, maxLength + 100, 3);
+      ctx.fillRect(0, baseHeight, maxLength + 100, 3);
 
       // 画比例尺
       ctx.font = '12px serif';
       ctx.fillStyle = 'rgba(50, 50, 50, 0.8)';
       for(let i = 0; i <= maxLength + 200; i+=100) {
-        ctx.fillRect(i, 255, 1, 3);
-        ctx.fillText(i, i, 270);
+        ctx.fillRect(i, baseHeight + 55, 1, 3);
+        ctx.fillText(i, i, baseHeight + 70);
       }
-      ctx.fillRect(0, 257, maxLength + 200, 1);
+      ctx.fillRect(0, baseHeight+ 57, maxLength + 200, 1);
 
       // 画domin
       this.dominData.forEach(item => {
         ctx.fillStyle = 'rgba('+(Math.random()*100).toFixed()+', '+(Math.random()*100).toFixed()+', '+(Math.random()*100).toFixed()+', 1)';
-        ctx.fillRect(Number(item.start), 186, Number(item.domin_length), 30);
-        let textY = 140 + Math.floor(Math.random() * 5) * 10;
+        ctx.fillRect(Number(item.start), 86, Number(item.domin_length), 30);
+        let textY = 40 + Math.floor(Math.random() * 5) * 10;
         ctx.fillText(item.domin_id, Number(item.start)-11,  textY);
-        ctx.fillRect(Number(item.start)+10, textY + 3, 1, 180 - textY);
+        ctx.fillRect(Number(item.start)+10, textY + 3, 1, 80 - textY);
       })
 
       //添加事件
@@ -282,7 +282,7 @@ export default {
         //that.$refs.domin_detail.style.display = 'none';
         
         that.dominData.forEach(item => {
-          if(pageX >= Number(item.start) && pageX <= Number(item.end) && pageY >= 190 && pageY <= 220){
+          if(pageX >= Number(item.start) && pageX <= Number(item.end) && pageY >= 90 && pageY <= 120){
             // console.log(item);
             that.domin_detail_item = item;
             that.$refs.domin_detail.style.display = 'block';
@@ -291,8 +291,19 @@ export default {
           }
         })
       });
-      canvas.addEventListener("click", function(event) {
-        that.$refs.domin_detail.style.display = 'none';
+      document.addEventListener("click", function(event) {
+        let flag = false;
+        for (let i = 0; i < event.path.length; i++) {
+          if(event.path[i].id === 'domin_detail') {
+            flag = true;
+            break;
+          }
+        }
+        if (flag) {
+          return;
+        } else {
+          that.$refs.domin_detail.style.display = 'none';
+        };
       });
     },
     generate_domin_table_id_href(id){
@@ -335,7 +346,7 @@ export default {
     padding: 16px; 
     border: 1px solid black; 
     width: 732px; 
-    height: 432px;
+    height: 232px;
     margin: 0 auto;
     overflow-x: scroll;
   }
