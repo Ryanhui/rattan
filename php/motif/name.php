@@ -30,7 +30,7 @@
   }
   cors();
 
-  $sequence = $_POST["sequence"];
+  $gene_list = $_POST["gene_list"];
   $species = $_POST["species"];
   $jobid = $_POST["jobid"];
 
@@ -41,14 +41,15 @@
   }
 
   chmod($dir, 0777);
-  $fafile = fopen($dir."/promoter_sequence.fa", "w") or die("Unable to open file!");
 
-  fwrite($fafile, $sequence);
+  $fafile = fopen($dir."/gene_list.file", "w") or die("Unable to open file!");
+
+  fwrite($fafile, $gene_list);
   fclose($fafile);
-  chmod($dir."/promoter_sequence.fa", 0777);
+  chmod($dir."/gene_list.file", 0777);
 
-  $cmd = "perl /var/www/rattan/motif/scripts/Cis-sequence_scan.pl ".$dir."/promoter_sequence.fa ".$species." " .$dir."/out";
+  $cmd = "perl /var/www/rattan/motif/scripts/Cis-name_scan.pl ".$species." " .$dir."/gene_list.file ".$dir."/out";
   #$cmd = 'perl /var/www/rattan/motif/scripts/Cis-sequence_scan.pl /var/www/rattan/motif/jobs/s1573127584000/promoter_sequence.fa Calsi /var/www/rattan/motif/jobs/s1573127584000/result';
-  echo($cmd);
+  # echo($cmd);
   exec($cmd);
 ?>

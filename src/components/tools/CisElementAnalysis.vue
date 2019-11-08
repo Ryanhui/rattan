@@ -6,6 +6,7 @@
     We collected 1,035 motifs with published annotations. With these identified motifs and published 
     annotations, we predicted TF/TR-binding regions. In addition to scanning for motif sequences, 
     we offered a Z–score method that calculates the significance enrichment of motifs.</p>
+    <!-- sequence scan -->
     <div class="wrapper">
       <p class="sub-title">1. Sequence Scan</p>
       <p>Input a fasta sequence, we'll find out all the possible motifs.</p>
@@ -39,47 +40,93 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-
     </div>
+    <!-- name scan -->
     <div class="wrapper">
       <p class="sub-title">2. Name Scan</p>
       <p>Input a gene list in rattans, and we'll compute the significant motifs located at 3000bp upstream of the gene, then show each motif and its frequency. users can also significantly analyze these motifs. It may take a lot of time in calculation.</p>
-      <el-input
-        type="textarea"
-        :rows="5"
-        class="input"
-        placeholder="Please input"
-        v-model="name">
-      </el-input>
-      <span class="example" v-on:click="nameExample">example</span>
-      <div style="margin-top: 8px">
-        <el-button type="primary" size="small" plain>GO</el-button>
-        <el-button type="primary" size="small" plain v-on:click="reset('name')">RESET</el-button>
-      </div>
+      <el-tabs type="border-card" v-model="nameSpecies" stretch style="margin-top: 8px">
+        <el-tab-pane label="Calsi" name="Calsi">
+          <el-input
+            type="textarea"
+            :rows="5"
+            class="input"
+            placeholder="Please input"
+            v-model="name">
+          </el-input>
+          <span class="example" v-on:click="nameExample">example</span>
+          <div style="margin-top: 8px">
+            <el-button type="primary" size="small" plain v-on:click="nameSubmit">GO</el-button>
+            <el-button type="primary" size="small" plain v-on:click="reset('name')">RESET</el-button>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="Daeje" name="Daeje">
+          <el-input
+            type="textarea"
+            :rows="5"
+            class="input"
+            placeholder="Please input"
+            v-model="name">
+          </el-input>
+          <span class="example" v-on:click="nameExample">example</span>
+          <div style="margin-top: 8px">
+            <el-button type="primary" size="small" plain v-on:click="nameSubmit">GO</el-button>
+            <el-button type="primary" size="small" plain v-on:click="reset('name')">RESET</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </div>
+    <!-- custom scan -->
     <div class="wrapper" style="border: none">
       <p class="sub-title">3. Custom motif Scan</p>
       <p>Please input a list of rattans gene names and the motif sequences you interested, we'll extract all these genes promoter sequence (3000bp upstream), then show each motif's frequency and significant analysis result.</p>
-      <el-input
-        type="textarea"
-        :rows="5"
-        class="input"
-        placeholder="Please input"
-        v-model="custom">
-      </el-input>
-      <p style="margin-top: 8px">Please input motifs splited by ":"</p>
-      <el-input
-        type="textarea"
-        :rows="5"
-        class="input"
-        placeholder="Please input"
-        v-model="customMotifs">
-      </el-input>
-      <span class="example" v-on:click="customExample">example</span>
-      <div style="margin-top: 8px">
-        <el-button type="primary" size="small" plain>GO</el-button>
-        <el-button type="primary" size="small" plain v-on:click="reset('custom')">RESET</el-button>
-      </div>
+      <el-tabs type="border-card" v-model="customSpecies" stretch style="margin-top: 8px">
+        <el-tab-pane label="Calsi" name="Calsi">
+          <el-input
+            type="textarea"
+            :rows="5"
+            class="input"
+            placeholder="Please input"
+            v-model="custom">
+          </el-input>
+          <p style="margin-top: 8px">Please input motifs splited by ":"</p>
+          <el-input
+            type="textarea"
+            :rows="5"
+            class="input"
+            placeholder="Please input"
+            v-model="customMotifs">
+          </el-input>
+          <span class="example" v-on:click="customExample">example</span>
+          <div style="margin-top: 8px">
+            <el-button type="primary" size="small" plain>GO</el-button>
+            <el-button type="primary" size="small" plain v-on:click="reset('custom')">RESET</el-button>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="Daeje" name="Daeje">
+          <el-input
+            type="textarea"
+            :rows="5"
+            class="input"
+            placeholder="Please input"
+            v-model="custom">
+          </el-input>
+          <p style="margin-top: 8px">Please input motifs splited by ":"</p>
+          <el-input
+            type="textarea"
+            :rows="5"
+            class="input"
+            placeholder="Please input"
+            v-model="customMotifs">
+          </el-input>
+          <span class="example" v-on:click="customExample">example</span>
+          <div style="margin-top: 8px">
+            <el-button type="primary" size="small" plain>GO</el-button>
+            <el-button type="primary" size="small" plain v-on:click="reset('custom')">RESET</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+      
     </div>
   </div>
 </template>
@@ -93,7 +140,9 @@ export default {
   data() {
     return {
       sequenceSpecies: 'Calsi',
-
+      nameSpecies: 'Calsi',
+      customSpecies: 'Calsi',
+      
       sequence: '',
       name: '',
       custom: '',
@@ -102,7 +151,8 @@ export default {
   },
   methods: {
     sequenceExample() {
-      this.sequence = '>CRO_T006982CTTTCTCTCTCTACACATATTTCTTCATACGCGGAAATACATATAAAGTGGTAGCTTCAAAGATCAGTATTCTTCAATCTTCATTCATTCAGGAGTTGTGGTTGTAGCTCTGATTTCAGTGTTCTTGTGGAAATTCGTGATCTGGGTCGGAAAAAAAATCTGGTTTTGTTAATTGTGGAAGAAAATCAATGGCTTCATCGGAGATGATTATGGATTCCGGCAGGGCTTCTGCTGTTCAGAAGTCTAACTTTTCTCAGACTTGTAGTCTTTTGAGTCAGTATTTGAAGGAAAACGGTAGTTTTGGAGATCTCAGCCTTGGACTCAACCGTAATTTTGAACCCAATGGTACTAATTTGCGGCTTCTTTTTCTATTTCATTCATGGCGTTTCCAGATCGAATTTGGGGGTACTTACTTTGGAAAAAATTGGTTTGTTTTCCAAATCAAAGGGGTTTTCTTAATCTGGGTTTTGATGGGTTTGGTTTATTTATGGAAGTAATTCAGTGAAAATAATGAGCCTTAAATCTATCTCCCTAGTTTTCTATTTTCGATTTTGTTTCCTTTTTTAAGATAGGATTTTTAATTTTACTCTGTTTTTTGCTTCATTATTTAGGGGTTCCTGCAAAAACTATGAATTTGCTATCAACGATGGATAAATCTGGCCAGAATTTAGAGGCTCCGGCTGTGAAAGAGAACAAACCTGGGAATTTGTTTCCTCAGCCGGCTGGTTTCTACACCATCCCTGATATAAGGTTAGCGCATAGAAATTTTTGCTCTTAAATTCATATCCTAGGCCAAAGATATTCAAGCAATTTACATGTTTTTTTTAATCCATTTTTGCTGAATCTTGTCTGCAATTCATGTACAGTGTTGCAAAATCTGAACCAGACACAGCACAAATGACCATCTTTTATGGTGGACAAGTCTTGGTTTTCAATGACTTCCCAGCTGAAAAGGCCAGAGAAATCATGCTTTTGGCAAGCAATGGAAGCCCACTTAATTTCACCCCTAAACCAGCTGAATCTGCCACCGGTTTGGTCACTCCTCCACCCCCTGCTGCATCAAATGTTGTCCCAAGTTTTGGAAATGGTCTTGTGCAGCAGGAGAATGTCCCAAGCCCTCTTTATCCACGCATCAATGGTGAGTATTTCTTCATGAAAGAAAATCAGAAATATTGTTCTTGATTTCTTCTGCCAATTATGTGCTGATGGGATTTTGTTTTTCCTTGTGTTTGCAGATTTACCACTCTCAAGAAAAGCATCACTTACCAGGTTCTTGGAGAAGAGAAAAGATAGGTAGGCATTTTAGAATTGAGATCTTGAAATTTTATTCTAGAAATGTTTAGAGAGGGAGAAAGAAAGATCTGTTAATGTTCAATTTCTAGTTGAATTTTCTTCTTTCTTTAAGGGTGGTTTGTTCTTTGTTCTTGATTTAAGGTAGGCTTTTAGGGTGGTTTGTTGTTTGTTCTTGAGTTGCTGAACAAAAAAATGTAAATAAAATGAAGAAATTTTCAAATTTCAATGAAAAATTGTGGCTGCTTTTTGGGTGTTTTTAAATATTTTGTGTTAATTTTTTCATATTACAGGATTACAGCAAAAGCACCATACCAGATGATGAACAACTATTCTTCTAAGGCTGCTGCTGCTTCTGATCAAAAAGGAACATGGTTGGGTTTTGGTCAACAATTTCCTGCAAATGGAACGCCAAGTATAGAAATTGGCTTTCCTTTTTAAAACCCCTCAAGAACTTCTTGGGGTTGGTTGACTCTCTCTACCAAGTTTAAGTTTAGATCTAACTATTTATATTCATCTTTTAATGTAATTAAAATTAAAAATTCCCAACGATCTATCTAGTTAGTATTATTTCTATATTTTCAGATCTTGAAAATGTATTTTTGAAGGCATGTTTCCCTACAATTTCGTATGGGAGCATAAATTTTATTATATCTGTTTATTTCCTTTCAG'
+      this.sequence = `>CRO_T006982
+CTTTCTCTCTCTACACATATTTCTTCATACGCGGAAATACATATAAAGTGGTAGCTTCAAAGATCAGTATTCTTCAATCTTCATTCATTCAGGAGTTGTGGTTGTAGCTCTGATTTCAGTGTTCTTGTGGAAATTCGTGATCTGGGTCGGAAAAAAAATCTGGTTTTGTTAATTGTGGAAGAAAATCAATGGCTTCATCGGAGATGATTATGGATTCCGGCAGGGCTTCTGCTGTTCAGAAGTCTAACTTTTCTCAGACTTGTAGTCTTTTGAGTCAGTATTTGAAGGAAAACGGTAGTTTTGGAGATCTCAGCCTTGGACTCAACCGTAATTTTGAACCCAATGGTACTAATTTGCGGCTTCTTTTTCTATTTCATTCATGGCGTTTCCAGATCGAATTTGGGGGTACTTACTTTGGAAAAAATTGGTTTGTTTTCCAAATCAAAGGGGTTTTCTTAATCTGGGTTTTGATGGGTTTGGTTTATTTATGGAAGTAATTCAGTGAAAATAATGAGCCTTAAATCTATCTCCCTAGTTTTCTATTTTCGATTTTGTTTCCTTTTTTAAGATAGGATTTTTAATTTTACTCTGTTTTTTGCTTCATTATTTAGGGGTTCCTGCAAAAACTATGAATTTGCTATCAACGATGGATAAATCTGGCCAGAATTTAGAGGCTCCGGCTGTGAAAGAGAACAAACCTGGGAATTTGTTTCCTCAGCCGGCTGGTTTCTACACCATCCCTGATATAAGGTTAGCGCATAGAAATTTTTGCTCTTAAATTCATATCCTAGGCCAAAGATATTCAAGCAATTTACATGTTTTTTTTAATCCATTTTTGCTGAATCTTGTCTGCAATTCATGTACAGTGTTGCAAAATCTGAACCAGACACAGCACAAATGACCATCTTTTATGGTGGACAAGTCTTGGTTTTCAATGACTTCCCAGCTGAAAAGGCCAGAGAAATCATGCTTTTGGCAAGCAATGGAAGCCCACTTAATTTCACCCCTAAACCAGCTGAATCTGCCACCGGTTTGGTCACTCCTCCACCCCCTGCTGCATCAAATGTTGTCCCAAGTTTTGGAAATGGTCTTGTGCAGCAGGAGAATGTCCCAAGCCCTCTTTATCCACGCATCAATGGTGAGTATTTCTTCATGAAAGAAAATCAGAAATATTGTTCTTGATTTCTTCTGCCAATTATGTGCTGATGGGATTTTGTTTTTCCTTGTGTTTGCAGATTTACCACTCTCAAGAAAAGCATCACTTACCAGGTTCTTGGAGAAGAGAAAAGATAGGTAGGCATTTTAGAATTGAGATCTTGAAATTTTATTCTAGAAATGTTTAGAGAGGGAGAAAGAAAGATCTGTTAATGTTCAATTTCTAGTTGAATTTTCTTCTTTCTTTAAGGGTGGTTTGTTCTTTGTTCTTGATTTAAGGTAGGCTTTTAGGGTGGTTTGTTGTTTGTTCTTGAGTTGCTGAACAAAAAAATGTAAATAAAATGAAGAAATTTTCAAATTTCAATGAAAAATTGTGGCTGCTTTTTGGGTGTTTTTAAATATTTTGTGTTAATTTTTTCATATTACAGGATTACAGCAAAAGCACCATACCAGATGATGAACAACTATTCTTCTAAGGCTGCTGCTGCTTCTGATCAAAAAGGAACATGGTTGGGTTTTGGTCAACAATTTCCTGCAAATGGAACGCCAAGTATAGAAATTGGCTTTCCTTTTTAAAACCCCTCAAGAACTTCTTGGGGTTGGTTGACTCTCTCTACCAAGTTTAAGTTTAGATCTAACTATTTATATTCATCTTTTAATGTAATTAAAATTAAAAATTCCCAACGATCTATCTAGTTAGTATTATTTCTATATTTTCAGATCTTGAAAATGTATTTTTGAAGGCATGTTTCCCTACAATTTCGTATGGGAGCATAAATTTTATTATATCTGTTTATTTCCTTTCAG`
     },
     nameExample() {
       this.name = `CRO_T006982
@@ -130,10 +180,26 @@ CRO_T008347`;
       let data = new FormData();
       data.append('sequence',this.sequence);
       data.append('species',this.sequenceSpecies);
-      
+      let jobid = 's'+Date.parse( new Date());
+      data.append('jobid', jobid)
       this.axios.post('http://rattan.bamboogdb.org/php/motif/sequence.php', data).then((response) => {
         console.log(response);
       });
+      let routeData = this.$router.resolve({ path: '/tools/cis_element_analysis_result', query: { jobid: jobid}})
+      window.open(routeData.href, '_blank')
+    },
+
+    nameSubmit() {
+      let data = new FormData();
+      data.append('gene_list',this.name);
+      data.append('species',this.nameSpecies);
+      let jobid = 'n'+Date.parse( new Date());
+      data.append('jobid', jobid)
+      this.axios.post('http://rattan.bamboogdb.org/php/motif/name.php', data).then((response) => {
+        console.log(response);
+      });
+      let routeData = this.$router.resolve({ path: '/tools/cis_element_analysis_result', query: { jobid: jobid}})
+      window.open(routeData.href, '_blank')
     }
   }
 }
