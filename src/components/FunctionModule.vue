@@ -8,36 +8,48 @@
     <el-table
       :data="mafg_tableData"
       border
-      class="mafg-table">
+      stripe
+      size="mini"
+      class="mafg-table"
+      :default-sort = "{prop: 'value2', order: 'descending'}"
+      >
       <el-table-column
         prop="describe1"
-        label="">
+        label="Descriptions">
       </el-table-column>
       <el-table-column
         prop="value2"
-        label="">
+        sortable
+        label="FDR">
+      </el-table-column>
+      <el-table-column
+        prop="value1"
+        sortable
+        label="P-Value">
       </el-table-column>
     </el-table>
     <h3>Module member annotation</h3>
     <el-table
       :data="mma_tableData"
       border
+      stripe
+      size="mini"
       class="mafg-table">
       <el-table-column
         prop="query"
-        label="">
+        label="Gene ID">
       </el-table-column>
       <el-table-column
         prop="AT_gene"
-        label="">
+        label="Orthologous gene in Arabidopsis thaliana">
       </el-table-column>
       <el-table-column
         prop="e_value"
-        label="">
+        label="E-value">
       </el-table-column>
       <el-table-column
         prop="annotation"
-        label="">
+        label="Annotation">
       </el-table-column>
     </el-table>
     <h3>Direct connection functional modules</h3>
@@ -153,14 +165,6 @@ export default {
           rows: [
             { '时间': '星期一', '地点': '北京', '人数': 1000 },
             { '时间': '星期二', '地点': '上海', '人数': 400 },
-            // { '时间': '星期三', '地点': '杭州', '人数': 800 },
-            // { '时间': '星期二', '地点': '深圳', '人数': 200 },
-            // { '时间': '星期三', '地点': '长春', '人数': 100 },
-            // { '时间': '星期五', '地点': '南京', '人数': 300 },
-            // { '时间': '星期四', '地点': '江苏', '人数': 800 },
-            // { '时间': '星期一', '地点': '北京', '人数': 700 },
-            // { '时间': '星期三', '地点': '上海', '人数': 300 },
-            // { '时间': '星期二', '地点': '杭州', '人数': 500 }
           ]
         }
     }
@@ -224,7 +228,24 @@ export default {
       let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
       let gene = this.module_genes.join(',')
       this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/mma.php?gene=${gene}&species=${species}`).then((response)=>{
-        this.mma_tableData = response.data || [];
+        console.log(response.data);
+        
+        let newList = [];
+        response.data.forEach(item => {
+          newList.push(item.query);
+        });
+        let geneList = this.module_genes;
+        let addList = newList.concat(geneList).filter(v => !newList.includes(v));
+        addList = Array.from(new Set(addList));
+        let setResult = addList.map(item => {
+          return {
+            query: item,
+            AT_gene: '-',
+            e_value: '-',
+            annotation: '-'
+          }
+        })
+        this.mma_tableData = response.data.concat(setResult) || [];
       });
     },
 

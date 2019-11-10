@@ -14,6 +14,9 @@
         <el-table-column
           prop="motif_id"
           label="Motif ID">
+            <template slot-scope="scope">
+              <a style="margin-left: 10px" target="_blank" class="link" :href="'/motif/data/motif_information/'+scope.row.motif_id+'.txt'">{{ scope.row.motif_id }}</a>
+            </template>
         </el-table-column>
         <el-table-column
           prop="motif_name"
@@ -66,6 +69,9 @@
         <el-table-column
           prop="motif_id"
           label="Motif ID">
+            <template slot-scope="scope">
+              <a style="margin-left: 10px" target="_blank" class="link" :href="'/motif/data/motif_information/'+scope.row.motif_id+'.txt'">{{ scope.row.motif_id }}</a>
+            </template>
         </el-table-column>
         <el-table-column
           prop="motif_name"
@@ -210,6 +216,10 @@ export default {
     margin: 24px auto;
     text-align: left;
     width: 80%;
+  }
+  .link {
+    text-decoration: none;
+    color: rgb(34, 124, 34);
   }
 </style>
 

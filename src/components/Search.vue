@@ -205,12 +205,12 @@
         >
           <el-table-column
             prop="gene"
-            label="gene"
+            label="Gene"
           >
           </el-table-column>
           <el-table-column
             prop="function"
-            label="function"
+            label="Annotation"
           >
           </el-table-column>
         </el-table>
@@ -345,7 +345,7 @@
         >
           <el-table-column
             prop="gene"
-            label=""
+            label="ModuleID"
             width="140"
           >
             <template slot-scope="scope">
@@ -353,9 +353,9 @@
               <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
             </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="group"
-            label=""
+            label="123"
           >
           </el-table-column>
           <el-table-column
@@ -367,13 +367,13 @@
             prop="num1"
             label=""
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="describe1"
-            label=""
+            label="Descriptions"
           >
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="num2"
             label=""
           >
@@ -382,15 +382,15 @@
             prop="value1"
             label=""
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="value2"
-            label=""
+            label="P-Value"
           >
           </el-table-column>
           <el-table-column
             prop="genes"
-            label=""
+            label="FDR"
           >
           </el-table-column>
         </el-table>

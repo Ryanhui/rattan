@@ -11,18 +11,23 @@
       <el-table
       :data="mafg_tableData"
       border
+      stripe
+      size="mini"
+       :default-sort = "{prop: 'value2', order: 'descending'}"
       class="mafg-table">
       <el-table-column
         prop="gene"
-        label="">
+        label="Gene Id">
       </el-table-column>
       <el-table-column
         prop="describe1"
-        label="">
+        label="Annotation">
       </el-table-column>
       <el-table-column
         prop="value2"
-        label="">
+        label="FDR"
+        sortable
+        >
       </el-table-column>
     </el-table>
     </div>
@@ -31,22 +36,24 @@
       <el-table
         :data="mma_tableData"
         border
+        stripe
+        size="mini"
         class="mafg-table">
         <el-table-column
           prop="query"
-          label="">
+          label="Gene ID">
         </el-table-column>
         <el-table-column
           prop="AT_gene"
-          label="">
+          label="Orthologous gene in Arabidopsis thaliana">
         </el-table-column>
         <el-table-column
           prop="e_value"
-          label="">
+          label="E-value">
         </el-table-column>
         <el-table-column
           prop="annotation"
-          label="">
+          label="Annotation">
         </el-table-column>
       </el-table>
     </div>
@@ -139,6 +146,9 @@ export default {
       network: [],
       showNetwork: false,
 
+      module1_gene_list: [],
+      module2_gene_list: [],
+
       mafg_module1_tableData: [],
       mafg_module2_tableData: [],
       mafg_tableData: [],
@@ -158,12 +168,17 @@ export default {
         whichModule = this.$route.params.module2;
       }
       await this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/networks.php?id=${whichModule}`).then((response)=>{
-        // console.log(response);
+        console.log(response);
         let result = [];
         let node = [];
+        let geneList = [];
+        
         response.data.forEach(element => {
           node.push(element.source, element.target);
+          geneList.push(element.source, element.target);
         });
+
+        geneList = Array.from(new Set(geneList));
 
         Array.from(new Set(node)).forEach(element => {
           let obj = {};
@@ -187,19 +202,19 @@ export default {
 
         if(module === 'module1') {
           this.module1_network = result;
+          this.module1_gene_list = geneList;
         } else {
           this.module2_network = result;
+          this.module2_gene_list = geneList;
         }
       })
     },
     async getNetwork() {
       await this.network_submit('module1');
       await this.network_submit('module2');
-      // console.log(this.module1_network);
-      // console.log(this.module2_network);
+
       this.config.elements = this.module1_network.concat(this.module2_network);
       this.showNetwork = true;
-      //console.log(this.config.elements);
     },
 
     async mafg_submit(module) {
@@ -223,38 +238,36 @@ export default {
       await this.mafg_submit('module2');
       this.mafg_tableData = this.mafg_module1_tableData.concat(this.mafg_module2_tableData);
       //console.log(this.mafg_tableData);
+      await this.mma_submit();
     },
 
     async mma_submit() { //module memeber annotation
-      let whichModule = '';
-      if(module === 'module1') {
-        whichModule = this.$route.params.module1;
-      } else {
-        whichModule = this.$route.params.module2;
-      }
       let pattan = /Calsi/;
-      let species = pattan.test(whichModule) ? 'Calsi' : 'Daeje';
-      let gene = whichModule.replace('Module','gene0');
-      await this.axios.get(`http://rattan.bamboogdb.org/php/search_gene_function.php?gene=${gene}&species=${species}`).then((response)=>{
-        this.mma_tableData = response.data || [];
-        if(module === 'module1') {
-          this.mma_module1_tableData = response.data || [];
-        } else {
-          this.mma_module2_tableData = response.data || [];
-        }
+      let species = pattan.test(this.$route.params.module1) ? 'Calsi' : 'Daeje';
+      let gene = this.module2_gene_list.concat(this.module1_gene_list).join(',');
+      await this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/mma.php?gene=${gene}&species=${species}`).then((response)=>{
+        let newList = [];
+        response.data.forEach(item => {
+          newList.push(item.query);
+        });
+        let geneList = this.module1_gene_list.concat(this.module2_gene_list);
+        let addList = newList.concat(geneList).filter(v => !newList.includes(v));
+        addList = Array.from(new Set(addList));
+        let setResult = addList.map(item => {
+          return {
+            query: item,
+            AT_gene: '-',
+            e_value: '-',
+            annotation: '-'
+          }
+        })
+        this.mma_tableData = response.data.concat(setResult) || [];
       });
-    },
-    async getMma() {
-      await this.mma_submit('module1');
-      await this.mma_submit('module2');
-      this.mma_tableData = this.mma_module1_tableData.concat(this.mma_module2_tableData);
-      console.log(this.mma_tableData);
     },
   },
   mounted: function() {
    this.getNetwork();
    this.getMafg();
-   this.getMma();
   }
 }
 </script>
