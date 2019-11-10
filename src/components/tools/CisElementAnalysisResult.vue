@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-loading="loading">
+  <div class="container" v-loading="loading" element-loading-text="please wait... It would take some time...">
     <p class="title" >Cis-element Analysis</p>
     <p class="jobid">
       You job id is: <span style="font-weight:700">{{this.$route.query.jobid}}</span>
@@ -56,6 +56,64 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="table_wrapper" v-if="type==='name'">
+      <el-table
+        :data="name.name_result"
+        stripe
+        border
+        size="mini"
+        style="width: 100%">
+        <el-table-column
+          prop="motif_id"
+          label="Motif ID">
+        </el-table-column>
+        <el-table-column
+          prop="motif_name"
+          label="Motif name">
+        </el-table-column>
+        <el-table-column
+          prop="motif_counts"
+          label="Motif counts">
+        </el-table-column>
+        <el-table-column
+          prop="z_score"
+          label="Z-score">
+        </el-table-column>
+        <el-table-column
+          prop="p_value"
+          label="P-value">
+        </el-table-column>
+      </el-table>
+    </div>
+<div class="table_wrapper" v-if="type==='custom'">
+      <el-table
+        :data="custom.custom_result"
+        stripe
+        border
+        size="mini"
+        style="width: 100%">
+        <el-table-column
+          prop="gene_id"
+          label="Gene ID">
+        </el-table-column>
+        <el-table-column
+          prop="motif"
+          label="Motif">
+        </el-table-column>
+        <el-table-column
+          prop="counts"
+          label="Counts">
+        </el-table-column>
+        <el-table-column
+          prop="location_forward"
+          label="Location in forward">
+        </el-table-column>
+        <el-table-column
+          prop="location_reverse"
+          label="Location in reverse">
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -70,6 +128,8 @@ export default {
       type: '',
       loading: false,
       sequence: {},
+      name: {},
+      custom: {}
     }
   },
   mounted(){
@@ -79,23 +139,56 @@ export default {
     if(/s/g.test(jobid)){
       this.type = 'sequence';
       this.loading = true;
-      this.axios.get(`http://rattan.bamboogdb.org/php/motif/result.php?jobid=${jobid}&type=sequence`).then((response) => {
-        this.sequence = response.data;
-        this.loading = false;
-      });
+      let self = this;
+      setTimeout(() => {
+          self.axios.get(`http://rattan.bamboogdb.org/php/motif/result.php?jobid=${jobid}&type=sequence`).then((response) => {
+          self.sequence = response.data;
+          self.loading = false;
+        });
+      }, 2000);
     }
     if(/n/g.test(jobid)){
       this.type = 'name';
       this.loading = true;
-      this.axios.get(`http://rattan.bamboogdb.org/php/motif/result.php?jobid=${jobid}&type=name`).then((response) => {
-        this.name = response.data;
-        this.loading = false;
-      });
+      let timer;
+      let self = this;
+      function getData() {
+        self.axios.get(`http://rattan.bamboogdb.org/php/motif/result.php?jobid=${jobid}&type=name`).then((response) => {
+          if(response.data == 'not yet'){
+            console.log(null);
+          } else {
+            if(response.data.file_size === self.name.file_size) {
+              self.loading = false;
+              clearInterval(timer);
+            }
+            self.name = response.data;
+            console.log(response.data);
+          }
+        });
+      }
+      timer = setInterval(getData, 10000)
     }
     if(/c/g.test(jobid)){
-      type = 'custom';
+      this.type = 'custom';
+      this.loading = true;
+      let timer;
+      let self = this;
+      function getData() {
+        self.axios.get(`http://rattan.bamboogdb.org/php/motif/result.php?jobid=${jobid}&type=custom`).then((response) => {
+          if(response.data == 'not yet'){
+            console.log(null);
+          } else {
+            if(response.data.file_size === self.custom.file_size) {
+              self.loading = false;
+              clearInterval(timer);
+            }
+            self.custom = response.data;
+            console.log(response.data);
+          }
+        });
+      }
+      timer = setInterval(getData, 10000)
     }
-
   }
 }
 

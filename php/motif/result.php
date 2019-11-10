@@ -87,11 +87,9 @@
   }
 
   if($type == 'name') {
-    echo 'yes';
     $return_data = new stdClass();
     
     $file_path = $job_dir.'/out.Cis-name_scan.results';
-    echo $file_path;
 
     if(file_exists($file_path)) {
       $file_arr = fopen($file_path, 'r');
@@ -106,12 +104,49 @@
           $temp_data->motif_id = $line[0];
           $temp_data->motif_name = $line[1];
           $temp_data->motif_counts = $line[2];
+          $temp_data->z_score = $line[3];
+          $temp_data->p_value = $line[4];
 
           array_push($detail_data, $temp_data);
       } while(!feof($file_arr));
     
       $return_data->name_result = $detail_data;
+      $return_data->file_size = filesize($file_path);
+      echo json_encode($return_data);
+    } else {
+      echo 'not yet'; 
     }
-    echo json_encode($return_data);
+  }
+
+  if($type == 'custom') {
+    $return_data = new stdClass();
+    
+    $file_path = $job_dir.'/result1.Cis_results';
+
+    if(file_exists($file_path)) {
+      $file_arr = fopen($file_path, 'r');
+      $detail_data = array();
+      do {
+          $line = fgets($file_arr);
+          $line = str_replace(PHP_EOL, '', $line);
+          $line = str_replace("\t", "^", $line);
+          $line = explode("^", $line);
+
+          $temp_data = new stdClass();
+          $temp_data->gene_id = $line[0];
+          $temp_data->motif = $line[1];
+          $temp_data->counts = $line[2];
+          $temp_data->location_forward = $line[3];
+          $temp_data->location_reverse = $line[4];
+
+          array_push($detail_data, $temp_data);
+      } while(!feof($file_arr));
+    
+      $return_data->custom_result = $detail_data;
+      $return_data->file_size = filesize($file_path);
+      echo json_encode($return_data);
+    } else {
+      echo 'not yet'; 
+    }
   }
 ?>
