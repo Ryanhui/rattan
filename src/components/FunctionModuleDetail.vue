@@ -6,7 +6,8 @@
     <div class="cystyle" v-if="showNetwork">
       <cytoscape :config="config" />
     </div>
-    <div>
+    <p class="cytoscape-info">Orange and grey line links nodes from distinct modules respectively</p>
+    <div style="margin-top:48px">
       <h3>1.Module annotation (GSEA enrichment result)</h3>
       <el-table
       :data="mafg_tableData"
@@ -279,6 +280,9 @@ export default {
     position: relative;
     width: 95%;
     margin: 0 auto;
+  }
+  .cytoscape-info {
+    text-align: center;
   }
   .mafg-table {
     width: 80%;
