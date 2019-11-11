@@ -25,10 +25,10 @@
         label="Description"
         width="180">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="category"
         label="Category">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="overlap"
         label="Overlap Genes">
@@ -44,7 +44,7 @@
     </el-table>
     <el-form ref="form" label-width="200px" class="form">
       <el-form-item label="Choose Species">
-        <el-select v-model="species" placeholder="please select">
+        <el-select v-model="species" placeholder="please select" v-on:change="changeSpeices">
           <el-option label="Calamus simplicifolius" value="Calsi"></el-option>
           <el-option label="Daemonorops jenkinsiana" value="Daeje"></el-option>
         </el-select>
@@ -83,6 +83,7 @@
           v-model="textarea"
           style="width:240px">
         </el-input>
+        <span class="example" v-on:click="handelExample">example</span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -116,6 +117,67 @@ export default {
       barplotPdf: '',
       dotplotPptx: '',
       barplotPptx: '',
+
+      calsiExample: `Calsi_gene14976
+Calsi_gene45768
+Calsi_gene17400
+Calsi_gene27018
+Calsi_gene38529
+Calsi_gene22211
+Calsi_gene47040
+Calsi_gene01037
+Calsi_gene02724
+Calsi_gene04583
+Calsi_gene06096
+Calsi_gene14471
+Calsi_gene24814
+Calsi_gene32530
+Calsi_gene42790
+Calsi_gene45374
+Calsi_gene48073
+Calsi_gene50416
+Calsi_gene27120
+Calsi_gene49864
+Calsi_gene34465
+Calsi_gene25727
+Calsi_gene45961
+Calsi_gene47420
+Calsi_gene34228
+Calsi_gene04910
+Calsi_gene15756
+Calsi_gene42007
+Calsi_gene08349
+Calsi_gene09567
+Calsi_gene33854
+Calsi_gene09494
+Calsi_gene14638
+Calsi_gene39106
+Calsi_gene47559
+Calsi_gene43457
+Calsi_gene23996
+Calsi_gene45366
+Calsi_gene36004
+Calsi_gene10259
+Calsi_gene11877
+`,
+      daejeExample: `Daeje_Gene32641
+Daeje_Gene16374
+Daeje_Gene28386
+Daeje_Gene64410
+Daeje_Gene67057
+Daeje_Gene18412
+Daeje_Gene59534
+Daeje_Gene24534
+Daeje_Gene34355
+Daeje_Gene68231
+Daeje_Gene49181
+Daeje_Gene00605
+Daeje_Gene00607
+Daeje_Gene04737
+Daeje_Gene52976
+Daeje_Gene63840
+Daeje_Gene33109
+`,
     }
   },
   methods: {
@@ -173,6 +235,20 @@ export default {
       }).catch((error) => {
         console.log(error);
       })
+    },
+
+    handelExample() {
+      if(this.species === 'Calsi') {
+        this.textarea = this.calsiExample;
+      }
+      if(this.species === 'Daeje') {
+        this.textarea = this.daejeExample;
+      }
+    },
+
+    changeSpeices() {
+      console.log('eueuue')
+      this.textarea = '';
     }
   }
 }
@@ -193,6 +269,12 @@ export default {
   .clickColor {
     text-decoration: none;
     color: rgb(2, 128, 86);
+    cursor: pointer;
+  }
+  .example {
+    margin-left: 8px;
+    color:rgb(2, 128, 86);
+    font-size: 18px;
     cursor: pointer;
   }
 </style>

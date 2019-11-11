@@ -61,7 +61,7 @@ if($type == 'Positive') {
 }
 
 # start search
-$sql = 'SELECT gene1, gene2, length FROM '. $whichDataBase .' WHERE gene1="'. $gene . '"' . ' AND length' . $whichOrder .'0';
+$sql = 'SELECT gene1, gene2, num1, length FROM '. $whichDataBase .' WHERE gene1="'. $gene . '"' . ' AND length' . $whichOrder .'0';
 
 $result = mysqli_query($conn, $sql);
  
@@ -74,17 +74,17 @@ if (mysqli_num_rows($result) > 0) {
         // echo $row["gene1"]. " " .$row["gene2"]. " " . $row["length"];
         array_push($data, $row);
         array_push($node, $row["gene2"]);
-        array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"], 'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"]));
+        array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"], 'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"], 'mr' => $row["num1"]));
     }
 
     # search child node
     foreach ($node as $childNode) {
-        $sql = 'SELECT gene1, gene2, length FROM '. $whichDataBase .' WHERE gene1="'. $childNode . '"' . '  AND length' . $whichOrder .'0';
+        $sql = 'SELECT gene1, gene2, num1, length FROM '. $whichDataBase .' WHERE gene1="'. $childNode . '"' . '  AND length' . $whichOrder .'0';
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
                 if(in_array($row["gene2"], $node)) {
-                    array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"],'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"]));
+                    array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"],'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"],'mr' => $row["num1"]));
                 }
             }
         }

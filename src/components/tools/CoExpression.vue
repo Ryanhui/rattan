@@ -6,6 +6,7 @@
       <cytoscape :config="config" />
     </div>
     <div v-if="show">
+      <p style="font-size:18px; width:600px; text-align:center; margin: 0px auto 24px auto;">Blue dot is/are the query gene/genes .Orange and grey line links nodes with negative and positive co-expression relationship respectively.</p>
       <p v-on:click="exportToImg" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">Export to img</p>
       <p v-on:click="showDetailfun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showDetail?'Hide':'Show'}} network details</p>
     </div>
@@ -22,7 +23,7 @@
         </el-table-column>
         <el-table-column
           prop="target"
-          label="	Gene B"
+          label="Gene B"
           width="180">
         </el-table-column>
         <el-table-column
@@ -30,7 +31,7 @@
           label="PCC">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="mr"
           label="MR">
         </el-table-column>
         <el-table-column
@@ -256,7 +257,7 @@ Daeje_Gene26990`;
             newElement.push({data: { id: element }});
           });
           rowData.edge.forEach(element => {
-            newElement.push({data: { id: element.id, source: element.source, target: element.target, length: element.length }})
+            newElement.push({data: { id: element.id, source: element.source, target: element.target, length: element.length, mr: element.mr }})
           });
           this.elements = newElement;
           this.config.elements = newElement;

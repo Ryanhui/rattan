@@ -7,3 +7,20 @@ strings /lib64/libc.so.6 |grep GLIBC_
 #需要升到2.17
 sudo rpm -Uvh *-2.17-55.el6.x86_64.rpm --force --nodeps
 
+rattan目录结构
+lrwxrwxrwx 1 web_admin web_admin      39 Aug 31 19:38 annotation_summary -> /web_data/Rattan_NET/annotation_summary
+drwxrwxr-x 2 web_admin web_admin    4096 Nov 10 19:37 css
+lrwxrwxrwx 1 web_admin web_admin      29 Aug 24 15:17 download -> /web_data/Rattan_NET/download
+-rw-r--r-- 1 web_admin web_admin  801830 Nov 10 19:37 f821ddb5d354dd81df1c.worker.js
+-rw-r--r-- 1 web_admin web_admin 2632814 Nov 10 19:37 f821ddb5d354dd81df1c.worker.js.map
+-rw-r--r-- 1 web_admin web_admin    4414 Nov 10 19:37 favicon.ico
+drwxrwxr-x 2 web_admin web_admin    4096 Jun 22 15:55 fonts
+drwxrwxr-x 2 web_admin web_admin    4096 Sep  1 08:04 img
+-rw-r--r-- 1 web_admin web_admin    1051 Nov 10 19:37 index.html
+drwxrwxr-x 2 web_admin web_admin    4096 Nov 10 19:38 js
+lrwxrwxrwx 1 web_admin web_admin      27 Nov  6 20:08 motif -> /web_data/Rattan_NET/motif/
+drwxrwxr-x 4 web_admin web_admin    4096 Nov  6 21:02 php
+drwxrwxrwx 3 web_admin web_admin    4096 Aug 13 18:55 scripts
+drwxrwxr-x 2 web_admin web_admin    4096 Sep 17 19:31 searchData
+lrwxrwxrwx 1 web_admin web_admin      10 Nov 10 14:25 web_data -> /web_data/
+[web_admin@bogon rattan]$ 

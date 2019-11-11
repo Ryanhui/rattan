@@ -76,7 +76,7 @@ foreach ($genes as $gene) {
             array_push($data, $row);
             array_push($node, $row["gene2"]);
             array_push($__node, $row["gene2"]);
-            array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"], 'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"]));
+            array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"], 'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"], 'mr' => $row["num1"]));
         }
 
         # search child node
@@ -86,7 +86,7 @@ foreach ($genes as $gene) {
             if (mysqli_num_rows($result2) > 0) { 
                 while($row = mysqli_fetch_assoc($result2)) { 
                     if(in_array($row["gene2"], $__node)) {  
-                        array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"],'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"]));
+                        array_push($edge, array('id' => $row["gene1"].'-'.$row["gene2"],'source' => $row["gene1"], 'target' => $row["gene2"], 'length' => $row["length"], 'mr' => $row["num1"]));
                     }
                 }
             }
