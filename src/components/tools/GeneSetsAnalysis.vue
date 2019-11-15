@@ -139,6 +139,7 @@
           v-model="textarea"
           style="width:240px">
         </el-input>
+        <span class="example" v-on:click="inputExample">example</span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -348,6 +349,23 @@ export default {
 
       ctx.restore();
     },
+
+    inputExample() {
+      if(this.species === 'Calsi') {
+        this.textarea = `Calsi_gene14976
+Calsi_gene45768
+Calsi_gene17400
+Calsi_gene27018
+Calsi_gene38529`
+      }
+      if(this.species === 'Daeje') {
+        this.textarea = `Daeje_Gene32641
+Daeje_Gene16374
+Daeje_Gene28386
+Daeje_Gene64410
+Daeje_Gene67057`
+      }
+    }
   },
 }
 
@@ -396,5 +414,6 @@ export default {
     color: rgb(2, 128, 86);
     cursor: pointer;
   }
+
 </style>
 

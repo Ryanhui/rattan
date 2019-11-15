@@ -9,11 +9,13 @@
       <p style="font-size:18px; width:600px; text-align:center; margin: 0px auto 24px auto;">Blue dot is/are the query gene/genes .Orange and grey line links nodes with negative and positive co-expression relationship respectively.</p>
       <p v-on:click="exportToImg" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">Export to img</p>
       <p v-on:click="showDetailfun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showDetail?'Hide':'Show'}} network details</p>
+      <p v-on:click="showAnnotationFun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showAnnotation?'Hide':'Show'}} annotation details</p>
     </div>
     <div v-if="showDetail">
       <el-table
         :data="tableData"
         border
+        stripe
         size="mini"
         style="width: 80%;margin: 0 auto;">
         <el-table-column
@@ -39,6 +41,43 @@
           <template slot-scope="scope">
             {{scope.row.length > 0 ? 'Positive': 'Negative'}}
           </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div v-if="showAnnotation">
+      <el-table
+        :data="annotationTable"
+        border
+        stripe
+        size="mini"
+        class="table"
+        empty-text="loading..."
+        style="width: 80%">
+        <el-table-column
+          prop="geneSetName"
+          label="Gene Set Name(NO. Genes)"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="Description"
+          width="180">
+        </el-table-column>
+        <!-- <el-table-column
+          prop="category"
+          label="Category">
+        </el-table-column> -->
+        <el-table-column
+          prop="overlap"
+          label="Overlap Genes">
+        </el-table-column>
+        <el-table-column
+          prop="pvalue"
+          label="p-value">
+        </el-table-column>
+        <el-table-column
+          prop="fdr"
+          label="FDR">
         </el-table-column>
       </el-table>
     </div>
@@ -194,7 +233,9 @@ export default {
       show: false,
       tableData: [],
       showDetail: false,
-      
+      annotationTable: [],
+      showAnnotation: false,
+
       form: {
           activeName: 'calsi',
 
@@ -262,12 +303,26 @@ Daeje_Gene26990`;
           this.elements = newElement;
           this.config.elements = newElement;
           this.tableData = rowData.edge;
-          console.log(rowData.edge);
+          // console.log(rowData);
+
           const self = this;
-          setTimeout(function(){
-            self.show = true;  
-            self.loading = false;
-          },1000);
+
+          // get annotation data
+          let postData = new FormData();
+          postData.append('species',this.form.activeName === 'calsi' ? 'Calsi' : 'Daeje');
+          postData.append('testMethod','fisher');
+          postData.append('adjustmentMethod','BY');
+          postData.append('level','0.05');
+          postData.append('textarea', rowData.node.join('\n'));
+          this.axios.post('http://rattan.bamboogdb.org/php/modulesea.php', postData).then((response) => {
+            self.axios.get(`http://rattan.bamboogdb.org/php/modulesea_result.php?job_id=${response.data}`).then((responseData)=>{
+              self.annotationTable = responseData.data;
+            });
+            setTimeout(function(){
+              self.show = true;  
+              self.loading = false;
+            },1000);
+          });
         })
       } else {
         var data = new FormData();
@@ -319,7 +374,7 @@ Daeje_Gene26990`;
       }
     },
     exportToImg() {
-      console.log(this.$cytoscape)
+      // console.log(this.$cytoscape)
       this.$cytoscape.instance.then(cy => {
         let png64 = cy.png();
         
@@ -333,6 +388,9 @@ Daeje_Gene26990`;
     },
     showDetailfun() {
       this.showDetail = !this.showDetail;
+    },
+    showAnnotationFun() {
+      this.showAnnotation = !this.showAnnotation;
     }
   }
 }

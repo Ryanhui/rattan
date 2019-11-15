@@ -66,7 +66,7 @@ $edge = array();
 
 foreach ($genes as $gene) {
     $gene = trim($gene);
-    $sql = 'SELECT gene1, gene2, length FROM '. $whichDataBase .' WHERE gene1="'. $gene . '"' . ' AND length' . $whichOrder .'0';
+    $sql = 'SELECT gene1, gene2, num1, length FROM '. $whichDataBase .' WHERE gene1="'. $gene . '"' . ' AND length' . $whichOrder .'0';
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {
@@ -81,7 +81,7 @@ foreach ($genes as $gene) {
 
         # search child node
         foreach ($__node as $childNode) { 
-            $sql = 'SELECT gene1, gene2, length  FROM '. $whichDataBase .' WHERE gene1="'. $childNode . '"' . '  AND length' . $whichOrder .'0';  
+            $sql = 'SELECT gene1, gene2, num1, length  FROM '. $whichDataBase .' WHERE gene1="'. $childNode . '"' . '  AND length' . $whichOrder .'0';  
             $result2 = mysqli_query($conn, $sql) ;    
             if (mysqli_num_rows($result2) > 0) { 
                 while($row = mysqli_fetch_assoc($result2)) { 
