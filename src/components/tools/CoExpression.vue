@@ -54,13 +54,13 @@
         empty-text="loading..."
         style="width: 80%">
         <el-table-column
-          prop="geneSetName"
-          label="Gene Set Name(NO. Genes)"
+          prop="query"
+          label="Gene Id"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="description"
-          label="Description"
+          prop="AT_gene"
+          label="AT_gene"
           width="180">
         </el-table-column>
         <!-- <el-table-column
@@ -68,16 +68,12 @@
           label="Category">
         </el-table-column> -->
         <el-table-column
-          prop="overlap"
-          label="Overlap Genes">
+          prop="e_value"
+          label="e_value">
         </el-table-column>
         <el-table-column
-          prop="pvalue"
-          label="p-value">
-        </el-table-column>
-        <el-table-column
-          prop="fdr"
-          label="FDR">
+          prop="annotation"
+          label="annotation">
         </el-table-column>
       </el-table>
     </div>
@@ -303,21 +299,11 @@ Daeje_Gene26990`;
           this.elements = newElement;
           this.config.elements = newElement;
           this.tableData = rowData.edge;
-          // console.log(rowData);
 
           const self = this;
 
-          // get annotation data
-          let postData = new FormData();
-          postData.append('species',this.form.activeName === 'calsi' ? 'Calsi' : 'Daeje');
-          postData.append('testMethod','fisher');
-          postData.append('adjustmentMethod','BY');
-          postData.append('level','0.05');
-          postData.append('textarea', rowData.node.join('\n'));
-          this.axios.post('http://rattan.bamboogdb.org/php/modulesea.php', postData).then((response) => {
-            self.axios.get(`http://rattan.bamboogdb.org/php/modulesea_result.php?job_id=${response.data}`).then((responseData)=>{
-              self.annotationTable = responseData.data;
-            });
+          self.axios.get(`http://rattan.bamboogdb.org/php/search_gene_functions.php?species=${this.form.activeName === 'calsi' ? 'Calsi' : 'Daeje'}&gene=${rowData.node.join(',')}`).then((response)=>{
+            self.annotationTable = response.data;
             setTimeout(function(){
               self.show = true;  
               self.loading = false;

@@ -32,7 +32,8 @@
           <li class="tools-dropdown-list"><router-link to="/tools/coexpression">Co-expression Network</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/moduleenrichment">Module enrichment</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/ciselementanalysis">Cis-element Analysis</router-link></li>
-          <li><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
+          <li class="tools-dropdown-list"><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
+          <li><router-link to="/tools/sequenceextractor">Sequence Extractor</router-link></li>
         </ul>
       </el-col>
       <el-col :span="4"><div class="meun-item"><router-link to="/annotationsummary">Annotation Summary</router-link></div></el-col>

@@ -75,7 +75,7 @@
     </el-table>
     <h3>Expression profilings</h3>
     <div class="heatmap">
-      <ve-heatmap :data="chartData"></ve-heatmap>
+      <ve-heatmap :data="chartData" :settings="chartSettings"></ve-heatmap>
     </div>
   </div>
 </template>
@@ -163,10 +163,17 @@ export default {
       chartData: {
           columns: ['时间', '地点', '人数'],
           rows: [
-            { '时间': '星期一', '地点': '北京', '人数': 1000 },
-            { '时间': '星期二', '地点': '上海', '人数': 400 },
+            { '时间': '星期一', '地点': '北京', '人数': 1000},
+            { '时间': '星期二', '地点': '北京', '人数': 1000},
+            { '时间': '星期三', '地点': '北京', '人数': 1000},
+            { '时间': '星期二', '地点': '上海', '人数': 400},
           ]
-        }
+      },
+
+      chartSettings: {
+        dataType: 'normal',
+        digit: 8
+      }
     }
   },
   methods: {
@@ -273,7 +280,26 @@ export default {
       let species = pattan.test(this.$route.params.gene) ? 'Calsi' : 'Daeje';
       let gene = this.module_genes.join(',')
       this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/fpkm.php?gene=${gene}&species=${species}`).then((response)=>{
-        console.log(response);        
+        console.log(response); 
+        let rows = [];
+        response.data.forEach((item) => {
+          for(let key in item){
+            if(/cirrus/g.test(key)) {
+              console.log('key', key)
+              rows.push({
+                gene_id: item.gene_id,
+                cirrus: key,
+                value: item[key]
+              })
+            }
+          } 
+        })
+        let chartData = {
+          columns: ['cirrus', 'gene_id', 'value'],
+          rows: rows,
+        }
+        console.log('111111', chartData);
+        this.chartData = chartData;
       });
     }
   },
@@ -307,7 +333,7 @@ export default {
     color: rgb(11, 146, 63);
   }
   .heatmap {
-    min-height: 400px;
+    min-height: 350px;
     width: 800px;
     margin: 0 auto;
   }

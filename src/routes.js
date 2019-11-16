@@ -14,6 +14,7 @@ import CoExpression from './components/tools/CoExpression.vue';
 import GeneSetsAnalysis from './components/tools/GeneSetsAnalysis.vue';
 import ModuleEnrichment from './components/tools/ModuleEnrichment.vue';
 import CisElementAnalysis from './components/tools/CisElementAnalysis.vue';
+import SequenceExtractor from './components/tools/SequenceExtractor';
 import CisElementAnalysisResult from './components/tools/CisElementAnalysisResult.vue';
 import Search from './components/Search.vue';
 
@@ -36,4 +37,5 @@ export default [
   {path: '/tools/moduleenrichment', component: ModuleEnrichment},
   {path: '/tools/ciselementanalysis', component: CisElementAnalysis},
   {path: '/tools/cis_element_analysis_result', name:'CisElementAnalysisResult', component: CisElementAnalysisResult, props: (route) => ({query: route.query.jobid})},
+  {path: '/tools/sequenceextractor', component: SequenceExtractor},
 ]

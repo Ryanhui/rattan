@@ -30,55 +30,6 @@
   }
   cors();
 
-  // $servername = "127.0.0.1";
-  // $username = "rattan";
-  // $password = "rattan123";
-  // $dbname = "RATTAN";
-
-
-  // $gene = $_GET["gene"];
-  // $species = $_GET["species"];
-
-  // if($species == 'Calsi') {
-  //   $whichDataBase = "Locus_Search_Calsi";
-  // } else {
-  //   $whichDataBase = "Locus_Search_Daeje";
-  // }
-
-  // $conn = mysqli_connect($servername, $username, $password, $dbname);
-  
-  // if (!$conn) {
-  //   die("连接失败: " . mysqli_connect_error());
-  // }
-  
-  // $gene = explode(",", $gene);
-  
-  // // echo json_encode($gene);
-  // $data = array();
-  // foreach ($gene as $key => $value) {
-  //   $sql = 'SELECT * FROM '. $whichDataBase .' WHERE query="'. $value . '";';
-  //   $result = mysqli_query($conn, $sql);
-  //   if (mysqli_num_rows($result) > 0) {
-      
-  //     while($row = mysqli_fetch_assoc($result)) {
-  //       array_push($data, $row);
-  //     }
-  //   }
-  // }
-  // echo json_encode($data);
-  // $sql = 'SELECT query, AT_gene, e_value, annotation FROM '. $whichDataBase .' WHERE query="'. $gene . '";';
-  
-  // $result = mysqli_query($conn, $sql);
-  // // echo $sql;
-  // // echo mysqli_num_rows($result);
-  // #echo $gene,$species;
-  // if (mysqli_num_rows($result) > 0) {
-  //   $data = array();
-  //   while($row = mysqli_fetch_assoc($result)) {
-  //     array_push($data, $row);
-  //   }
-  //   echo json_encode($data);
-  // }
   $servername = "127.0.0.1";
   $username = "rattan";
   $password = "rattan123";
@@ -89,9 +40,9 @@
   $species = $_GET["species"];
 
   if($species == 'Calsi') {
-    $whichDataBase = "FPKM_Calsi";
+    $whichDataBase = "Locus_Search_Calsi";
   } else {
-    $whichDataBase = "FPKM_Daeje";
+    $whichDataBase = "Locus_Search_Daeje";
   }
 
   $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -100,12 +51,26 @@
     die("连接失败: " . mysqli_connect_error());
   }
   
+//   $sql = 'SELECT query, AT_gene, e_value, annotation FROM '. $whichDataBase .' WHERE query="'. $gene . '";';
+  
+//   $result = mysqli_query($conn, $sql);
+//   // echo $sql;
+//   // echo mysqli_num_rows($result);
+//   #echo $gene,$species;
+//   if (mysqli_num_rows($result) > 0) {
+//     $data = array();
+//     while($row = mysqli_fetch_assoc($result)) {
+//       array_push($data, $row);
+//     }
+//     echo json_encode($data);
+//   }
+////////////////////////////////////////////////////////////////////////////
   $gene = explode(",", $gene);
   
   // echo json_encode($gene);
   $data = array();
   foreach ($gene as $key => $value) {
-    $sql = 'SELECT * FROM '. $whichDataBase .' WHERE gene_id="'. $value . '";';
+    $sql = 'SELECT * FROM '. $whichDataBase .' WHERE query="'. $value . '";';
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
       
