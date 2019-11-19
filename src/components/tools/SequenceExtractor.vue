@@ -1,9 +1,15 @@
 <template>
   <div class="container">
     <p class="title">Sequence extractor</p>
-    <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card" stretch class="tab">
+    <!-- result -->
+    <div v-if="showResult" class="result-area">
+      <el-button type="primary" v-on:click="handleBack" size="small" class="back-button">Return</el-button>
+      <el-input type="textarea" :rows="35" placeholder="Result" v-model="sequenceResult"></el-input>
+    </div>
+    <!-- pannel -->
+    <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card" stretch class="tab" v-if="!showResult">
       <el-tab-pane label="Calsi" name="Calsi">
-        <el-form label-position="right" label-width="150px" style="width: 350px; margin: 0 auto;">
+        <el-form label-position="right" label-width="100px" style="width: 350px; margin: 0 auto;">
           <el-form-item label="Promoter:">
             <el-select v-model="type" placeholder="Please Select" size="small" style="width: 100%">
               <el-option-group v-for="group in options" :key="group.label" :label="group.label">
@@ -18,11 +24,15 @@
           </el-form-item>
           <el-form-item label="Sequences:">
             <el-input type="textarea" :rows="5" placeholder="Please input" v-model="sequences"></el-input>
+            <span class="examples" v-on:click="addExample">example</span>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit" class="submit-button" :loading="loading">Submit</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="Daeje" name="Daeje">
-        <el-form label-position="right" label-width="150px" style="width: 350px; margin: 0 auto;">
+        <el-form label-position="right" label-width="100px" style="width: 350px; margin: 0 auto;">
           <el-form-item label="Promoter:">
             <el-select v-model="type" placeholder="Please Select" size="small" style="width: 100%">
               <el-option-group v-for="group in options" :key="group.label" :label="group.label">
@@ -37,6 +47,10 @@
           </el-form-item>
           <el-form-item label="Sequences:">
             <el-input type="textarea" :rows="5" placeholder="Please input" v-model="sequences"></el-input>
+            <span class="examples" v-on:click="addExample">example</span>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit" class="submit-button" :loading="loading">Submit</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -53,6 +67,9 @@ export default {
       activeName: "Calsi",
       type: "",
       sequences: "",
+      sequenceResult: '',
+      showResult: false,
+      loading: false,
 
       options: [
         {
@@ -109,6 +126,57 @@ export default {
     handleClick() {
       this.type = '';
       this.sequences = '';
+    },
+    onSubmit() {
+      console.log(this.type, this.sequences);
+      var data = new FormData();
+
+      data.append('species', this.activeName);
+      data.append('type', this.type);
+      data.append('sequences', this.sequences);
+
+      /////////////////////////////////////////
+      function compare(property){
+          return function(obj1, obj2){
+            var value1 = Number(obj1[property].slice(10));
+            var value2 = Number(obj2[property].slice(10));
+            return value1 - value2;     
+        }
+      }
+      /////////////////////////////////////////
+      this.loading = true;
+      this.axios.post('http://rattan.bamboogdb.org/php/search_sequence_extractor.php',data).then((response) => {
+        console.log(response)
+        let sortObj = response.data.sort(compare("gene_id"));
+        console.log(sortObj);
+        
+        let text = ``;
+        sortObj.forEach((item) => {
+          text = text + '>' + item.gene_id + '\n' + item.sequence + '\n';
+        })
+        this.sequenceResult = text;
+        this.showResult = true;
+        this.loading = false;
+      })
+    },
+
+    addExample() {
+      if(this.activeName === 'Calsi') {
+        this.sequences = `Calsi_gene14976
+Calsi_gene45768
+Calsi_gene17400
+Calsi_gene27018`;
+      }
+      if(this.activeName === 'Daeje') {
+        this.sequences = `Daeje_Gene32641
+Daeje_Gene16374
+Daeje_Gene28386
+Daeje_Gene64410
+Daeje_Gene67057`;
+      }
+    },
+    handleBack () {
+      this.showResult = false;
     }
   }
 };
@@ -126,6 +194,22 @@ export default {
 }
 .tab {
   margin-top: 24px;
+}
+.submit-button {
+  margin-top: 16px;
+  margin-right: 32px;
+}
+.examples {
+  margin-right: 195px;
+  cursor: pointer;
+  color: #349D38;
+}
+.result-area {
+  margin: 24px 0 48px 0;
+  text-align: left;
+}
+.back-button {
+  margin: 8px 0 24px 0;
 }
 </style>
 
