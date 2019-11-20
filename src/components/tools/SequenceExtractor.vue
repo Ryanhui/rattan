@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <p class="title">Sequence extractor</p>
+    <p>You can extract sequences of promoter resign, cds, pep and whole-length gene by Sequence extractor</p>
     <!-- result -->
     <div v-if="showResult" class="result-area">
       <el-button type="primary" v-on:click="handleBack" size="small" class="back-button">Return</el-button>
@@ -10,7 +11,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card" stretch class="tab" v-if="!showResult">
       <el-tab-pane label="Calsi" name="Calsi">
         <el-form label-position="right" label-width="100px" style="width: 350px; margin: 0 auto;">
-          <el-form-item label="Promoter:">
+          <el-form-item label="Data sets:">
             <el-select v-model="type" placeholder="Please Select" size="small" style="width: 100%">
               <el-option-group v-for="group in options" :key="group.label" :label="group.label">
                 <el-option
@@ -22,7 +23,7 @@
               </el-option-group>
             </el-select>
           </el-form-item>
-          <el-form-item label="Sequences:">
+          <el-form-item label="Gene ID:">
             <el-input type="textarea" :rows="5" placeholder="Please input" v-model="sequences"></el-input>
             <span class="examples" v-on:click="addExample">example</span>
           </el-form-item>
@@ -33,7 +34,7 @@
       </el-tab-pane>
       <el-tab-pane label="Daeje" name="Daeje">
         <el-form label-position="right" label-width="100px" style="width: 350px; margin: 0 auto;">
-          <el-form-item label="Promoter:">
+          <el-form-item label="Data sets:">
             <el-select v-model="type" placeholder="Please Select" size="small" style="width: 100%">
               <el-option-group v-for="group in options" :key="group.label" :label="group.label">
                 <el-option
@@ -45,7 +46,7 @@
               </el-option-group>
             </el-select>
           </el-form-item>
-          <el-form-item label="Sequences:">
+          <el-form-item label="Gene ID:">
             <el-input type="textarea" :rows="5" placeholder="Please input" v-model="sequences"></el-input>
             <span class="examples" v-on:click="addExample">example</span>
           </el-form-item>
@@ -151,9 +152,16 @@ export default {
         console.log(sortObj);
         
         let text = ``;
-        sortObj.forEach((item) => {
-          text = text + '>' + item.gene_id + '\n' + item.sequence + '\n';
-        })
+        if(this.type === 'genePep' || this.type === 'geneCds') {
+          sortObj.forEach((item) => {
+            text = `${text}>${item.gene_id} ${item.pf_id} ${item.pfam} ${item.start} ${item.end} ${item.value} ${item.annotation} ${item.length}
+${item.sequence}
+`})
+        } else {
+          sortObj.forEach((item) => {
+            text = text + '>' + item.gene_id + '\n' + item.sequence + '\n';
+          })
+        }
         this.sequenceResult = text;
         this.showResult = true;
         this.loading = false;
@@ -193,7 +201,7 @@ Daeje_Gene67057`;
   margin-top: 24px;
 }
 .tab {
-  margin-top: 24px;
+  margin-top: 36px;
 }
 .submit-button {
   margin-top: 16px;
