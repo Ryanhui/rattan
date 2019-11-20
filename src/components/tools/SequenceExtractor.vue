@@ -152,9 +152,14 @@ export default {
         console.log(sortObj);
         
         let text = ``;
-        if(this.type === 'genePep' || this.type === 'geneCds') {
+        if(this.type === 'domainPep' || this.type === 'domainCds') {
           sortObj.forEach((item) => {
             text = `${text}>${item.gene_id} ${item.pf_id} ${item.pfam} ${item.start} ${item.end} ${item.value} ${item.annotation} ${item.length}
+${item.sequence}
+`})
+        } else if(this.type === 'geneWhole'){
+          sortObj.forEach((item) => {
+            text = `${text}>${item.gene_id} ${item.scaffold} ${item.start} ${item.end}
 ${item.sequence}
 `})
         } else {
