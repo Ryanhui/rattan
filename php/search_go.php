@@ -51,10 +51,10 @@
     die("连接失败: " . mysqli_connect_error());
   }
   
-  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE go_id="'. $go_id . '";';
+  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE go_id="'. $go_id . '"'. ' OR gene="'.$go_id.'";';
   
   $result = mysqli_query($conn, $sql);
-  // echo $sql;
+ # echo $sql;
   // echo mysqli_num_rows($result);
   #echo $gene,$species;
   if (mysqli_num_rows($result) > 0) {

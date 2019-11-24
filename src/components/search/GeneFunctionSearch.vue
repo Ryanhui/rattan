@@ -6,6 +6,7 @@
         :data="gfs_tableData"
         style="width: 100%"
         size="mini"
+        stripe
         border
         >
         <el-table-column
@@ -30,6 +31,37 @@
     </div>
     <div>
       <h3>2. Location</h3>
+      <div class="a80-table">
+        <el-table
+          :data="locationTableData"
+          border
+          size="small"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="resion"
+            label="Resion"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="start"
+            label="Start"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="end"
+            label="End">
+          </el-table-column>
+          <el-table-column
+            prop="direction"
+            label="Direction">
+          </el-table-column>
+          <el-table-column
+            prop="scaffold"
+            label="Scaffold">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <div>
       <h3>3. Network</h3>
@@ -40,6 +72,7 @@
           :data="function_module_tableData"
           style="width: 100%"
           size="mini"
+          stripe
           border
         >
           <el-table-column
@@ -102,17 +135,35 @@
     </div>
     <div>
       <h3>7. Gene family</h3>
+      <div class="a80-table">
+        <el-table
+          :data="familyTableData"
+          border
+          size="small"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="gene"
+            label="Gene">
+          </el-table-column>
+          <el-table-column
+            prop="function"
+            label="family">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <div>
       <h3>8. Protein domain</h3>
       <div class="canvas">
         <canvas ref="canvas" width="700px" height="200px" >您的浏览器暂不支持canvas</canvas>
       </div>
-      <div class="domin-table">
+      <div class="a80-table">
         <el-table
           :data="dominTableData"
           border
           size="small"
+          stripe
           style="width: 100%">
           <el-table-column
             prop="Subject_id"
@@ -157,9 +208,43 @@
     </div>
     <div>
       <h3>9. KEGG Pathway</h3>
+      <div class="a80-table">
+        <el-table
+          :data="keggTableData"
+          border
+          size="small"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="description"
+            label="KEGG Ortholog">
+          </el-table-column>
+          <el-table-column
+            prop="kegg_id"
+            label="Pathway ID">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <div>
       <h3>10. Gene Ontology</h3>
+      <div class="a80-table">
+        <el-table
+          :data="ontologyTableData"
+          border
+          size="small"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="go_id"
+            label="GO Accession">
+          </el-table-column>
+          <el-table-column
+            prop="description"
+            label="GO Annotation">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <div>
       <h3>11. Orthologous in Rattans</h3>
@@ -180,6 +265,10 @@ export default {
       dominData: [],
       dominTableData: [],
       domin_detail_item: {},
+      locationTableData: [],
+      familyTableData: [],
+      keggTableData: [],
+      ontologyTableData: []
     }
   },
   methods: {
@@ -201,14 +290,38 @@ export default {
     domin_submit() {
       this.axios.get(`http://rattan.bamboogdb.org/php/search_domin.php?keyword=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
         //console.log(response.data);
-        this.dominData = response.data;
+        this.dominData = response.data || [];
         if(response.data.length > 0) {
           this.canvasDraw();
         }
       })
       this.axios.get(`http://rattan.bamboogdb.org/php/search_pfam_id.php?subject_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
         // console.log(response.data);
-        this.dominTableData = response.data;
+        this.dominTableData = response.data || [];
+      })
+    },
+    location_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_location.php?gene_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+        // console.log(response.data);
+        this.locationTableData = response.data || [];
+      })
+    },
+    family_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_gfam.php?function=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+        // console.log(response.data);
+        this.familyTableData = response.data || [];
+      })
+    },
+    kegg_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_kegg.php?kegg_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+        // console.log(response.data);
+        this.keggTableData = response.data || [];
+      })
+    },
+    ontology_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_go.php?go_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+        // console.log(response.data);
+        this.ontologyTableData = response.data || [];
       })
     },
     // draw picture
@@ -325,6 +438,10 @@ export default {
     this.gfs_submit();
     this.function_module_submit();
     this.domin_submit();
+    this.location_submit();
+    this.family_submit();
+    this.kegg_submit();
+    this.ontology_submit();
   }
 }
 
@@ -374,7 +491,7 @@ export default {
     font-size: 16px;
     color: rgb(39, 39, 39);
   }
-  .domin-table {
+  .a80-table {
     width: 80%;
     margin: 0 auto;
     margin-top: 24px;

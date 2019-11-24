@@ -51,7 +51,7 @@
     die("连接失败: " . mysqli_connect_error());
   }
   
-  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE kegg_id="'. $kegg_id . '";';
+  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE kegg_id="'. $kegg_id . '"' . ' OR gene="'.$kegg_id.'";';
   
   $result = mysqli_query($conn, $sql);
 

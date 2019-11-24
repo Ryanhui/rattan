@@ -36,13 +36,13 @@
   $dbname = "RATTAN";
 
 
-  $keyword = $_GET["keyword"];
+  $gene_id = $_GET["gene_id"];
   $species = $_GET["species"];
 
   if($species == 'Calsi') {
-    $whichDataBase = "FunctionModule_Calsi";
+    $whichDataBase = "Search_Location_Calsi";
   } else {
-    $whichDataBase = "FunctionModule_Daeje";
+    $whichDataBase = "Search_Location_Daeje";
   }
 
   $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -51,12 +51,10 @@
     die("连接失败: " . mysqli_connect_error());
   }
   
-  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE gene="'. $keyword . '" ' .'OR describe1 LIKE "%'.$keyword.'%"'. ' OR genes Like "%' . $keyword. '%";';
+  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE gene_id="'. $gene_id . '";';
   
   $result = mysqli_query($conn, $sql);
-  #echo $sql;
-  // echo mysqli_num_rows($result);
-  #echo $gene,$species;
+
   if (mysqli_num_rows($result) > 0) {
     $data = array();
     while($row = mysqli_fetch_assoc($result)) {

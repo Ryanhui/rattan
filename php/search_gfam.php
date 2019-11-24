@@ -51,7 +51,7 @@
     die("连接失败: " . mysqli_connect_error());
   }
 
-  $sql = 'SELECT * FROM ' . $whichDataBase . ' WHERE function LIKE "%' . $function . '%";';
+  $sql = 'SELECT * FROM ' . $whichDataBase . ' WHERE function LIKE "%' . $function . '%"' . 'OR gene="' .$function.'";';
 
   $result = mysqli_query($conn, $sql);
 
