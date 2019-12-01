@@ -68,8 +68,41 @@
             </div>
         </el-collapse-item>
         <el-collapse-item title="3. Network" name="3">
-          <div>
-            <!-- <h3>3. Network</h3> -->
+          <div style="width: 80%;margin: 0 auto;">
+            <el-table
+              :data="networkTableData"
+              border
+              stripe
+              size="mini"
+              >
+              <el-table-column
+                prop="source"
+                label="Gene A"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="target"
+                label="Gene B"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="length"
+                label="PCC">
+              </el-table-column>
+              <el-table-column
+                prop="mr"
+                label="MR">
+              </el-table-column>
+              <el-table-column
+                label="Relationship">
+                <template slot-scope="scope">
+                  {{scope.row.length > 0 ? 'Positive': 'Negative'}}
+                </template>
+              </el-table-column>
+            </el-table>
+            <div style="text-align: left">
+              <el-link :href="`/php/search_top300.php?gene_id=${this.$route.params.gene}&species=${this.$route.params.species}`" target="_blank" type="primary" style="margin-top: 8px">Show top 300 PCC co-expression genes</el-link>
+            </div>
           </div>
         </el-collapse-item>
         <el-collapse-item title="4. Functional module" name="4">
@@ -295,7 +328,8 @@ export default {
       locationTableData: [],
       familyTableData: [],
       keggTableData: [],
-      ontologyTableData: []
+      ontologyTableData: [],
+      networkTableData: [],
     }
   },
   methods: {
@@ -349,6 +383,12 @@ export default {
       this.axios.get(`http://rattan.bamboogdb.org/php/search_go.php?go_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
         // console.log(response.data);
         this.ontologyTableData = response.data || [];
+      })
+    },
+    network_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/coExpressionGet.php?gene=${this.$route.params.gene}&database=${this.$route.params.species.toLowerCase()}&type=All`).then((response)=>{
+        // console.log(response.data);
+        this.networkTableData = response.data.edge || [];
       })
     },
     // draw picture
@@ -469,6 +509,7 @@ export default {
     this.family_submit();
     this.kegg_submit();
     this.ontology_submit();
+    this.network_submit();
   }
 }
 
