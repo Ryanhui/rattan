@@ -1,254 +1,278 @@
 <template>
   <div class="container">
-    <div class="wrapper">
-      <h3>1. Annotation</h3>
-      <el-table
-        :data="gfs_tableData"
-        style="width: 100%"
-        size="mini"
-        stripe
-        border
-        >
-        <el-table-column
-          prop="query"
-          label="query"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="AT_gene"
-          label="AT_gene"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="e_value"
-          label="e_value">
-        </el-table-column>
-        <el-table-column
-          prop="annotation"
-          label="annotation">
-        </el-table-column>
-      </el-table>
-    </div>
-    <div>
-      <h3>2. Location</h3>
-      <div class="a80-table">
-        <el-table
-          :data="locationTableData"
-          border
-          size="small"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="resion"
-            label="Resion"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="start"
-            label="Start"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="end"
-            label="End">
-          </el-table-column>
-          <el-table-column
-            prop="direction"
-            label="Direction">
-          </el-table-column>
-          <el-table-column
-            prop="scaffold"
-            label="Scaffold">
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-    <div>
-      <h3>3. Network</h3>
-    </div>
-    <div class="wrapper">
-      <h3>4. Functional module</h3>
-      <el-table
-          :data="function_module_tableData"
-          style="width: 100%"
-          size="mini"
-          stripe
-          border
-        >
-          <el-table-column
-            prop="gene"
-            label=""
-            width="140"
-          >
-            <template slot-scope="scope">
-              <router-link class="link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
-              <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="group"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="function"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="num1"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="describe1"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="num2"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="value1"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="value2"
-            label=""
-          >
-          </el-table-column>
-          <el-table-column
-            prop="genes"
-            label=""
-          >
-          </el-table-column>
-        </el-table>
-    </div>
-    <div>
-      <h3>5. Cis-elements</h3>
-    </div>
-    <div>
-      <h3>6. Expression profilings</h3>
-    </div>
-    <div>
-      <h3>7. Gene family</h3>
-      <div class="a80-table">
-        <el-table
-          :data="familyTableData"
-          border
-          size="small"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="gene"
-            label="Gene">
-          </el-table-column>
-          <el-table-column
-            prop="function"
-            label="family">
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-    <div>
-      <h3>8. Protein domain</h3>
-      <div class="canvas">
-        <canvas ref="canvas" width="700px" height="200px" >您的浏览器暂不支持canvas</canvas>
-      </div>
-      <div class="a80-table">
-        <el-table
-          :data="dominTableData"
-          border
-          size="small"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="Subject_id"
-            label="Id"
-            width="180">
-              <template slot-scope="scope">
-                <a target="_blank" :href="generate_domin_table_id_href(scope.row.Subject_id)" style="margin-left: 10px;color: #1e6f15">{{scope.row.Subject_id}}</a>
-              </template>
-          </el-table-column>
-          <el-table-column
-            prop="Subject_DB"
-            label="Database"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="Query_start"
-            label="Start">
-          </el-table-column>
-          <el-table-column
-            prop="Query_end"
-            label="End">
-          </el-table-column>
-          <el-table-column
-            prop="E_value"
-            label="E-value">
-          </el-table-column>
-          <el-table-column
-            prop="Subject_annotation"
-            label="Annotation">
-          </el-table-column>
-        </el-table>
-      </div>
-      <div ref="domin_detail" id="domin_detail">
-        <p><span>Id: </span> <a target="_blank" style="color:#1e6f15" :href="'http://pfam.xfam.org/family/'+domin_detail_item.domin_id">{{domin_detail_item.domin_id}}</a></p>
-        <p><span>Position: </span>{{domin_detail_item.start}} to {{domin_detail_item.end}}</p>
-        <p><span>E-value: </span>{{domin_detail_item.e_value}}</p>
-        <p><span>Domin length: </span>{{domin_detail_item.domin_length}}</p>
-        <p><span>Annotation:</span> {{domin_detail_item.annotation}}</p>
-        <p style="word-break:break-word;"><span>Pep sequence:</span> {{domin_detail_item.pep}}</p>
-        <p style="word-break:break-word;"><span>Cds sequence:</span> {{domin_detail_item.cds}}</p>
-      </div>
-    </div>
-    <div>
-      <h3>9. KEGG Pathway</h3>
-      <div class="a80-table">
-        <el-table
-          :data="keggTableData"
-          border
-          size="small"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="description"
-            label="KEGG Ortholog">
-          </el-table-column>
-          <el-table-column
-            prop="kegg_id"
-            label="Pathway ID">
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-    <div>
-      <h3>10. Gene Ontology</h3>
-      <div class="a80-table">
-        <el-table
-          :data="ontologyTableData"
-          border
-          size="small"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="go_id"
-            label="GO Accession">
-          </el-table-column>
-          <el-table-column
-            prop="description"
-            label="GO Annotation">
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-    <div>
-      <h3>11. Orthologous in Rattans</h3>
-    </div>
+    <h3>Gene function search result of <span style="color: rgb(47, 141, 50)">{{this.$route.params.gene}}</span></h3>
+      <el-collapse v-model="activeNames" class="collapse-style">
+        <el-collapse-item title="1. Annotation" name="1">
+          <div class="wrapper">
+           <!-- <h3>1. Annotation</h3> -->
+           <el-table
+             :data="gfs_tableData"
+             style="width: 100%"
+             size="mini"
+             stripe
+             border
+             >
+             <el-table-column
+               prop="query"
+               label="query"
+               width="180">
+             </el-table-column>
+             <el-table-column
+               prop="AT_gene"
+               label="AT_gene"
+               width="180">
+             </el-table-column>
+             <el-table-column
+               prop="e_value"
+               label="e_value">
+             </el-table-column>
+             <el-table-column
+               prop="annotation"
+               label="annotation">
+             </el-table-column>
+           </el-table>
+           <p style="text-align: left;margin-top: 8px;color: #909399;font-style: italic;">based on blast</p>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="2. Location" name="2">
+            <div>
+              <!-- <h3>2. Location</h3> -->
+              <div class="a80-table">
+                <p class="location-p">Scaffold: {{this.locationTableData[0] ? this.locationTableData[0].scaffold : null }}</p>
+                <p class="location-p">Strand: {{this.locationTableData[0] ? this.locationTableData[0].direction : null }}</p>
+                <p class="location-p">Based on: {{this.locationTableData[0] ? this.locationTableData[0].maker : null }}</p>
+                <el-table
+                  :data="locationTableData"
+                  border
+                  size="small"
+                  stripe
+                  style="width: 100%;margin-top: 8px">
+                  <el-table-column
+                    prop="resion"
+                    label="Resion">
+                  </el-table-column>
+                  <el-table-column
+                    prop="start"
+                    label="Start">
+                  </el-table-column>
+                  <el-table-column
+                    prop="end"
+                    label="End">
+                  </el-table-column>
+                </el-table>
+                <div style="text-align: left">
+                  <el-link :href="`/php/search_location_show_sequence.php?gene_id=${this.$route.params.gene}&species=${this.$route.params.species}`" target="_blank" type="primary" style="margin-top: 8px">Get Sequence</el-link>
+                </div>
+              </div>
+
+            </div>
+        </el-collapse-item>
+        <el-collapse-item title="3. Network" name="3">
+          <div>
+            <!-- <h3>3. Network</h3> -->
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="4. Functional module" name="4">
+          <div class="wrapper">
+            <!-- <h3>4. Functional module</h3> -->
+            <el-table
+                :data="function_module_tableData"
+                style="width: 100%"
+                size="mini"
+                stripe
+                border
+              >
+                <el-table-column
+                  prop="gene"
+                  label=""
+                  width="140"
+                >
+                  <template slot-scope="scope">
+                    <router-link class="link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
+                    <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="group"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="function"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="num1"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="describe1"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="num2"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="value1"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="value2"
+                  label=""
+                >
+                </el-table-column>
+                <el-table-column
+                  prop="genes"
+                  label=""
+                >
+                </el-table-column>
+              </el-table>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="5. Cis-elements" name="5">
+          <div>
+            <!-- <h3>5. Cis-elements</h3> -->
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="6. Expression profilings" name="6">
+          <div>
+            <!-- <h3>6. Expression profilings</h3> -->
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="7. Gene family" name="7">
+          <div>
+            <!-- <h3>7. Gene family</h3> -->
+            <div class="a80-table">
+              <el-table
+                :data="familyTableData"
+                border
+                size="small"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                  prop="gene"
+                  label="Gene">
+                </el-table-column>
+                <el-table-column
+                  prop="function"
+                  label="family">
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="8. Protein domain" name="8">
+          <div>
+            <!-- <h3>8. Protein domain</h3> -->
+            <div class="canvas">
+              <canvas ref="canvas" width="700px" height="200px" >您的浏览器暂不支持canvas</canvas>
+            </div>
+            <div class="a80-table">
+              <el-table
+                :data="dominTableData"
+                border
+                size="small"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                  prop="Subject_id"
+                  label="Id"
+                  width="180">
+                    <template slot-scope="scope">
+                      <a target="_blank" :href="generate_domin_table_id_href(scope.row.Subject_id)" style="margin-left: 10px;color: #1e6f15">{{scope.row.Subject_id}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                  prop="Subject_DB"
+                  label="Database"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="Query_start"
+                  label="Start">
+                </el-table-column>
+                <el-table-column
+                  prop="Query_end"
+                  label="End">
+                </el-table-column>
+                <el-table-column
+                  prop="E_value"
+                  label="E-value">
+                </el-table-column>
+                <el-table-column
+                  prop="Subject_annotation"
+                  label="Annotation">
+                </el-table-column>
+              </el-table>
+            </div>
+            <div ref="domin_detail" id="domin_detail">
+              <p><span>Id: </span> <a target="_blank" style="color:#1e6f15" :href="'http://pfam.xfam.org/family/'+domin_detail_item.domin_id">{{domin_detail_item.domin_id}}</a></p>
+              <p><span>Position: </span>{{domin_detail_item.start}} to {{domin_detail_item.end}}</p>
+              <p><span>E-value: </span>{{domin_detail_item.e_value}}</p>
+              <p><span>Domin length: </span>{{domin_detail_item.domin_length}}</p>
+              <p><span>Annotation:</span> {{domin_detail_item.annotation}}</p>
+              <p style="word-break:break-word;"><span>Pep sequence:</span> {{domin_detail_item.pep}}</p>
+              <p style="word-break:break-word;"><span>Cds sequence:</span> {{domin_detail_item.cds}}</p>
+            </div>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="9. KEGG Pathway" name="9">
+          <div>
+            <!-- <h3>9. KEGG Pathway</h3> -->
+            <div class="a80-table">
+              <el-table
+                :data="keggTableData"
+                border
+                size="small"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                  prop="description"
+                  label="KEGG Ortholog">
+                </el-table-column>
+                <el-table-column
+                  prop="kegg_id"
+                  label="Pathway ID">
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="10. Gene Ontology" name="10">
+          <div>
+            <!-- <h3>10. Gene Ontology</h3> -->
+            <div class="a80-table">
+              <el-table
+                :data="ontologyTableData"
+                border
+                size="small"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                  prop="go_id"
+                  label="GO Accession">
+                </el-table-column>
+                <el-table-column
+                  prop="description"
+                  label="GO Annotation">
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="11. Orthologous in Rattans" name="11">
+          <div>
+            <!-- <h3>11. Orthologous in Rattans</h3> -->
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+  
   </div>
 </template>
 
@@ -260,6 +284,9 @@ export default {
   },
   data: function() {
     return {
+      activeNames: ['1'],
+
+
       gfs_tableData: [],
       function_module_tableData: [],
       dominData: [],
@@ -453,7 +480,11 @@ export default {
   }
   .wrapper {
     width: 80%;
-    margin: 0 auto;
+    margin: 16px auto;
+  }
+  .collapse-style {
+    width: 85%;
+    margin: 24px auto;
   }
   .link {
     color: rgb(11, 146, 63);
@@ -494,7 +525,12 @@ export default {
   .a80-table {
     width: 80%;
     margin: 0 auto;
-    margin-top: 24px;
+    margin-top: 16px;
+  }
+  .location-p {
+    color: #909399;
+    text-align: left;
+    font-size: 14px;
   }
 </style>
 
