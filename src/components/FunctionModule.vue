@@ -298,7 +298,7 @@ export default {
           columns: ['cirrus', 'gene_id', 'value'],
           rows: rows,
         }
-        console.log('111111', chartData);
+
         this.chartData = chartData;
       });
     }

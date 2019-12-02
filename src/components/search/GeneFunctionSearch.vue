@@ -191,8 +191,8 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="6. Expression profilings" name="6">
-          <div>
-            <!-- <h3>6. Expression profilings</h3> -->
+          <div style="width: 100%;height:400px">
+            <ve-bar :data="fpkmTableData" :settings="chartSettings" :legend-visible='false'></ve-bar>
           </div>
         </el-collapse-item>
         <el-collapse-item title="7. Gene family" name="7">
@@ -362,9 +362,11 @@ export default {
 
   },
   data: function() {
+    this.chartSettings = {
+      yAxisType: 'category',
+    }
     return {
-      activeNames: ['1'],
-
+      activeNames: ['1', '6'],
 
       gfs_tableData: [],
       function_module_tableData: [],
@@ -377,7 +379,13 @@ export default {
       ontologyTableData: [],
       networkTableData: [],
       cisElementTableData: [],
-      orthologousTableData: []
+      orthologousTableData: [],
+
+      fpkmTableData: {
+          columns: [],
+          rows: [
+          ]
+      },
     }
   },
   methods: {
@@ -447,6 +455,27 @@ export default {
     orthologous_submit() {
       this.axios.get(`http://rattan.bamboogdb.org/php/search_orthologous.php?gene_id=${this.$route.params.gene}`).then((response)=>{
         this.orthologousTableData = response.data || [];
+      })
+    },
+    fpkm_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/fpkm.php?gene=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+      let rows = [];
+        response.data.forEach((item) => {
+          for(let key in item){
+            if(/cirrus/g.test(key)) {
+              rows.push({
+                //gene_id: item.gene_id,
+                cirrus: key,
+                value: item[key]
+              })
+            }
+          } 
+        })
+        let chartData = {
+          columns: ['cirrus', 'value'],
+          rows: rows,
+        }
+        this.fpkmTableData = chartData;
       })
     },
     // draw picture
@@ -578,6 +607,7 @@ export default {
     this.network_submit();
     this.cisElement_submit();
     this.orthologous_submit();
+    this.fpkm_submit();
   }
 }
 
