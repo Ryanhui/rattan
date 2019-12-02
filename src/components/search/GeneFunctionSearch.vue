@@ -117,7 +117,7 @@
               >
                 <el-table-column
                   prop="gene"
-                  label=""
+                  label="Module Id"
                   width="140"
                 >
                   <template slot-scope="scope">
@@ -126,43 +126,28 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="group"
-                  label=""
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="function"
-                  label=""
-                >
-                </el-table-column>
-                <el-table-column
                   prop="num1"
-                  label=""
+                  label="Background"
                 >
                 </el-table-column>
                 <el-table-column
                   prop="describe1"
-                  label=""
+                  label="Annotation"
                 >
                 </el-table-column>
                 <el-table-column
                   prop="num2"
-                  label=""
+                  label="Counts"
                 >
                 </el-table-column>
                 <el-table-column
                   prop="value1"
-                  label=""
+                  label="P-value"
                 >
                 </el-table-column>
                 <el-table-column
                   prop="value2"
-                  label=""
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="genes"
-                  label=""
+                  label="FDR"
                 >
                 </el-table-column>
               </el-table>
@@ -170,7 +155,39 @@
         </el-collapse-item>
         <el-collapse-item title="5. Cis-elements" name="5">
           <div>
-            <!-- <h3>5. Cis-elements</h3> -->
+            <div class="a80-table">
+              <el-table
+                :data="cisElementTableData"
+                border
+                size="small"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                  prop="motif_id"
+                  label="Motif Id">
+                </el-table-column>
+                <el-table-column
+                  prop="motif_name"
+                  label="Motif Name">
+                </el-table-column>
+                <el-table-column
+                  prop="motif_pattern"
+                  label="Motif Pattern">
+                </el-table-column>
+                <el-table-column
+                  prop="counts"
+                  label="Counts">
+                </el-table-column>
+                <el-table-column
+                  prop="forward_position"
+                  label="Forward Position">
+                </el-table-column>
+                <el-table-column
+                  prop="reverse_postion"
+                  label="Reverse Position">
+                </el-table-column>
+              </el-table>
+            </div>
           </div>
         </el-collapse-item>
         <el-collapse-item title="6. Expression profilings" name="6">
@@ -194,7 +211,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="function"
-                  label="family">
+                  label="Gene Family">
                 </el-table-column>
               </el-table>
             </div>
@@ -205,6 +222,9 @@
             <!-- <h3>8. Protein domain</h3> -->
             <div class="canvas">
               <canvas ref="canvas" width="700px" height="200px" >您的浏览器暂不支持canvas</canvas>
+              <span>
+              Domains annotated by interpro were showed in image only
+              </span>
             </div>
             <div class="a80-table">
               <el-table
@@ -272,6 +292,9 @@
                 <el-table-column
                   prop="kegg_id"
                   label="Pathway ID">
+                    <template slot-scope="scope">
+                      <a target="_blank" :href="generate_kegg_table_id_href(scope.row.kegg_id)" style="margin-left: 10px;color: #1e6f15">{{scope.row.kegg_id}}</a>
+                    </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -290,6 +313,9 @@
                 <el-table-column
                   prop="go_id"
                   label="GO Accession">
+                    <template slot-scope="scope">
+                      <a target="_blank" :href="'http://amigo.geneontology.org/amigo/term/'+scope.row.go_id" style="margin-left: 10px;color: #1e6f15">{{scope.row.go_id}}</a>
+                    </template>
                 </el-table-column>
                 <el-table-column
                   prop="description"
@@ -301,7 +327,27 @@
         </el-collapse-item>
         <el-collapse-item title="11. Orthologous in Rattans" name="11">
           <div>
-            <!-- <h3>11. Orthologous in Rattans</h3> -->
+            <div class="a80-table">
+              <el-table
+                :data="orthologousTableData"
+                border
+                size="small"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                  prop="gene_id_a"
+                  label="Gene ID">
+                </el-table-column>
+                <el-table-column
+                  prop="gene_id_b"
+                  label="Gene ID">
+                </el-table-column>
+                <el-table-column
+                  prop="value_a"
+                  label="E-Value">
+                </el-table-column>
+              </el-table>
+            </div>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -330,6 +376,8 @@ export default {
       keggTableData: [],
       ontologyTableData: [],
       networkTableData: [],
+      cisElementTableData: [],
+      orthologousTableData: []
     }
   },
   methods: {
@@ -389,6 +437,16 @@ export default {
       this.axios.get(`http://rattan.bamboogdb.org/php/coExpressionGet.php?gene=${this.$route.params.gene}&database=${this.$route.params.species.toLowerCase()}&type=All`).then((response)=>{
         // console.log(response.data);
         this.networkTableData = response.data.edge || [];
+      })
+    },
+    cisElement_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_cis_element.php?gene_id=${this.$route.params.gene}&species=${this.$route.params.species}`).then((response)=>{
+        this.cisElementTableData = response.data || [];
+      })
+    },
+    orthologous_submit() {
+      this.axios.get(`http://rattan.bamboogdb.org/php/search_orthologous.php?gene_id=${this.$route.params.gene}`).then((response)=>{
+        this.orthologousTableData = response.data || [];
       })
     },
     // draw picture
@@ -499,6 +557,14 @@ export default {
       if(/PS/g.test(id)) {
         return (`https://prosite.expasy.org/${id}`);
       }
+    },
+    generate_kegg_table_id_href(id){
+      if(/K/g.test(id)) {
+        return (`https://www.genome.jp/dbget-bin/www_bget?ko:${id}`);
+      }
+      if(/map/g.test(id)) {
+        return (`https://www.genome.jp/kegg-bin/show_pathway?${id}`);
+      }
     }
   },
   mounted: function() {
@@ -510,6 +576,8 @@ export default {
     this.kegg_submit();
     this.ontology_submit();
     this.network_submit();
+    this.cisElement_submit();
+    this.orthologous_submit();
   }
 }
 
@@ -535,7 +603,7 @@ export default {
     padding: 16px; 
     border: 1px solid black; 
     width: 732px; 
-    height: 232px;
+    height: 252px;
     margin: 0 auto;
     overflow-x: scroll;
   }

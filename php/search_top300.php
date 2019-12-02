@@ -22,7 +22,7 @@
 
     $data = array();
 
-    $sql = 'SELECT * FROM '. $whichDataBase .' WHERE from="'. $gene_id . '";';
+    $sql = 'SELECT * FROM '. $whichDataBase .' WHERE gene_from="'. $gene_id . '";';
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
@@ -32,7 +32,7 @@
 
     $html = '';
     foreach($data as $value){
-        $html = $html.$value['from'].' '.$value['to'].' '.$value[''].' '.$value['value']. '<br />';
+        $html = $html.$value['gene_from'].' '.$value['gene_to'].' '.$value['polarity'].' '.$value['value']. '<br />';
     }
 
     echo $html;

@@ -7,8 +7,8 @@
           style="width: 100%">
           <el-table-column
             prop="name"
-            label="name"
-            width="380">
+            label="Name"
+            width="450">
           </el-table-column>
           <el-table-column
             prop="address"
@@ -25,8 +25,8 @@
           style="width: 100%">
           <el-table-column
             prop="name"
-            label="name"
-            width="380">
+            label="Name"
+            width="450">
           </el-table-column>
           <el-table-column
             prop="address"
