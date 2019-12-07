@@ -61,7 +61,7 @@
         prop="id"
         label="">
           <template slot-scope="scope">
-            <router-link class="link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.id }}">{{scope.row.id}}</router-link>
+            <router-link class="a-link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.id }}">{{scope.row.id}}</router-link>
             <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
           </template>
       </el-table-column>
@@ -69,13 +69,13 @@
         prop=""
         label="">
           <template slot-scope="scope">
-              <router-link class="link" target="_blank" :to="{ name: 'FunctionModuleDetail', params: { module1:$route.params.gene, module2: scope.row.id }}">detail</router-link>
+              <router-link class="a-link" target="_blank" :to="{ name: 'FunctionModuleDetail', params: { module1:$route.params.gene, module2: scope.row.id }}">detail</router-link>
           </template>
       </el-table-column>
     </el-table>
     <h3>Expression profilings</h3>
     <div class="heatmap">
-      <ve-heatmap :data="chartData" :settings="chartSettings"></ve-heatmap>
+      <ve-heatmap :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-heatmap>
     </div>
   </div>
 </template>
@@ -161,19 +161,22 @@ export default {
       dcfm_tableData: [],
 
       chartData: {
-          columns: ['时间', '地点', '人数'],
+          columns: [],
           rows: [
-            { '时间': '星期一', '地点': '北京', '人数': 1000},
-            { '时间': '星期二', '地点': '北京', '人数': 1000},
-            { '时间': '星期三', '地点': '北京', '人数': 1000},
-            { '时间': '星期二', '地点': '上海', '人数': 400},
           ]
       },
 
       chartSettings: {
-        dataType: 'normal',
-        digit: 8
-      }
+        heatColor: ['#003399', '#fff', '#FF3333'],
+        xAxisList: ['cirrus_1_1', 'cirrus_1_2', 'cirrus_1_3', 'cirrus_1_4', 'cirrus_2_1', 'cirrus_2_3', 'cirrus_2_4','cirrus_3_1','cirrus_3_2','cirrus_3_3','cirrus_3_4'],
+      },
+		  chartExtend: {
+		  	xAxis: {
+		  		axisLabel: {
+		  		  rotate: 45
+		  		}
+		  	}
+		  }
     }
   },
   methods: {
@@ -285,7 +288,6 @@ export default {
         response.data.forEach((item) => {
           for(let key in item){
             if(/cirrus/g.test(key)) {
-              console.log('key', key)
               rows.push({
                 gene_id: item.gene_id,
                 cirrus: key,
@@ -329,7 +331,7 @@ export default {
     width: 80%; 
     margin: 24px auto;
   }
-  .link {
+  .a-link {
     color: rgb(11, 146, 63);
   }
   .heatmap {

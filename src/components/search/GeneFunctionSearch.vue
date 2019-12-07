@@ -121,7 +121,7 @@
                   width="140"
                 >
                   <template slot-scope="scope">
-                    <router-link class="link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
+                    <router-link class="a-link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.gene }}">{{scope.row.gene}}</router-link>
                     <!-- <a target="_blank" :href="'#/function_module?gene='+scope.row.gene">{{ scope.row.gene }}</a> -->
                   </template>
                 </el-table-column>
@@ -165,6 +165,9 @@
                 <el-table-column
                   prop="motif_id"
                   label="Motif Id">
+                    <template slot-scope="scope">
+                      <a style="margin-left: 10px" target="_blank" class="a-link" :href="'/motif/data/motif_information/'+scope.row.motif_id+'.txt'">{{ scope.row.motif_id }}</a>
+                    </template>
                 </el-table-column>
                 <el-table-column
                   prop="motif_name"
@@ -625,7 +628,7 @@ export default {
     width: 85%;
     margin: 24px auto;
   }
-  .link {
+  .a-link {
     color: rgb(11, 146, 63);
 
   }

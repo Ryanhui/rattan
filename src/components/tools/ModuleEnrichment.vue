@@ -19,6 +19,9 @@
         prop="geneSetName"
         label="Gene Set Name(NO. Genes)"
         width="180">
+          <template slot-scope="scope">
+              <router-link class="a-link" target="_blank" :to="{ name: 'FunctionModule', params: { gene: scope.row.geneSetName.replace(/\(\S+\)/g, '') }}">{{scope.row.geneSetName}}</router-link>
+          </template>
       </el-table-column>
       <el-table-column
         prop="description"
@@ -276,6 +279,9 @@ Daeje_Gene33109
     color:rgb(2, 128, 86);
     font-size: 18px;
     cursor: pointer;
+  }
+  .a-link {
+    color: rgb(2, 128, 86);
   }
 </style>
 

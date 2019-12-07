@@ -61,7 +61,7 @@ if($type == 'Positive') {
 }
 
 # start search
-$sql = 'SELECT gene1, gene2, num1, length FROM '. $whichDataBase .' WHERE gene1="'. $gene . '"' . ' AND length' . $whichOrder .'0';
+$sql = 'SELECT * FROM '. $whichDataBase .' WHERE gene1="'. $gene . '"' . ' AND length' . $whichOrder .'0';
 
 $result = mysqli_query($conn, $sql);
  

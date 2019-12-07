@@ -10,6 +10,7 @@
       <p v-on:click="exportToImg" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">Export to img</p>
       <p v-on:click="showDetailfun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showDetail?'Hide':'Show'}} network details</p>
       <p v-on:click="showAnnotationFun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showAnnotation?'Hide':'Show'}} annotation details</p>
+      <p v-on:click="showHeatmapFun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showHeatmap?'Hide':'Show'}} heat map</p>
     </div>
     <div v-if="showDetail">
       <el-table
@@ -76,6 +77,9 @@
           label="annotation">
         </el-table-column>
       </el-table>
+    </div>
+    <div class="heatmap" style="width: 80%;margin: 0 auto;" v-if="showHeatmap">
+      <ve-heatmap :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-heatmap>
     </div>
     <el-tabs type="border-card" v-model="form.activeName" @tab-click="handleTabClick" stretch class="tabs">
       <el-tab-pane label="Calsi" name="calsi">
@@ -231,7 +235,25 @@ export default {
       showDetail: false,
       annotationTable: [],
       showAnnotation: false,
+      showHeatmap: false,
 
+      chartData: {
+          columns: [],
+          rows: [
+          ]
+      },
+      chartSettings: {
+        heatColor: ['#003399', '#fff', '#FF3333'],
+        xAxisList: ['cirrus_1_1', 'cirrus_1_2', 'cirrus_1_3', 'cirrus_1_4', 'cirrus_2_1', 'cirrus_2_3', 'cirrus_2_4','cirrus_3_1','cirrus_3_2','cirrus_3_3','cirrus_3_4'],
+      },
+		  chartExtend: {
+		  	xAxis: {
+		  		axisLabel: {
+		  		  rotate: 45
+		  		}
+        },
+      },
+      
       form: {
           activeName: 'calsi',
 
@@ -309,6 +331,8 @@ Daeje_Gene26990`;
               self.loading = false;
             },1000);
           });
+
+          this.fpkm_submit(rowData.node);
         })
       } else {
         var data = new FormData();
@@ -349,11 +373,20 @@ Daeje_Gene26990`;
           });
           this.elements = newElement;
           this.config.elements = newElement;
+          this.fpkm_submit(rowData.node);
+
+          
+          this.tableData = rowData.edge;
+
           const self = this;
-          setTimeout(function(){
-            self.show = true;  
-            self.loading = false;
-          },1000);
+
+          self.axios.get(`http://rattan.bamboogdb.org/php/search_gene_functions.php?species=${this.form.activeName === 'calsi' ? 'Calsi' : 'Daeje'}&gene=${rowData.node.join(',')}`).then((response)=>{
+            self.annotationTable = response.data;
+            setTimeout(function(){
+              self.show = true;  
+              self.loading = false;
+            },1000);
+          });
         }).catch((error) => {
 
         })
@@ -372,11 +405,39 @@ Daeje_Gene26990`;
         debugBase64(png64)
       })
     },
+    fpkm_submit(genes) {
+      let species = this.form.activeName === 'calsi' ? 'Calsi' : 'Daeje';
+      let gene = genes.join(',')
+      this.axios.get(`http://rattan.bamboogdb.org/php/fun_module_search/fpkm.php?gene=${gene}&species=${species}`).then((response)=>{
+        console.log(response); 
+        let rows = [];
+        response.data.forEach((item) => {
+          for(let key in item){
+            if(/cirrus/g.test(key)) {
+              rows.push({
+                gene_id: item.gene_id,
+                cirrus: key,
+                value: item[key]
+              })
+            }
+          } 
+        })
+        let chartData = {
+          columns: ['cirrus', 'gene_id', 'value'],
+          rows: rows,
+        }
+
+        this.chartData = chartData;
+      });
+    },
     showDetailfun() {
       this.showDetail = !this.showDetail;
     },
     showAnnotationFun() {
       this.showAnnotation = !this.showAnnotation;
+    },
+    showHeatmapFun() {
+      this.showHeatmap = !this.showHeatmap;
     }
   }
 }

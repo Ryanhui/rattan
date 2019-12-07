@@ -58,6 +58,8 @@
           label="Length">
         </el-table-column>
       </el-table>
+      <p style="margin-top:16px;text-align:justify">Bg 1K: Suppose we have n promoter sequences in our database, and the length of them are all 1000 bp, the total number of occurrences of motifi in these promoters is N, thus the bg 1k of motifi is computer by N/n. This is the same for Bg 2K and Bg 3K.
+</p>
     </div>
     <div class="table_wrapper" v-if="type==='name'">
       <el-table
@@ -139,7 +141,6 @@ export default {
     }
   },
   mounted(){
-    console.log(this.$route.query.jobid);
     let jobid = this.$route.query.jobid;
     let type = '';
     if(/s/g.test(jobid)){

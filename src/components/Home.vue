@@ -40,10 +40,17 @@
           </el-col>
          <el-col :span="6">
            <div class="body-content news" ref="scriptHolder">
-              <div style="height: 330px;line-height: 330px">
-                There are news
+              <div class="news-contenter" ref="newsHolder">
+                <p>2019.05.01 Rattan-NET is online now.</p>
+                <p>2019.06.20 SequenceServer and Gbrowse are usable now.</p>
+                <p>2019.07.10 The Co-expression networks and functional modules of two rattans (Calamus simplicifolius and Daemonorops jenkinsiana) are online.</p>
+                <p>2019.08.20 Module enrichment and Gene set analysis tools construction are finished.</p>
+                <p>2019.09.20 Cis-element analysis tool is applicable now.</p>
+                <p>2019.11.10 Sequence extractor and search tools are online now.</p>
               </div>
-              <a href="https://www.revolvermaps.com/livestats/5pplwzj355p/"><img src="//rf.revolvermaps.com/h/m/a/0/ff0000/128/0/5pplwzj355p.png" width="256" height="128" alt="Map" style="border:0;"></a>
+              <div class="map">
+                <a href="https://www.revolvermaps.com/livestats/5pplwzj355p/" ><img src="//rf.revolvermaps.com/h/m/a/0/ff0000/128/0/5pplwzj355p.png" width="256" height="128" alt="Map" style="border:0;"></a>
+              </div>
            </div>
         </el-col>
       </el-row>
@@ -64,9 +71,24 @@ export default {
         photo2: require('../assets/photo2.jpg'),
         photo3: require('../assets/photo3.jpg'),
         photo4: require('../assets/photo4.jpg')
-      }
+      },
+      newsPosition: -100,
     }
   },
+  methods: {
+    newsScroll() {
+      if(this.newsPosition <= -390) {
+        this.newsPosition = 340;
+      } else {
+        this.newsPosition = this.newsPosition - 0.3;
+      }
+      this.$refs.newsHolder.style.top = this.newsPosition + 'px';
+      setTimeout(this.newsScroll, 10);
+    }
+  },
+  mounted() {
+    this.newsScroll();
+  }
 }
 </script>
 
@@ -78,6 +100,7 @@ export default {
   .body-content {
     background: rgba(40, 241, 40, 0.2);
     height: 470px;
+    overflow: hidden;
   }
   .introduction {
     margin-right: 8px;
@@ -106,6 +129,20 @@ export default {
   .lab {
     text-decoration: none;
     color: rgb(0, 131, 87);
+  }
+  .news-contenter{
+    text-align: left;
+    position: relative;
+  }
+  .news-contenter p {
+    padding: 8px 8px;
+  }
+  .map {
+    position: relative;
+    top: -78px;
+    padding-top: 10px;
+    /* background: rgb(211, 252, 211); */
+    background: #fff;
   }
 </style>
 
