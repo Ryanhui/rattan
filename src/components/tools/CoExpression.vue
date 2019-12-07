@@ -244,7 +244,7 @@ export default {
       },
       chartSettings: {
         heatColor: ['#003399', '#fff', '#FF3333'],
-        xAxisList: ['cirrus_1_1', 'cirrus_1_2', 'cirrus_1_3', 'cirrus_1_4', 'cirrus_2_1', 'cirrus_2_3', 'cirrus_2_4','cirrus_3_1','cirrus_3_2','cirrus_3_3','cirrus_3_4'],
+        // xAxisList: ['cirrus_1_1', 'cirrus_1_2', 'cirrus_1_3', 'cirrus_1_4', 'cirrus_2_1', 'cirrus_2_3', 'cirrus_2_4','cirrus_3_1','cirrus_3_2','cirrus_3_3','cirrus_3_4'],
       },
 		  chartExtend: {
 		  	xAxis: {
