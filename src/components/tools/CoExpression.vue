@@ -13,37 +13,54 @@
       <p v-on:click="showHeatmapFun" style="font-size:14px; margin: 0 0 24px 120px;cursor:pointer">{{showHeatmap?'Hide':'Show'}} heat map</p>
     </div>
     <div v-if="showDetail">
-      <el-table
-        :data="tableData"
-        border
-        stripe
-        size="mini"
-        style="width: 80%;margin: 0 auto;">
-        <el-table-column
-          prop="source"
-          label="Gene A"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="target"
-          label="Gene B"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="length"
-          label="PCC">
-        </el-table-column>
-        <el-table-column
-          prop="mr"
-          label="MR">
-        </el-table-column>
-        <el-table-column
-          label="Relationship">
-          <template slot-scope="scope">
-            {{scope.row.length > 0 ? 'Positive': 'Negative'}}
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-row style="width: 80%;margin: 0 auto;">
+        <el-col :span="20">
+          <el-table
+            :data="tableData"
+            border
+            stripe
+            size="mini">
+            <el-table-column
+              prop="source"
+              label="Gene A"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="target"
+              label="Gene B"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="length"
+              label="PCC">
+            </el-table-column>
+            <el-table-column
+              prop="mr"
+              label="MR">
+            </el-table-column>
+            <el-table-column
+              label="Relationship">
+              <template slot-scope="scope">
+                {{scope.row.length > 0 ? 'Positive': 'Negative'}}
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="4">
+          <el-table
+            :data="tableDataGeneNorepeat"
+            border
+            stripe
+            size="mini"
+            style="width: 80%;margin: 0 auto;">
+            <el-table-column
+              prop="gene"
+              label="Co-expression Genes"
+              width="">
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
     <div v-if="showAnnotation">
       <el-table
@@ -232,6 +249,7 @@ export default {
       loading: false,
       show: false,
       tableData: [],
+      tableDataGeneNorepeat: [],
       showDetail: false,
       annotationTable: [],
       showAnnotation: false,
@@ -321,6 +339,15 @@ Daeje_Gene26990`;
           this.elements = newElement;
           this.config.elements = newElement;
           this.tableData = rowData.edge;
+          
+          let temArr = [];
+          rowData.edge.forEach(item => {
+            temArr.push(item.source, item.target);
+          })
+          temArr= Array.from(new Set(temArr));
+          this.tableDataGeneNorepeat = temArr.map(item => {
+            return {gene: item}
+          })
 
           const self = this;
 
@@ -377,7 +404,15 @@ Daeje_Gene26990`;
 
           
           this.tableData = rowData.edge;
-
+          let temArr = [];
+          rowData.edge.forEach(item => {
+            temArr.push(item.source, item.target);
+          })
+          temArr= Array.from(new Set(temArr));
+          this.tableDataGeneNorepeat = temArr.map(item => {
+            return {gene: item}
+          })
+          
           const self = this;
 
           self.axios.get(`http://rattan.bamboogdb.org/php/search_gene_functions.php?species=${this.form.activeName === 'calsi' ? 'Calsi' : 'Daeje'}&gene=${rowData.node.join(',')}`).then((response)=>{

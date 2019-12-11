@@ -152,7 +152,7 @@ export default {
           self.sequence = response.data;
           self.loading = false;
         });
-      }, 2000);
+      }, 3600);
     }
     if(/n/g.test(jobid)){
       this.type = 'name';

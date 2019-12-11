@@ -103,9 +103,9 @@
           $temp_data = new stdClass();
           $temp_data->motif_id = $line[0];
           $temp_data->motif_name = $line[1];
-          $temp_data->motif_counts = $line[2];
-          $temp_data->z_score = $line[3];
-          $temp_data->p_value = $line[4];
+          $temp_data->motif_counts = $line[3];
+          $temp_data->z_score = $line[4];
+          $temp_data->p_value = $line[5];
 
           array_push($detail_data, $temp_data);
       } while(!feof($file_arr));

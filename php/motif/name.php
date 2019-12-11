@@ -50,6 +50,6 @@
 
   $cmd = "perl /var/www/rattan/motif/scripts/Cis-name_scan.pl ".$species." " .$dir."/gene_list.file ".$dir."/out";
   #$cmd = 'perl /var/www/rattan/motif/scripts/Cis-sequence_scan.pl /var/www/rattan/motif/jobs/s1573127584000/promoter_sequence.fa Calsi /var/www/rattan/motif/jobs/s1573127584000/result';
-  # echo($cmd);
+  echo($cmd);
   exec($cmd);
 ?>
