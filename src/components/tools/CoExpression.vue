@@ -96,7 +96,7 @@
       </el-table>
     </div>
     <div class="heatmap" style="width: 80%;margin: 0 auto;" v-if="showHeatmap">
-      <ve-heatmap :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-heatmap>
+      <ve-heatmap :data="chartData" :yAxis="{show:false}" :settings="chartSettings" :extend="chartExtend"></ve-heatmap>
     </div>
     <el-tabs type="border-card" v-model="form.activeName" @tab-click="handleTabClick" stretch class="tabs">
       <el-tab-pane label="Calsi" name="calsi">
@@ -262,6 +262,10 @@ export default {
       },
       chartSettings: {
         heatColor: [ '#fff', '#FF3333'],
+        yAxis : [
+        {
+            show : false,
+        }]
         // xAxisList: ['cirrus_1_1', 'cirrus_1_2', 'cirrus_1_3', 'cirrus_1_4', 'cirrus_2_1', 'cirrus_2_3', 'cirrus_2_4','cirrus_3_1','cirrus_3_2','cirrus_3_3','cirrus_3_4'],
       },
 		  chartExtend: {
@@ -452,13 +456,13 @@ Daeje_Gene26990`;
               rows.push({
                 gene_id: item.gene_id,
                 cirrus: key,
-                value: item[key]
+                FPKM: item[key]
               })
             }
           } 
         })
         let chartData = {
-          columns: ['cirrus', 'gene_id', 'value'],
+          columns: ['cirrus', 'gene_id', 'FPKM'],
           rows: rows,
         }
 

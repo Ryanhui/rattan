@@ -469,13 +469,13 @@ export default {
               rows.push({
                 //gene_id: item.gene_id,
                 cirrus: key,
-                value: item[key]
+                FPKM: item[key]
               })
             }
           } 
         })
         let chartData = {
-          columns: ['cirrus', 'value'],
+          columns: ['cirrus', 'FPKM'],
           rows: rows,
         }
         this.fpkmTableData = chartData;

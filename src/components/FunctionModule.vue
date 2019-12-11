@@ -75,7 +75,7 @@
     </el-table>
     <h3>Expression profilings</h3>
     <div class="heatmap">
-      <ve-heatmap :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-heatmap>
+      <ve-heatmap :data="chartData" :yAxis="{show:false}" :settings="chartSettings" :extend="chartExtend"></ve-heatmap>
     </div>
   </div>
 </template>
@@ -291,13 +291,13 @@ export default {
               rows.push({
                 gene_id: item.gene_id,
                 cirrus: key,
-                value: item[key]
+                FPKM: item[key]
               })
             }
           } 
         })
         let chartData = {
-          columns: ['cirrus', 'gene_id', 'value'],
+          columns: ['cirrus', 'gene_id', 'FPKM'],
           rows: rows,
         }
 
