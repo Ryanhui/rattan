@@ -8,7 +8,7 @@
       </el-col>
       <el-col :span="12">
         <div class="pv">
-         
+          <a href="http://fzamsc.top/" target="_blank">Powered by Fuzhou AMSC Co.,Ltd.</a>
         </div>
       </el-col>
     </el-row>
@@ -40,5 +40,9 @@ export default {
     margin-right: 24px;
     line-height: 50px;
     font-size: 14px;
+  }
+  .pv a {
+    text-decoration: none;
+    color: inherit;
   }
 </style>
