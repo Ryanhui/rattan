@@ -16,6 +16,9 @@ import ModuleEnrichment from './components/tools/ModuleEnrichment.vue';
 import CisElementAnalysis from './components/tools/CisElementAnalysis.vue';
 import SequenceExtractor from './components/tools/SequenceExtractor';
 import CisElementAnalysisResult from './components/tools/CisElementAnalysisResult.vue';
+import NetworkModuleComparison from './components/tools/NetworkModuleComparison';
+import NetworkModuleComparisonOneGene from './components/tools/NetworkModuleComparison/NetworkModuleComparisonOneGene';
+
 import Search from './components/Search.vue';
 
 export default [
@@ -38,4 +41,6 @@ export default [
   {path: '/tools/ciselementanalysis', component: CisElementAnalysis},
   {path: '/tools/cis_element_analysis_result', name:'CisElementAnalysisResult', component: CisElementAnalysisResult, props: (route) => ({query: route.query.jobid})},
   {path: '/tools/sequenceextractor', component: SequenceExtractor},
+  {path: '/tools/network_module_comparison', component: NetworkModuleComparison},
+  {path: '/tools/network_module_comparison_one_gene', name: 'NetworkModuleComparisonOneGene', component: NetworkModuleComparisonOneGene, props: (route) => ({geneA: route.query.genaA})}
 ]

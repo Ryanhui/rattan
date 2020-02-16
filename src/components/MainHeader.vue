@@ -26,14 +26,15 @@
       <el-col :span="2"><div class="meun-item"><router-link to="/blast">Blast</router-link></div></el-col>
       <el-col :span="2">
         <div class="meun-item" v-bind:class="{addColor: isInToolsList}" @mouseenter="enterTools()" @mouseleave="leaveTools('title')">Tools</div>
-        <ul class="gbrowser-dropdown" style="width:200px" v-show="showTools" @mouseenter="enterToolsList()" @mouseleave="leaveTools()">
+        <ul class="gbrowser-dropdown" style="width:260px" v-show="showTools" @mouseenter="enterToolsList()" @mouseleave="leaveTools()">
           <!-- <li class="tools-dropdown-list"><router-link to="/">Annotation</router-link></li> -->
           <li class="tools-dropdown-list"><router-link to="/search">Search</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/coexpression">Co-expression Network</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/moduleenrichment">Module enrichment</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/ciselementanalysis">Cis-element Analysis</router-link></li>
           <li class="tools-dropdown-list"><router-link to="/tools/genesetsanalysis">Gene Sets Analysis</router-link></li>
-          <li><router-link to="/tools/sequenceextractor">Sequence Extractor</router-link></li>
+          <li class="tools-dropdown-list"><router-link to="/tools/sequenceextractor">Sequence Extractor</router-link></li>
+          <li><router-link to="/tools/network_module_comparison">Network and module Comparison</router-link></li>
         </ul>
       </el-col>
       <el-col :span="4"><div class="meun-item"><router-link to="/annotationsummary">Annotation Summary</router-link></div></el-col>
