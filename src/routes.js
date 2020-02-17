@@ -18,6 +18,7 @@ import SequenceExtractor from './components/tools/SequenceExtractor';
 import CisElementAnalysisResult from './components/tools/CisElementAnalysisResult.vue';
 import NetworkModuleComparison from './components/tools/NetworkModuleComparison';
 import NetworkModuleComparisonOneGene from './components/tools/NetworkModuleComparison/NetworkModuleComparisonOneGene';
+import NetworkModuleComparisonGeneResult from './components/tools/NetworkModuleComparison/NetworkModuleComparisonGeneResult';
 
 import Search from './components/Search.vue';
 
@@ -42,5 +43,6 @@ export default [
   {path: '/tools/cis_element_analysis_result', name:'CisElementAnalysisResult', component: CisElementAnalysisResult, props: (route) => ({query: route.query.jobid})},
   {path: '/tools/sequenceextractor', component: SequenceExtractor},
   {path: '/tools/network_module_comparison', component: NetworkModuleComparison},
-  {path: '/tools/network_module_comparison_one_gene', name: 'NetworkModuleComparisonOneGene', component: NetworkModuleComparisonOneGene, props: (route) => ({geneA: route.query.genaA})}
+  {path: '/tools/network_module_comparison_one_gene', name: 'NetworkModuleComparisonOneGene', component: NetworkModuleComparisonOneGene, props: (route) => ({geneA: route.query.genaA})},
+  {path: '/tools/network_module_comparison_gene_result', name: 'NetworkModuleComparisonGeneResult', component: NetworkModuleComparisonGeneResult, props: (route) => ({genaA: route.query.genaA, geneB:route.query.geneB})}
 ]

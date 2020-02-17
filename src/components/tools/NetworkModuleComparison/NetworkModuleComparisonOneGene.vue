@@ -11,6 +11,9 @@
           <el-table-column
             prop="gene_b"
             label="gene Id">
+              <template slot-scope="scope">
+                <span style="margin-left: 10px; cursor: pointer" v-on:click='onGetResult(scope.row.gene_b)'>{{ scope.row.gene_b }}</span>
+              </template>
           </el-table-column>
         </el-table>
     </div>
@@ -43,6 +46,10 @@ export default {
           console.log(error);
         })
       },
+      onGetResult(gene_b) {
+          let routeData = this.$router.resolve({ path: '/tools/network_module_comparison_gene_result', query: { geneA: this.geneA, geneB: gene_b}})
+          window.open(routeData.href, '_blank')
+      }
   }
 }
 </script>

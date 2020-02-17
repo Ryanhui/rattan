@@ -14,10 +14,16 @@
                     <div class="input-field">
                         Gene Id A: 
                         <el-input v-model="geneIdA" placeholder="Please input gene" size="small" style="width: 200px"></el-input>
+                        <span class="gene-example">
+                            example: Daeje_Gene00045
+                        </span>
                     </div>
                     <div class="input-field">
                         Gene Id B: 
                         <el-input v-model="geneIdB" :disabled="!twoGene" size="small" placeholder="Please input gene" style="width: 200px"></el-input>
+                        <span class="gene-example">
+                            example: Calsi_gene15519
+                        </span>
                     </div>
                     <div class='submit-button'>
                         <el-button type="primary" @click="onSubmitGene">Submit</el-button>
@@ -71,8 +77,24 @@ export default {
   },
   methods: {
       onSubmitGene() {
-        let routeData = this.$router.resolve({ path: '/tools/network_module_comparison_one_gene', query: { geneA: this.geneIdA}})
-        window.open(routeData.href, '_blank')
+        if(!this.twoGene && this.geneIdA) {
+            let routeData = this.$router.resolve({ path: '/tools/network_module_comparison_one_gene', query: { geneA: this.geneIdA}})
+            window.open(routeData.href, '_blank')
+        } else {
+            this.$message({
+                message: 'please input gene',
+                type: 'warning'
+            });
+        }
+        if(this.twoGene && this.geneIdA && this.geneIdB) {
+            let routeData = this.$router.resolve({ path: '/tools/network_module_comparison_gene_result', query: { geneA: this.geneIdA, geneB: this.geneIdB}})
+            window.open(routeData.href, '_blank')
+        } else {
+            this.$message({
+                message: 'please input gene',
+                type: 'warning'
+            });
+        }
       },
       onSubmitModule(){
 
@@ -100,6 +122,12 @@ export default {
   .submit-button {
       margin-top: 72px;
       text-align: center;
+  }
+  .gene-example {
+      display: block;
+      font-size: 14px;
+      margin-left: 82px;
+      margin-top: 12px;
   }
 </style>
 
