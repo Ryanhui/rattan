@@ -42,10 +42,16 @@
                     <div class="input-field">
                         Module Id A: 
                         <el-input v-model="moduleIdA" placeholder="Please input module" size="small" style="width: 200px"></el-input>
+                        <span class="module-example">
+                            example: Calsi_Module0874
+                        </span>
                     </div>
                     <div class="input-field">
                         Module Id B: 
                         <el-input v-model="moduleIdB" :disabled="!twoModule" size="small" placeholder="Please input module" style="width: 200px"></el-input>
+                        <span class="module-example">
+                            example: Daeje_Module2599
+                        </span>
                     </div>
                     <div class='submit-button'>
                         <el-button type="primary" @click="onSubmitModule">Submit</el-button>
@@ -97,7 +103,24 @@ export default {
         }
       },
       onSubmitModule(){
-
+        if(!this.twoModule && this.moduleIdA) {
+            let routeData = this.$router.resolve({ path: '/tools/network_module_comparison_one_module', query: { moduleA: this.moduleIdA}})
+            window.open(routeData.href, '_blank')
+        } else {
+            this.$message({
+                message: 'please input module',
+                type: 'warning'
+            });
+        }
+        if(this.twoModule && this.moduleIdA && this.moduleIdB) {
+            let routeData = this.$router.resolve({ path: '/tools/network_module_comparison_module_result', query: { moduleA: this.moduleIdA, moduleB: this.moduleIdB}})
+            window.open(routeData.href, '_blank')
+        } else {
+            this.$message({
+                message: 'please input module',
+                type: 'warning'
+            });
+        }
       },
   }
 }
@@ -127,6 +150,12 @@ export default {
       display: block;
       font-size: 14px;
       margin-left: 82px;
+      margin-top: 12px;
+  }
+  .module-example {
+      display: block;
+      font-size: 14px;
+      margin-left: 98px;
       margin-top: 12px;
   }
 </style>

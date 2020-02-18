@@ -19,6 +19,8 @@ import CisElementAnalysisResult from './components/tools/CisElementAnalysisResul
 import NetworkModuleComparison from './components/tools/NetworkModuleComparison';
 import NetworkModuleComparisonOneGene from './components/tools/NetworkModuleComparison/NetworkModuleComparisonOneGene';
 import NetworkModuleComparisonGeneResult from './components/tools/NetworkModuleComparison/NetworkModuleComparisonGeneResult';
+import NetworkModuleComparisonOneModule from './components/tools/NetworkModuleComparison/NetworkModuleComparisonOneModule';
+import NetworkModuleComparisonModuleResult from './components/tools/NetworkModuleComparison/NetworkModuleComparisonModuleResult';
 
 import Search from './components/Search.vue';
 
@@ -43,6 +45,9 @@ export default [
   {path: '/tools/cis_element_analysis_result', name:'CisElementAnalysisResult', component: CisElementAnalysisResult, props: (route) => ({query: route.query.jobid})},
   {path: '/tools/sequenceextractor', component: SequenceExtractor},
   {path: '/tools/network_module_comparison', component: NetworkModuleComparison},
-  {path: '/tools/network_module_comparison_one_gene', name: 'NetworkModuleComparisonOneGene', component: NetworkModuleComparisonOneGene, props: (route) => ({geneA: route.query.genaA})},
-  {path: '/tools/network_module_comparison_gene_result', name: 'NetworkModuleComparisonGeneResult', component: NetworkModuleComparisonGeneResult, props: (route) => ({genaA: route.query.genaA, geneB:route.query.geneB})}
+  {path: '/tools/network_module_comparison_one_gene', name: 'NetworkModuleComparisonOneGene', component: NetworkModuleComparisonOneGene, props: (route) => ({geneA: route.query.geneA})},
+  {path: '/tools/network_module_comparison_gene_result', name: 'NetworkModuleComparisonGeneResult', component: NetworkModuleComparisonGeneResult, props: (route) => ({geneA: route.query.geneA, geneB:route.query.geneB})},
+  {path: '/tools/network_module_comparison_one_module', name: 'NetworkModuleComparisonOneModule', component: NetworkModuleComparisonOneModule, props: (route) => ({moduleA: route.query.moduleA})},
+  {path: '/tools/network_module_comparison_module_result', name: 'NetworkModuleComparisonModuleResult', component: NetworkModuleComparisonModuleResult, props: (route) => ({moduleA: route.query.moduleA, moduleB:route.query.moduleB})},
+
 ]
