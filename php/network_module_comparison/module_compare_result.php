@@ -34,6 +34,7 @@
   $username = "rattan";
   $password = "rattan123";
   $dbname = "RATTAN";
+  $conn = mysqli_connect($servername, $username, $password, $dbname);
 
   $moduleA = trim($_GET["moduleA"]);
   $moduleB = trim($_GET["moduleB"]);
@@ -68,16 +69,10 @@
           array_push($gene_array, $line[1], $line[2]);
         } while(!feof($file_arr));
         return array_values(array_filter(array_unique($gene_array)));
-        //return array_unique($gene_array);
-        // echo json_encode($returnData);
       }
     }
     $gene_array_a = getRowdata($file_path_a);
     $gene_array_b = getRowdata($file_path_b);
-
-    // echo gettype($gene_array_a);
-    // return;
-    // echo json_encode($gene_array_a), json_encode($gene_array_b);
 
 
   $servername = "127.0.0.1";
@@ -85,64 +80,22 @@
   $password = "rattan123";
   $dbname = "RATTAN";
 
-//   $dataBaseA = '';
-//   $dataBaseB = '';
   $dataBaseCalsi_Daeje_doublemax3 = 'Calsi_Daeje_doublemax3';
   
-  // $geneAData = array();
-  // $geneBData = array();
   $geneRelation = array();
-
-//   if (preg_match("/Calsi/i", $geneA)) {
-//         $dataBaseA = 'CalsiMR';
-//         $dataBaseB = 'DaejeMR';
-//     } else {
-//         $dataBaseA = 'DaejeMR';
-//         $dataBaseB = 'CalsiMR';
-//     }
-// //   $whichDataBase  = 'Calsi_Daeje_doublemax3';
-
-//   $conn = mysqli_connect($servername, $username, $password, $dbname);
-
-//   // Check connection
-//   if (!$conn) {
-//       die("连接失败: " . mysqli_connect_error());
-//   }
-
-//   $sql = 'SELECT * FROM '. $dataBaseA .' WHERE gene1="'. $geneA . '"';
-//   $result = mysqli_query($conn, $sql);
-//   if (mysqli_num_rows($result) > 0) {
-//     while($row = mysqli_fetch_assoc($result)) {
-//       array_push($geneAData, $row);
-//     }
-//   } else {
-//     //   array_push($geneAData, null);
-//   }
-//   $selfobject = array("gene2"=>$geneA, 'isRootA'=>true);
-//   array_push($geneAData, $selfobject);
-
-//   $sql = 'SELECT * FROM '. $dataBaseB .' WHERE gene1="'. $geneB . '"';
-//   $result = mysqli_query($conn, $sql);
-//   if (mysqli_num_rows($result) > 0) {
-//     while($row = mysqli_fetch_assoc($result)) {
-//       array_push($geneBData, $row);
-//     }
-//   } else {
-//     //   array_push($geneBData, null);
-//   }
-//   $selfobject = array("gene2"=>$geneB, 'isRootB'=>true);
-//   array_push($geneBData, $selfobject);
 
   foreach($gene_array_a as $singleGeneA) {
     foreach($gene_array_b as $singleGeneB) {
-        $sql = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a="'. $singleGeneA . '" AND gene_b="'. $singleGeneB . '"';
+        $sql = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a LIKE "'. $singleGeneA . '" AND gene_b LIKE "'. $singleGeneB . '"';
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
+            
             while($row = mysqli_fetch_assoc($result)) {
               array_push($geneRelation, $row);
             }
         }
-        $sql2 = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a="'. $singleGeneB . '" AND gene_b="'. $singleGeneA . '"';
+
+        $sql2 = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a LIKE "'. $singleGeneB . '" AND gene_b LIKE "'. $singleGeneA . '"';
         $result2 = mysqli_query($conn, $sql2);
         if (mysqli_num_rows($result2) > 0) {
             while($row2 = mysqli_fetch_assoc($result2)) {
@@ -151,7 +104,9 @@
         }
     }
   }
-
+  // echo json_encode($temsql);
+  // return;
+  
   $tableData = array();
   foreach($geneRelation as $item) {
     $sql = 'SELECT * FROM Calsi_Daeje_double_Annotation' .' WHERE gene_a="'. $item["gene_a"] . '" AND gene_b="'. $item["gene_b"] . '"';

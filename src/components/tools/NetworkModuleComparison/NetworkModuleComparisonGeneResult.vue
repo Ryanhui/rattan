@@ -130,7 +130,7 @@ export default {
   methods: {
       onSubmitGene() {
         this.axios.get(`http://rattan.bamboogdb.org/php/network_module_comparison/gene_compare_result.php?geneA=${this.geneA}&geneB=${this.geneB}`).then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             if(response.data.geneAdata.length > 0) {
                 response.data.geneAdata.forEach(item => {
                     let newOne = {};

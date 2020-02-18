@@ -43,14 +43,14 @@
                         Module Id A: 
                         <el-input v-model="moduleIdA" placeholder="Please input module" size="small" style="width: 200px"></el-input>
                         <span class="module-example">
-                            example: Calsi_Module0874
+                            example: Calsi_Module0437
                         </span>
                     </div>
                     <div class="input-field">
                         Module Id B: 
                         <el-input v-model="moduleIdB" :disabled="!twoModule" size="small" placeholder="Please input module" style="width: 200px"></el-input>
                         <span class="module-example">
-                            example: Daeje_Module2599
+                            example: Daeje_Module0680
                         </span>
                     </div>
                     <div class='submit-button'>

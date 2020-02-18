@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="title-sen">
-            <p>module compares with {{this.moudleA}}</p>
+            <p>module compares with {{this.moduleA}}</p>
         </div>
         <el-table
           :data="tableData"
@@ -39,7 +39,7 @@ export default {
   methods: {
       onSubmitModule() {
         this.axios.get('http://rattan.bamboogdb.org/php/network_module_comparison/module_compare_list.php?moduleA='+this.moduleA).then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             if(response.data) {
                 this.tableData = response.data;
             }

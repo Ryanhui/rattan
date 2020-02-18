@@ -67,6 +67,7 @@
       die("连接失败: " . mysqli_connect_error());
   }
 
+  /////////////////// get Gene a ////////////////////////////////////
   $sql = 'SELECT * FROM '. $dataBaseA .' WHERE gene1="'. $geneA . '"';
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
@@ -79,6 +80,7 @@
   $selfobject = array("gene2"=>$geneA, 'isRootA'=>true);
   array_push($geneAData, $selfobject);
 
+  /////////////// get Gene b /////////////////////////////////////////
   $sql = 'SELECT * FROM '. $dataBaseB .' WHERE gene1="'. $geneB . '"';
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
@@ -91,13 +93,22 @@
   $selfobject = array("gene2"=>$geneB, 'isRootB'=>true);
   array_push($geneBData, $selfobject);
 
+  //////////////////// get Relation /////////////////////////////////
   foreach($geneAData as $singleGeneA) {
     foreach($geneBData as $singleGeneB) {
-        $sql = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a="'. $singleGeneA["gene2"] . '" AND gene_b="'. $singleGeneB["gene2"] . '"';
+        $sql = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a LIKE "'. $singleGeneA["gene2"] . '" AND gene_b LIKE "'. $singleGeneB["gene2"] . '"';
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
               array_push($geneRelation, $row);
+            }
+        }
+
+        $sql2 = 'SELECT * FROM '. $dataBaseCalsi_Daeje_doublemax3 .' WHERE gene_a LIKE "'. $singleGeneB["gene2"] . '" AND gene_b LIKE "'. $singleGeneA["gene2"] . '"';
+        $result2 = mysqli_query($conn, $sql2);
+        if (mysqli_num_rows($result2) > 0) {
+            while($row2 = mysqli_fetch_assoc($result2)) {
+              array_push($geneRelation, $row2);
             }
         }
     }

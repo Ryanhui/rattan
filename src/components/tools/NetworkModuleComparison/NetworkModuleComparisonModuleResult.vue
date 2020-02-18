@@ -131,7 +131,7 @@ export default {
   methods: {
       onSubmitGene() {
         this.axios.get(`http://rattan.bamboogdb.org/php/network_module_comparison/module_compare_result.php?moduleA=${this.moduleA}&moduleB=${this.moduleB}`).then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             if(response.data.moduleAdata.length > 0) {
                 response.data.moduleAdata.forEach(item => {
                     let newOne = {};
@@ -218,7 +218,7 @@ export default {
             this.edges = this.edges.concat(getEdges(response.data.moduleAdata, 'groupA'));
             this.edges = this.edges.concat(getEdges(response.data.moduleBdata, 'groupB'));
 
-            console.log(this.edges);
+            //console.log(this.edges);
             if(response.data.tableData.length > 0) {
                 this.tableData = response.data.tableData;
             }
@@ -231,7 +231,7 @@ export default {
                 this.showNetwork = true;
                 this.loading = false;
             }, 100)
-            console.log(JSON.stringify(this.config.elements) );
+            //console.log(JSON.stringify(this.config.elements) );
         }).catch((error) => {
           console.log(error);
         })

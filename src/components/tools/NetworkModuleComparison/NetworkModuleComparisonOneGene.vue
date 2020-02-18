@@ -38,7 +38,7 @@ export default {
   methods: {
       onSubmitGene() {
         this.axios.get('http://rattan.bamboogdb.org/php/network_module_comparison/gene_compare_list.php?geneA='+this.geneA).then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             if(response.data) {
                 this.tableData = response.data;
             }
