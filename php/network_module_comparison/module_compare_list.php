@@ -40,7 +40,7 @@
   if (preg_match("/Calsi/i", $moduleA)) {
         $searchName = 'module_a';
     }   else {
-        $dataBaseA = 'module_b';
+        $searchName = 'module_b';
   }
 
   $servername = "127.0.0.1";

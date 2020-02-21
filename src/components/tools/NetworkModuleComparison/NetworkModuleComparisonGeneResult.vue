@@ -1,8 +1,16 @@
 <template>
     <div v-loading="loading" class="container">
+      <div style="margin-top: 24px"><p>Comparison between <span class="red">{{geneA}}</span> and <span class="red">{{geneB}}</span></p></div>
       <div class="cystyle" v-if="showNetwork">
         <cytoscape :config="config" />
       </div>
+      <div class="image-noti"><p>Orange and blue line links co-expression genes. Green line links orthologous genes between two rattans. The comparison based on top300 PCC co-expression genes.
+</p></div>
+      <div style="margin-top:12px">
+        <el-button type="primary" plain size="small"  v-on:click="download('geneA')">{{geneA + '.PCC300'}}</el-button>
+        <el-button type="primary" plain size="small"  v-on:click="download('geneB')">{{geneB + '.PCC300'}}</el-button>
+      </div>
+      <p class="table-title">orthologous genes between two rattans in the figure</p>
       <el-table
             :data="tableData"
             stripe
@@ -27,7 +35,7 @@
               label="Gene ID">
             </el-table-column>
             <el-table-column
-              prop="funcion_b"
+              prop="function_b"
               label="Gene annotation">
             </el-table-column>
         </el-table>
@@ -122,8 +130,8 @@ export default {
       }
   },
   mounted() {
-    this.geneA = this.$route.query.geneA;
-    this.geneB = this.$route.query.geneB;
+    this.geneA = this.$route.query.geneA.trim();
+    this.geneB = this.$route.query.geneB.trim();
 
     this.onSubmitGene();
   },
@@ -131,65 +139,59 @@ export default {
       onSubmitGene() {
         this.axios.get(`http://rattan.bamboogdb.org/php/network_module_comparison/gene_compare_result.php?geneA=${this.geneA}&geneB=${this.geneB}`).then((response) => {
             console.log(response.data);
+            let correctGeneA = '',
+                correctGeneB = '';
+            if(/Calsi/.test(this.geneA)) {
+              correctGeneA = this.geneA;
+              correctGeneB = this.geneB;
+            } else {
+              correctGeneA = this.geneB;
+              correctGeneB = this.geneA;
+            }
+            /////////////////////////////////////// geneA //////////////////////////////////////
             if(response.data.geneAdata.length > 0) {
-                response.data.geneAdata.forEach(item => {
                     let newOne = {};
-                    newOne.data = {
-                        id: item.gene2,
-                        isRootA: item.isRootA || false,
-                        group: 'geneA',
-                    }
-                    if(item.isRootA) {
-                        newOne.position = { x: 360, y: 400 }
+                    let geneid = response.data.geneAdata[response.data.geneAdata.length-1].gene2;
+                    if(/Calsi/.test(geneid)) {
+                      newOne.data = {
+                          id: geneid,
+                          isRootA: true,
+                          group: 'geneA',
+                      }
+                      newOne.position = { x: 360, y: 400 }
                     } else {
-                        let x = Math.floor(Math.random() * 500);
-                        let y = Math.floor(Math.random() * 700);
-                        newOne.position = {x: x, y: y};
+                        newOne.data = {
+                          id: geneid,
+                          isRootB: true,
+                          group: 'geneB',
+                      }
+                      newOne.position = { x: 660, y: 400 }
                     }
-
                     this.nodes.push(newOne);
-
-                    if(!item.isRootA) {
-                        let edgeNewOne = {};
-                        edgeNewOne.data = {
-                            id: item.uuid,
-                            source: item.gene1,
-                            target: item.gene2,
-                            group: 'geneA'
-                        }
-                        this.edges.push(edgeNewOne);
-                    }
-                })
             }
+            //////////////////////////////////////////// geneB ////////////////////////////////////////
             if(response.data.geneBdata.length > 0) {
-                response.data.geneBdata.forEach(item => {
                     let newOne = {};
-                    newOne.data = {
-                        id: item.gene2,
-                        isRootB: item.isRootB || false,
-                        group: 'geneB',
-                    }
-                    if(item.isRootB) {
-                        newOne.position = { x: 660, y: 400 }
+                    let geneid = response.data.geneBdata[response.data.geneBdata.length-1].gene2;
+                    if(/Calsi/.test(geneid)) {
+                      newOne.data = {
+                          id: geneid,
+                          isRootA: true,
+                          group: 'geneA',
+                         
+                      }
+                      newOne.position = { x: 360, y: 400 }
                     } else {
-                        let x = Math.floor(Math.random() * 500 + 500);
-                        let y = Math.floor(Math.random() * 700);
-                        newOne.position = {x: x, y: y};
+                        newOne.data = {
+                          id: geneid,
+                          isRootB: true,
+                          group: 'geneB',
+                      }
+                      newOne.position = { x: 660, y: 400 }
                     }
                     this.nodes.push(newOne);
-
-                    if(!item.isRootB) {
-                        let edgeNewOne = {};
-                        edgeNewOne.data = {
-                            id: item.uuid,
-                            source: item.gene1,
-                            target: item.gene2,
-                            group: 'geneB'
-                        }
-                        this.edges.push(edgeNewOne);
-                    }
-                })
             }
+            //////////////////////////////////////// all nodes ////////////////////////////////////////////
             if(response.data.geneRelation.length > 0) {
                 response.data.geneRelation.forEach(item => {
                     let newOne = {};
@@ -197,12 +199,82 @@ export default {
                         id: item.id,
                         source: item.gene_a,
                         target: item.gene_b,
-                        isRootA: item.isRootA || false,
+                        // isRootA: item.isRootA || false,
                         isConnect: true,
                     }
                     this.edges.push(newOne);
+                    /////////////// nodes ///////////////
+                    if(item.gene_a !== correctGeneA && item.gene_b !== correctGeneB && item.gene_a !== correctGeneB && item.gene_b !== correctGeneA) {
+                        if(/Calsi/.test(item.gene_a)) {
+                            let newOne = {};
+                            newOne.data = {
+                                id: item.gene_a,
+                                isRootA: false,
+                                isRoot: false,
+                                group: 'geneA',
+                            }
+                            let x = Math.floor(Math.random() * 500);
+                            let y = Math.floor(Math.random() * 700);
+                            newOne.position = {x: x, y: y};
+                            this.nodes.push(newOne);
+
+                            let newOne2 = {};
+                            newOne2.data = {
+                                id: item.gene_b,
+                                isRootA: false,
+                                group: 'geneB',
+                            }
+                            x = Math.floor(Math.random() * 500 + 500);
+                            y = Math.floor(Math.random() * 700);
+                            newOne2.position = {x: x, y: y};
+                            this.nodes.push(newOne2);
+                        } else {
+                            let newOne = {};
+                            newOne.data = {
+                                id: item.gene_a,
+                                isRootA: false,
+                                isRoot: false,
+                                group: 'geneB',
+                            }
+                            let x = Math.floor(Math.random() * 500 + 500);
+                            let y = Math.floor(Math.random() * 700);
+                            newOne.position = {x: x, y: y};
+                            this.nodes.push(newOne);
+
+                            let newOne2 = {};
+                            newOne2.data = {
+                                id: item.gene_b,
+                                isRootA: false,
+                                group: 'geneA',
+                            }
+                            x = Math.floor(Math.random() * 500);
+                            y = Math.floor(Math.random() * 700);
+                            newOne2.position = {x: x, y: y};
+                            this.nodes.push(newOne2);
+                        }
+                    }
+                    
                 })
             }
+            
+            console.log(this.nodes);
+
+            /////////////////////////// node edges ////////////////////////////
+            this.nodes.forEach((item) => {
+              if(!item.data.isRootA && !item.data.isRootB) {
+                let newOne = {};
+                newOne.data = {
+                    //id: item.id,
+                    source: item.data.id,
+                    target: /Calsi/.test(item.data.id) ? correctGeneA : correctGeneB,
+                    isRootA: false,
+                    isConnect: false,
+                    group: /Calsi/.test(item.data.id) ? 'geneA' : 'geneB'
+                }
+                this.edges.push(newOne);
+              }
+            }) 
+
             if(response.data.tableData.length > 0) {
                 this.tableData = response.data.tableData;
             }
@@ -220,6 +292,24 @@ export default {
           console.log(error);
         })
       },
+      download(data) {
+        // window.open(data.address)
+        // window.location.href = address;
+        if(data === 'geneA') {
+          data = this.geneA;
+        }
+        data = this.geneB;
+        let eleLink = document.createElement('a');
+        eleLink.download = data + '.PCC300';
+        eleLink.style.display = 'none';
+        eleLink.href = '/web_data/Rattan_NET/comparision/PCC_top300/' + data + '.PCC300';
+        // 受浏览器安全策略的因素，动态创建的元素必须添加到浏览器后才能实施点击
+        document.body.appendChild(eleLink);
+        // 触发点击  
+        eleLink.click();
+        // 然后移除
+        document.body.removeChild(eleLink);
+      }
   }
 }
 </script>
@@ -238,6 +328,16 @@ export default {
   .ann-table {
       width: 80%;
       margin: 24px auto 96px auto;
+  }
+  .red {
+    color: red;
+  }
+  .image-noti {
+    width: 50%;
+    margin: 0 auto;
+  }
+  .table-title {
+    margin-top: 48px;
   }
 </style>
 

@@ -12,7 +12,7 @@
             prop="gene_b"
             label="gene Id">
               <template slot-scope="scope">
-                <span style="margin-left: 10px; cursor: pointer" v-on:click='onGetResult(scope.row.gene_b)'>{{ scope.row.gene_b }}</span>
+                <span style="margin-left: 10px; cursor: pointer" v-on:click='onGetResult(caculateGene(scope.row))'>{{ caculateGene(scope.row) }}</span>
               </template>
           </el-table-column>
         </el-table>
@@ -36,6 +36,13 @@ export default {
       this.onSubmitGene();
   },
   methods: {
+      caculateGene(row) {
+        if(row.gene_a.substring(0 ,4) === this.geneA.substring(0, 4)) {
+          return row.gene_b;
+        } else {
+          return row.gene_a;
+        }
+      },
       onSubmitGene() {
         this.axios.get('http://rattan.bamboogdb.org/php/network_module_comparison/gene_compare_list.php?geneA='+this.geneA).then((response) => {
             //console.log(response.data);

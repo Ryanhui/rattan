@@ -35,14 +35,22 @@
   $password = "rattan123";
   $dbname = "RATTAN";
 
-  $geneA = trim($_GET["geneA"]);
+  $moduleA = trim($_GET["moduleA"]);
+  $moduleB = trim($_GET["moduleB"]);
+
+  if (preg_match("/Calsi/i", $moduleA)) {
+        $searchTableA = 'Calsi_Module_Annotation';
+        $searchTableB = 'Daeje_Module_Annotation';
+    }   else {
+        $searchTableA = 'Daeje_Module_Annotation';
+        $searchTableB = 'Calsi_Module_Annotation';
+  }
 
   $servername = "127.0.0.1";
   $username = "rattan";
   $password = "rattan123";
   $dbname = "RATTAN";
 
-  $whichDataBase  = 'Calsi_Daeje_doublemax3';
 
   $conn = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -51,17 +59,31 @@
       die("连接失败: " . mysqli_connect_error());
   }
 
-  $sql = 'SELECT * FROM '. $whichDataBase .' WHERE gene_a="'. $geneA . '" OR gene_b="' .$geneA. '"';
-
+  $data = array();
+  $sql = 'SELECT * FROM '. $searchTableA .' WHERE module_id'.'="'. $moduleA . '"';
+  
   $result = mysqli_query($conn, $sql);
 
   if (mysqli_num_rows($result) > 0) {
-    $data = array();
     while($row = mysqli_fetch_assoc($result)) {
-      array_push($data, $row);
+      $data[] = $row;
     }
-    echo json_encode($data);
+    // echo json_encode($data);
   } else {
       echo null;
   }
+
+  $sql2 = 'SELECT * FROM '. $searchTableB .' WHERE module_id'.'="'. $moduleB . '"';
+  
+  $result2 = mysqli_query($conn, $sql2);
+
+  if (mysqli_num_rows($result2) > 0) {
+    while($row2 = mysqli_fetch_assoc($result2)) {
+        $data[] = $row2;
+    }
+    // 
+  } else {
+      echo null;
+  }
+  echo json_encode($data);
 ?>

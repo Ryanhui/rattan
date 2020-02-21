@@ -13,7 +13,7 @@
             prop="gene_b"
             label="module Id">
               <template slot-scope="scope">
-                <span style="margin-left: 10px; cursor: pointer" v-on:click='onGetResult(scope.row.module_b)'>{{ scope.row.module_b }}</span>
+                <span style="margin-left: 10px; cursor: pointer" v-on:click='onGetResult(caculateModule(scope.row))'>{{ caculateModule(scope.row) }}</span>
               </template>
           </el-table-column>
         </el-table>
@@ -37,6 +37,13 @@ export default {
       this.onSubmitModule();
   },
   methods: {
+      caculateModule(row) {
+        if(row.module_a.substring(0 ,4) === this.moduleA.substring(0, 4)) {
+          return row.module_b;
+        } else {
+          return row.module_a;
+        }
+      },
       onSubmitModule() {
         this.axios.get('http://rattan.bamboogdb.org/php/network_module_comparison/module_compare_list.php?moduleA='+this.moduleA).then((response) => {
             //console.log(response.data);

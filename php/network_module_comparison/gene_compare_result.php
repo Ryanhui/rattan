@@ -68,7 +68,7 @@
   }
 
   /////////////////// get Gene a ////////////////////////////////////
-  $sql = 'SELECT * FROM '. $dataBaseA .' WHERE gene1="'. $geneA . '"';
+  $sql = 'SELECT * FROM '. $dataBaseA .' WHERE gene1="'. $geneA . '" OR gene2="'. $geneA.'"';
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
@@ -77,11 +77,11 @@
   } else {
     //   array_push($geneAData, null);
   }
-  $selfobject = array("gene2"=>$geneA, 'isRootA'=>true);
+  $selfobject = array("gene2"=>$geneA, "gene1" => $geneB, 'isRootA'=>true);
   array_push($geneAData, $selfobject);
 
   /////////////// get Gene b /////////////////////////////////////////
-  $sql = 'SELECT * FROM '. $dataBaseB .' WHERE gene1="'. $geneB . '"';
+  $sql = 'SELECT * FROM '. $dataBaseB .' WHERE gene1="'. $geneB . '" OR gene2="'. $geneB.'"';
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
@@ -90,7 +90,7 @@
   } else {
     //   array_push($geneBData, null);
   }
-  $selfobject = array("gene2"=>$geneB, 'isRootB'=>true);
+  $selfobject = array("gene2"=>$geneB, "gene1" => $geneA, 'isRootB'=>true);
   array_push($geneBData, $selfobject);
 
   //////////////////// get Relation /////////////////////////////////
@@ -114,8 +114,24 @@
         //       $geneRelation[] = $row2;
         //     }
         // }
-        $temGenePair[] = $singleGeneA["gene2"].'-'.$singleGeneB["gene2"];
-        //$temGenePair[] = $singleGeneB["gene2"].'-'.$singleGeneA["gene2"];
+        if($singleGeneA["gene1"] == $geneA && $singleGeneB["gene1"] == $geneB) {
+          $temGenePair[] = $singleGeneA["gene2"].'-'.$singleGeneB["gene2"];
+          $temGenePair[] = $singleGeneB["gene2"].'-'.$singleGeneA["gene2"];
+        }
+        if($singleGeneA["gene2"] == $geneA && $singleGeneB["gene1"] == $geneB) {
+          $temGenePair[] = $singleGeneA["gene1"].'-'.$singleGeneB["gene2"];
+          $temGenePair[] = $singleGeneB["gene2"].'-'.$singleGeneA["gene1"];
+        }
+        if($singleGeneA["gene1"] == $geneA && $singleGeneB["gene2"] == $geneB) {
+          $temGenePair[] = $singleGeneA["gene2"].'-'.$singleGeneB["gene1"];
+          $temGenePair[] = $singleGeneB["gene1"].'-'.$singleGeneA["gene2"];
+        }
+        if($singleGeneA["gene2"] == $geneA && $singleGeneB["gene2"] == $geneB) {
+          $temGenePair[] = $singleGeneA["gene1"].'-'.$singleGeneB["gene1"];
+          $temGenePair[] = $singleGeneB["gene1"].'-'.$singleGeneA["gene1"];
+        }
+        // $temGenePair[] = $singleGeneA["gene2"].'-'.$singleGeneB["gene2"];
+        // $temGenePair[] = $singleGeneB["gene2"].'-'.$singleGeneA["gene2"];
     }
   }
 

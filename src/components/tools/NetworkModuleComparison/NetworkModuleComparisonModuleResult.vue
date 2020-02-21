@@ -1,8 +1,10 @@
 <template>
     <div v-loading="loading" class="container">
+      <div style="margin-top: 24px"><p>Comparison between <span class="red">{{moduleA}}</span> and <span class="red">{{moduleB}}</span></p></div>
       <div class="cystyle" v-if="showNetwork">
         <cytoscape :config="config" />
       </div>
+      <p>orthologous genes between two rattans in the figure</p>
       <el-table
             :data="tableData"
             stripe
@@ -28,8 +30,24 @@
               label="Gene ID">
             </el-table-column>
             <el-table-column
-              prop="funcion_b"
+              prop="function_b"
               label="Gene annotation">
+            </el-table-column>
+        </el-table>
+        <p>The annotations of modules</p>
+        <el-table
+            :data="annTableData"
+            stripe
+            size='small'
+            empty-text="No Result"
+            class="ann-table">
+            <el-table-column
+              prop="module_id"
+              label="Module ID">
+            </el-table-column>
+            <el-table-column
+              prop="value_3"
+              label="Module annotation">
             </el-table-column>
         </el-table>
     </div>
@@ -118,6 +136,7 @@ export default {
           nodes: [],
           edges: [],
           tableData: [],
+          annTableData: [],
 
           loading: true,
       }
@@ -126,10 +145,11 @@ export default {
     this.moduleA = this.$route.query.moduleA;
     this.moduleB = this.$route.query.moduleB;
 
-    this.onSubmitGene();
+    this.onSubmitModule();
+    this.getModuleAnno();
   },
   methods: {
-      onSubmitGene() {
+      onSubmitModule() {
         this.axios.get(`http://rattan.bamboogdb.org/php/network_module_comparison/module_compare_result.php?moduleA=${this.moduleA}&moduleB=${this.moduleB}`).then((response) => {
             //console.log(response.data);
             if(response.data.moduleAdata.length > 0) {
@@ -236,6 +256,14 @@ export default {
           console.log(error);
         })
       },
+      getModuleAnno() {
+        this.axios.get(`http://rattan.bamboogdb.org/php/network_module_comparison/module_anno_result.php?moduleA=${this.moduleA}&moduleB=${this.moduleB}`).then((response) => {
+           console.log(response.data);
+           this.annTableData = response.data;
+        }).catch((error) => {
+          console.log(error);
+        })
+      }
   }
 }
 </script>
@@ -254,6 +282,9 @@ export default {
   .ann-table {
       width: 80%;
       margin: 24px auto 96px auto;
+  }
+  .red {
+    color: red;
   }
 </style>
 
