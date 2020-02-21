@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="loading">
         <div class="title-sen">
             <p>module compares with {{this.moduleA}}</p>
         </div>
@@ -30,6 +30,8 @@ export default {
       return {
           tableData: [],
           moduleA: '',
+
+          loading: false,
       }
   },
   mounted() {
@@ -45,11 +47,13 @@ export default {
         }
       },
       onSubmitModule() {
+        this.loading = true;
         this.axios.get('http://rattan.bamboogdb.org/php/network_module_comparison/module_compare_list.php?moduleA='+this.moduleA).then((response) => {
             //console.log(response.data);
             if(response.data) {
                 this.tableData = response.data;
             }
+            this.loading = false;
         }).catch((error) => {
           console.log(error);
         })

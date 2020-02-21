@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="loading">
         <div class="title-sen">
             <p>Gene compares with {{this.geneA}}</p>
         </div>
@@ -7,6 +7,7 @@
           :data="tableData"
           stripe
           class="gene-table"
+          
           border>
           <el-table-column
             prop="gene_b"
@@ -29,6 +30,8 @@ export default {
       return {
           tableData: [],
           geneA: '',
+
+          loading: false,
       }
   },
   mounted() {
@@ -44,11 +47,13 @@ export default {
         }
       },
       onSubmitGene() {
+        this.loading = true;
         this.axios.get('http://rattan.bamboogdb.org/php/network_module_comparison/gene_compare_list.php?geneA='+this.geneA).then((response) => {
             //console.log(response.data);
             if(response.data) {
                 this.tableData = response.data;
             }
+            this.loading=false;
         }).catch((error) => {
           console.log(error);
         })
