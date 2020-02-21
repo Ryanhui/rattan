@@ -47,6 +47,7 @@
                 <p>2019.08.20 Module enrichment and Gene set analysis tools construction are finished.</p>
                 <p>2019.09.20 Cis-element analysis tool is applicable now.</p>
                 <p>2019.11.10 Sequence extractor and search tools are online now.</p>
+                <p>2020.02.21 Network and module comparison is online now</p>
               </div>
               <div class="map">
                 <a href="https://www.revolvermaps.com/livestats/5pplwzj355p/" ><img src="//rf.revolvermaps.com/h/m/a/0/ff0000/128/0/5pplwzj355p.png" width="256" height="128" alt="Map" style="border:0;"></a>
@@ -139,7 +140,7 @@ export default {
   }
   .map {
     position: relative;
-    top: -78px;
+    top: -125px;
     padding-top: 10px;
     /* background: rgb(211, 252, 211); */
     background: #fff;

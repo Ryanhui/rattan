@@ -4,6 +4,7 @@
       <el-col :span="12">
         <el-table
           :data="tableData1"
+          stripe
           style="width: 100%">
           <el-table-column
             prop="name"
@@ -22,6 +23,7 @@
       <el-col :span="12">
         <el-table
           :data="tableData2"
+          stripe
           style="width: 100%">
           <el-table-column
             prop="name"
@@ -76,7 +78,11 @@ export default {
           },{
             name: 'Calamus_simplicifolius.tRNA.gff3',
             address: '/download/Calsi/Calamus_simplicifolius.tRNA.gff3'
+          }, {
+            name: 'modules_coverage',
+            address: '/download/modules_coverage'
           }],
+
           tableData2: [{
             name: 'Daemonorops_jenkinsiana.HIC.genome',
             address: '/download/Daeje/Daemonorops_jenkinsiana.HIC.genome'
@@ -131,8 +137,6 @@ export default {
 <style scoped>
   .container {
     height: 700px;
-  }
-  .el-table {
     padding: 32px;
   }
 </style>
